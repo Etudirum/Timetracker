@@ -153,20 +153,26 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
 
           <div className="space-y-4">
             <div>
-              <label className="form-label">Mot de passe administrateur</label>
+              <label className={`form-label transition-colors duration-300 ${
+                darkMode ? 'text-gray-300' : ''
+              }`}>Mot de passe administrateur</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="form-input pr-10"
+                  className={`form-input pr-10 transition-colors duration-300 ${
+                    darkMode ? 'dark' : ''
+                  }`}
                   placeholder="Entrez le mot de passe"
                   onKeyPress={(e) => e.key === 'Enter' && handleAuth()}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500"
+                  className={`absolute inset-y-0 right-0 px-3 flex items-center transition-colors duration-300 ${
+                    darkMode ? 'text-gray-400' : 'text-gray-500'
+                  }`}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
