@@ -274,13 +274,17 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
           {success && (
-            <div className="success p-3 rounded-lg border mb-4">
+            <div className={`p-3 rounded-lg border mb-4 transition-colors duration-300 ${
+              darkMode ? 'bg-green-900 border-green-700 text-green-200' : 'bg-green-50 border-green-200 text-green-800'
+            }`}>
               {success}
             </div>
           )}
 
           {error && (
-            <div className="error p-3 rounded-lg border mb-4">
+            <div className={`p-3 rounded-lg border mb-4 transition-colors duration-300 ${
+              darkMode ? 'bg-red-900 border-red-700 text-red-200' : 'bg-red-50 border-red-200 text-red-800'
+            }`}>
               {error}
             </div>
           )}
