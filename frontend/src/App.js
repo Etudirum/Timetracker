@@ -632,21 +632,29 @@ function App() {
           {filter.period === 'custom' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
+                <label className={`block text-sm font-medium mb-1 transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>Date de début</label>
                 <input
                   type="date"
                   value={filter.startDate}
                   onChange={(e) => setFilter({...filter, startDate: e.target.value})}
-                  className="border border-gray-300 rounded-lg px-3 py-2"
+                  className={`border rounded-lg px-3 py-2 transition-colors duration-300 ${
+                    darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+                  }`}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
+                <label className={`block text-sm font-medium mb-1 transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>Date de fin</label>
                 <input
                   type="date"
                   value={filter.endDate}
                   onChange={(e) => setFilter({...filter, endDate: e.target.value})}
-                  className="border border-gray-300 rounded-lg px-3 py-2"
+                  className={`border rounded-lg px-3 py-2 transition-colors duration-300 ${
+                    darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+                  }`}
                 />
               </div>
             </>
