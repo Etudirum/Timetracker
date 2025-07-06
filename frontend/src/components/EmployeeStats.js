@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { X, Clock, Coffee, TrendingUp, Calendar, BarChart3, PieChart } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell, Pie } from 'recharts';
 
-export function EmployeeStats({ employee, timeEntries, onClose }) {
+export function EmployeeStats({ employee, timeEntries, onClose, showSalary = false, formatSalary }) {
   const [period, setPeriod] = useState('week');
 
   const stats = useMemo(() => {
