@@ -292,12 +292,45 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
           {currentView === 'employees' && (
             <div className="space-y-6">
               {/* Add Employee */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center space-x-2">
+              <div className={`p-4 rounded-lg transition-colors duration-300 ${
+                darkMode ? 'bg-gray-700' : 'bg-gray-50'
+              }`}>
+                <h3 className={`text-lg font-medium mb-4 flex items-center space-x-2 transition-colors duration-300 ${
+                  darkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   <UserPlus className="w-5 h-5" />
                   <span>Ajouter un employé</span>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Photo de profil */}
+                  <div className="md:col-span-2">
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Photo de profil</label>
+                    <div className="flex items-center space-x-4">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center">
+                        {newEmployee.profileImage ? (
+                          <img 
+                            src={newEmployee.profileImage} 
+                            alt="Profil" 
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-purple-600 font-semibold text-lg">
+                            {newEmployee.name ? getInitials(newEmployee.name) : 'PP'}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, false)}
+                        className={`form-input transition-colors duration-300 ${
+                          darkMode ? 'dark' : ''
+                        }`}
+                      />
+                    </div>
+                  </div>
                   <div>
                     <label className="form-label">Nom</label>
                     <input
