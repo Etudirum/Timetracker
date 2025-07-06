@@ -866,12 +866,69 @@ function App() {
         />
       )}
 
+      {/* Stats Auth Modal */}
+      {showStatsAuth && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-6 h-6 text-purple-600" />
+                <h2 className="text-xl font-semibold text-gray-900">Accès Statistiques</h2>
+              </div>
+              <button onClick={() => {
+                setShowStatsAuth(false);
+                setStatsPassword('');
+              }} className="text-gray-500 hover:text-gray-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                Les statistiques avec salaire nécessitent une authentification.
+              </p>
+              <div>
+                <label className="form-label">Mot de passe</label>
+                <input
+                  type="password"
+                  value={statsPassword}
+                  onChange={(e) => setStatsPassword(e.target.value)}
+                  className="form-input"
+                  placeholder="Entrez le mot de passe"
+                  onKeyPress={(e) => e.key === 'Enter' && handleStatsAuth()}
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button 
+                  onClick={() => {
+                    setShowStatsAuth(false);
+                    setStatsPassword('');
+                  }} 
+                  className="btn btn-secondary"
+                >
+                  Annuler
+                </button>
+                <button onClick={handleStatsAuth} className="btn btn-primary">
+                  Accéder
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Employee Stats */}
       {showEmployeeStats && selectedStatsEmployee && (
         <EmployeeStats 
           employee={selectedStatsEmployee}
           timeEntries={timeEntries}
-          onClose={() => setShowEmployeeStats(false)}
+          onClose={() => {
+            setShowEmployeeStats(false);
+            setIsStatsAuthenticated(false);
+          }}
+          showSalary={isStatsAuthenticated || selectedStatsEmployee.hourlyRate <= 0}
+          formatSalary={formatSalary}
         />
       )}
     </div>
