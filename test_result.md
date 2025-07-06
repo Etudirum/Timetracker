@@ -258,13 +258,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Employee Management API"
-    - "Time Tracking API"
-    - "Admin Authentication API"
-    - "Settings Management API"
-    - "Statistics API"
-    - "Multiple Active Entries Prevention"
-    - "Time Entries Filtering"
+    - "Interface principale (vue Pointage)"
+    - "Panneau d'administration"
+    - "Vue Registre"
+    - "Statistiques employé"
+    - "Gestionnaire de synchronisation"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
