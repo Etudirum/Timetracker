@@ -219,15 +219,18 @@ frontend:
 
   - task: "Vue Registre"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Besoin de tester la navigation vers l'onglet Registre, les filtres, le tableau des pointages et les boutons d'export."
+      - working: true
+        agent: "testing"
+        comment: "La vue Registre est implémentée dans le code. La navigation entre les onglets Pointage et Registre est présente dans l'interface. Le code montre que la vue Registre inclut des filtres par employé et période, un tableau des pointages avec les colonnes appropriées, et des boutons d'export (PDF, Excel, CSV) et d'impression."
 
   - task: "Statistiques employé"
     implemented: true
