@@ -337,108 +337,96 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
                     <div key={employee.id} className="bg-white border border-gray-200 rounded-lg p-4">
                       {editingEmployee === employee.id ? (
                         <div className="space-y-3">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <input
-                              type="text"
-                              value={employee.name}
-                              onChange={(e) => {
-                                // Update local state for immediate feedback
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, name: e.target.value} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                              placeholder="Nom"
-                            />
-                            <input
-                              type="text"
-                              value={employee.position}
-                              onChange={(e) => {
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, position: e.target.value} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                              placeholder="Poste"
-                            />
-                            <input
-                              type="email"
-                              value={employee.email || ''}
-                              onChange={(e) => {
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, email: e.target.value} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                              placeholder="Email"
-                            />
-                            <input
-                              type="number"
-                              value={employee.hourlyRate || 0}
-                              onChange={(e) => {
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, hourlyRate: parseFloat(e.target.value)} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                              placeholder="Taux horaire (FCFA)"
-                              step="0.01"
-                            />
-                            <input
-                              type="time"
-                              value={employee.startTime || '08:00'}
-                              onChange={(e) => {
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, startTime: e.target.value} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                            />
-                            <input
-                              type="time"
-                              value={employee.endTime || '17:00'}
-                              onChange={(e) => {
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, endTime: e.target.value} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                            />
-                            <input
-                              type="number"
-                              value={employee.breakDuration || 30}
-                              onChange={(e) => {
-                                const updatedEmployees = employees.map(emp => 
-                                  emp.id === employee.id ? {...emp, breakDuration: parseInt(e.target.value)} : emp
-                                );
-                                setEmployees && setEmployees(updatedEmployees);
-                              }}
-                              className="form-input"
-                              placeholder="Durée pause max (min)"
-                            />
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div>
+                              <label className="form-label">Nom</label>
+                              <input
+                                type="text"
+                                value={editingEmployeeData.name || employee.name}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, name: e.target.value})}
+                                className="form-input"
+                                placeholder="Nom"
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label">Poste</label>
+                              <input
+                                type="text"
+                                value={editingEmployeeData.position || employee.position}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, position: e.target.value})}
+                                className="form-input"
+                                placeholder="Poste"
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label">Email</label>
+                              <input
+                                type="email"
+                                value={editingEmployeeData.email || employee.email || ''}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, email: e.target.value})}
+                                className="form-input"
+                                placeholder="Email"
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label">Taux horaire (FCFA)</label>
+                              <input
+                                type="number"
+                                value={editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : (employee.hourlyRate || 0)}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, hourlyRate: parseFloat(e.target.value)})}
+                                className="form-input"
+                                placeholder="Taux horaire"
+                                step="0.01"
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label">Heure de début</label>
+                              <input
+                                type="time"
+                                value={editingEmployeeData.startTime || employee.startTime || '08:00'}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, startTime: e.target.value})}
+                                className="form-input"
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label">Heure de fin</label>
+                              <input
+                                type="time"
+                                value={editingEmployeeData.endTime || employee.endTime || '17:00'}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, endTime: e.target.value})}
+                                className="form-input"
+                              />
+                            </div>
+                            <div>
+                              <label className="form-label">Durée pause max (min)</label>
+                              <input
+                                type="number"
+                                value={editingEmployeeData.breakDuration !== undefined ? editingEmployeeData.breakDuration : (employee.breakDuration || 30)}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, breakDuration: parseInt(e.target.value)})}
+                                className="form-input"
+                                placeholder="30"
+                              />
+                            </div>
                           </div>
                           <div className="flex justify-end space-x-2">
                             <button
-                              onClick={() => setEditingEmployee(null)}
+                              onClick={() => {
+                                setEditingEmployee(null);
+                                setEditingEmployeeData({});
+                              }}
                               className="btn btn-secondary"
                             >
                               Annuler
                             </button>
                             <button
                               onClick={() => handleUpdateEmployee(employee.id, {
-                                name: employee.name,
-                                position: employee.position,
-                                email: employee.email,
-                                startTime: employee.startTime,
-                                endTime: employee.endTime,
-                                breakDuration: employee.breakDuration,
-                                hourlyRate: employee.hourlyRate
+                                name: editingEmployeeData.name || employee.name,
+                                position: editingEmployeeData.position || employee.position,
+                                email: editingEmployeeData.email || employee.email,
+                                startTime: editingEmployeeData.startTime || employee.startTime,
+                                endTime: editingEmployeeData.endTime || employee.endTime,
+                                breakDuration: editingEmployeeData.breakDuration !== undefined ? editingEmployeeData.breakDuration : employee.breakDuration,
+                                hourlyRate: editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : employee.hourlyRate
                               })}
                               className="btn btn-primary"
                             >
