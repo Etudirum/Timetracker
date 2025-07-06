@@ -366,6 +366,7 @@ function App() {
   };
 
   const handleStatsClick = (employee) => {
+    console.log('Statistiques clicked for:', employee);
     setSelectedStatsEmployee(employee);
     if (employee.hourlyRate > 0) {
       // Si taux horaire défini, demander authentification
@@ -373,6 +374,7 @@ function App() {
       setIsStatsAuthenticated(false);
     } else {
       // Sinon, afficher directement
+      setIsStatsAuthenticated(true);
       setShowEmployeeStats(true);
     }
   };
