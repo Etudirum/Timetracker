@@ -20,6 +20,7 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
     breakDuration: 30,
     hourlyRate: 0
   });
+  const [editingEmployee, setEditingEmployee] = useState(null);
   const [editingEmployeeData, setEditingEmployeeData] = useState({});
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
