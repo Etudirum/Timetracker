@@ -367,6 +367,7 @@ function App() {
 
       setEditingEntry(null);
       setEditForm({});
+      setIsEditAuthenticated(false);
       setSuccess('Pointage modifié avec succès');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
