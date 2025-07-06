@@ -612,11 +612,15 @@ function App() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Période</label>
+            <label className={`block text-sm font-medium mb-1 transition-colors duration-300 ${
+              darkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>Période</label>
             <select 
               value={filter.period} 
               onChange={(e) => setFilter({...filter, period: e.target.value})}
-              className="border border-gray-300 rounded-lg px-3 py-2"
+              className={`border rounded-lg px-3 py-2 transition-colors duration-300 ${
+                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+              }`}
             >
               <option value="today">Aujourd'hui</option>
               <option value="week">Cette semaine</option>
