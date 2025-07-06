@@ -798,19 +798,25 @@ function App() {
       </header>
 
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+      <nav className={`shadow-sm border-b transition-colors duration-300 ${
+        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex space-x-8">
             <button 
               onClick={() => setCurrentView('pointage')}
-              className={`nav-item ${currentView === 'pointage' ? 'nav-item-active' : 'nav-item-inactive'}`}
+              className={`nav-item ${currentView === 'pointage' ? 'nav-item-active' : 'nav-item-inactive'} ${
+                darkMode ? 'dark-nav-item' : ''
+              }`}
             >
               <Clock className="w-5 h-5" />
               <span>Pointage</span>
             </button>
             <button 
               onClick={() => setCurrentView('registre')}
-              className={`nav-item ${currentView === 'registre' ? 'nav-item-active' : 'nav-item-inactive'}`}
+              className={`nav-item ${currentView === 'registre' ? 'nav-item-active' : 'nav-item-inactive'} ${
+                darkMode ? 'dark-nav-item' : ''
+              }`}
             >
               <FileText className="w-5 h-5" />
               <span>Registre</span>
