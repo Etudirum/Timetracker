@@ -270,3 +270,5 @@ test_plan:
 agent_communication:
   - agent: "testing"
     message: "Completed comprehensive testing of all backend APIs for the TimeTracker24 application. Created a backend_test.py script that tests all the required endpoints. All tests passed successfully. The backend implementation is working as expected and meets all the requirements specified in the problem statement."
+  - agent: "testing"
+    message: "Starting comprehensive testing of the frontend application TimeTracker24. Will test all the components including the main interface, admin panel, register view, employee statistics, and synchronization manager according to the test plan."
