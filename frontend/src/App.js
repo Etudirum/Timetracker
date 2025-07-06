@@ -426,7 +426,7 @@ function App() {
                       setSelectedStatsEmployee(employee);
                       setShowEmployeeStats(true);
                     }}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     <BarChart3 className="w-5 h-5" />
                   </button>
