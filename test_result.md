@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test l'API backend de l'application de pointage TimeTracker24. L'application inclut la gestion des employés, des pointages, l'authentification admin, les paramètres et les statistiques."
+user_problem_statement: "Test complet de l'application frontend TimeTracker24. L'application est une interface de pointage des heures moderne avec les fonctionnalités suivantes : interface principale, panneau d'administration, vue registre, statistiques employé et gestionnaire de synchronisation."
 
 backend:
   - task: "Employee Management API"
