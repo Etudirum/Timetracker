@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Edit2, Trash2, Shield, Eye, EyeOff, Save, UserPlus } from 'lucide-react';
+import { X as CloseIcon, Plus, Edit2, Trash2, Shield, Eye, EyeOff, Save, UserPlus } from 'lucide-react';
 import { offlineStorage } from '../services/offlineStorage';
 import { db } from '../firebase';
 import { collection, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
