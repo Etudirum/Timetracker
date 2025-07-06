@@ -571,7 +571,8 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                                 startTime: editingEmployeeData.startTime || employee.startTime,
                                 endTime: editingEmployeeData.endTime || employee.endTime,
                                 breakDuration: editingEmployeeData.breakDuration !== undefined ? editingEmployeeData.breakDuration : employee.breakDuration,
-                                hourlyRate: editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : employee.hourlyRate
+                                hourlyRate: editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : employee.hourlyRate,
+                                profileImage: editingEmployeeData.profileImage || employee.profileImage
                               })}
                               className="btn btn-primary"
                             >
