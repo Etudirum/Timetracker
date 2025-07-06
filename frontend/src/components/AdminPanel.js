@@ -5,7 +5,7 @@ import { db } from '../firebase';
 import { collection, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
 
-export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
+export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = false }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
