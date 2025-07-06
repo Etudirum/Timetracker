@@ -945,6 +945,7 @@ function App() {
           onClose={() => setShowAdminPanel(false)}
           employees={employees}
           onEmployeeUpdate={loadEmployees}
+          darkMode={darkMode}
         />
       )}
 
