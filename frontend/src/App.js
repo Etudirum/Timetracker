@@ -24,8 +24,12 @@ function App() {
   const [error, setError] = useState('');
   const [darkMode, setDarkMode] = useState(false);
   const [showStatsAuth, setShowStatsAuth] = useState(false);
+  const [showEditAuth, setShowEditAuth] = useState(false);
   const [statsPassword, setStatsPassword] = useState('');
+  const [editPassword, setEditPassword] = useState('');
   const [isStatsAuthenticated, setIsStatsAuthenticated] = useState(false);
+  const [isEditAuthenticated, setIsEditAuthenticated] = useState(false);
+  const [pendingEditEntry, setPendingEditEntry] = useState(null);
   const [stats, setStats] = useState({
     weeklyHours: 0,
     activeEmployees: 0,
