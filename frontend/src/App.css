@@ -4,23 +4,31 @@
 
 /* Stats Cards */
 .stats-card {
-  @apply p-6 rounded-2xl shadow-sm border border-gray-200 bg-gradient-to-br transform transition-all duration-200 hover:shadow-md hover:-translate-y-1;
+  @apply p-6 rounded-2xl shadow-lg border-0 bg-gradient-to-br transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2;
 }
 
 .stats-card-total {
-  @apply from-purple-500 to-purple-600 text-white;
+  background: linear-gradient(135deg, #E879F9 0%, #C084FC 50%, #A855F7 100%);
+  @apply text-white;
+  box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.3);
 }
 
 .stats-card-completed {
-  @apply from-blue-500 to-blue-600 text-white;
+  background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 50%, #0284C7 100%);
+  @apply text-white;
+  box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
 }
 
 .stats-card-pending {
-  @apply from-green-500 to-green-600 text-white;
+  background: linear-gradient(135deg, #4ADE80 0%, #22C55E 50%, #16A34A 100%);
+  @apply text-white;
+  box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.3);
 }
 
 .stats-card-overdue {
-  @apply from-orange-500 to-orange-600 text-white;
+  background: linear-gradient(135deg, #FB7185 0%, #F87171 50%, #EF4444 100%);
+  @apply text-white;
+  box-shadow: 0 10px 25px -5px rgba(248, 113, 113, 0.3);
 }
 
 /* Navigation */
