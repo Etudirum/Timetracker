@@ -582,14 +582,36 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                         </div>
                       ) : (
                         <div className="flex items-center justify-between">
-                          <div>
-                            <h4 className="font-medium text-gray-900">{employee.name}</h4>
-                            <p className="text-sm text-gray-500">{employee.position}</p>
-                            <p className="text-sm text-gray-500">
-                              {employee.startTime} - {employee.endTime}
-                              {employee.hourlyRate > 0 && ` • ${employee.hourlyRate} FCFA/h`}
-                              {employee.breakDuration && ` • Pause max: ${employee.breakDuration}min`}
-                            </p>
+                          <div className="flex items-center space-x-3">
+                            {/* Photo de profil affichage */}
+                            <div className="w-12 h-12 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center">
+                              {employee.profileImage ? (
+                                <img 
+                                  src={employee.profileImage} 
+                                  alt={employee.name} 
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-purple-600 font-semibold">
+                                  {getInitials(employee.name)}
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <h4 className={`font-medium transition-colors duration-300 ${
+                                darkMode ? 'text-white' : 'text-gray-900'
+                              }`}>{employee.name}</h4>
+                              <p className={`text-sm transition-colors duration-300 ${
+                                darkMode ? 'text-gray-400' : 'text-gray-500'
+                              }`}>{employee.position}</p>
+                              <p className={`text-sm transition-colors duration-300 ${
+                                darkMode ? 'text-gray-400' : 'text-gray-500'
+                              }`}>
+                                {employee.startTime} - {employee.endTime}
+                                {employee.hourlyRate > 0 && ` • ${employee.hourlyRate} FCFA/h`}
+                                {employee.breakDuration && ` • Pause max: ${employee.breakDuration}min`}
+                              </p>
+                            </div>
                           </div>
                           <div className="flex space-x-2">
                             <button
