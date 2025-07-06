@@ -500,6 +500,20 @@ function App() {
                       status === 'on_break' ? 'bg-yellow-500' : 
                       'bg-red-500'
                     }`}></div>
+                    {/* Photo de profil */}
+                    <div className="w-10 h-10 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center">
+                      {employee.profileImage ? (
+                        <img 
+                          src={employee.profileImage} 
+                          alt={employee.name} 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-purple-600 font-semibold text-sm">
+                          {employee.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
+                        </span>
+                      )}
+                    </div>
                     <div>
                       <h3 className={`font-medium transition-colors duration-300 ${
                         darkMode ? 'text-white' : 'text-gray-900'
