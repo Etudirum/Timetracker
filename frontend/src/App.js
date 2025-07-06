@@ -985,7 +985,61 @@ function App() {
         />
       )}
 
-      {/* Stats Auth Modal */}
+      {/* Edit Auth Modal */}
+      {showEditAuth && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-2">
+                <Shield className="w-6 h-6 text-purple-600" />
+                <h2 className="text-xl font-semibold text-gray-900">Modification des Heures</h2>
+              </div>
+              <button onClick={() => {
+                setShowEditAuth(false);
+                setEditPassword('');
+                setPendingEditEntry(null);
+              }} className="text-gray-500 hover:text-gray-700">
+                <CloseIcon className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600">
+                La modification des heures de travail nécessite une authentification administrateur.
+              </p>
+              <div>
+                <label className="form-label">Mot de passe administrateur</label>
+                <input
+                  type="password"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  className="form-input"
+                  placeholder="Entrez le mot de passe"
+                  onKeyPress={(e) => e.key === 'Enter' && handleEditAuth()}
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button 
+                  onClick={() => {
+                    setShowEditAuth(false);
+                    setEditPassword('');
+                    setPendingEditEntry(null);
+                  }} 
+                  className="btn btn-secondary"
+                >
+                  Annuler
+                </button>
+                <button onClick={handleEditAuth} className="btn btn-primary">
+                  Autoriser la modification
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Stats Auth Modal - Keep for backward compatibility but not used */}
       {showStatsAuth && (
         <div className="modal-overlay">
           <div className="modal-content">
