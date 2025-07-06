@@ -406,6 +406,7 @@ function App() {
   const cancelEdit = () => {
     setEditingEntry(null);
     setEditForm({});
+    setIsEditAuthenticated(false);
   };
 
   const getFilteredTimeEntries = () => {
