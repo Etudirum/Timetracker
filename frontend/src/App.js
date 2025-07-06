@@ -373,9 +373,9 @@ function App() {
   const handleStatsClick = (employee) => {
     console.log('Statistiques clicked for:', employee);
     setSelectedStatsEmployee(employee);
-    // Toujours demander l'authentification pour accéder aux statistiques
-    setShowStatsAuth(true);
-    setIsStatsAuthenticated(false);
+    // Accès direct aux statistiques sans authentification
+    setIsStatsAuthenticated(true);
+    setShowEmployeeStats(true);
   };
 
   const formatSalary = (hours, hourlyRate) => {
