@@ -383,6 +383,11 @@ function App() {
     return `${salary.toLocaleString()} FCFA`;
   };
 
+  const cancelEdit = () => {
+    setEditingEntry(null);
+    setEditForm({});
+  };
+
   const getFilteredTimeEntries = () => {
     let filtered = timeEntries;
 
