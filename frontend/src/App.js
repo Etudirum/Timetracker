@@ -353,9 +353,34 @@ function App() {
     }
   };
 
-  const cancelEdit = () => {
-    setEditingEntry(null);
-    setEditForm({});
+  const handleStatsAuth = () => {
+    if (statsPassword === 'admin123') {
+      setIsStatsAuthenticated(true);
+      setShowStatsAuth(false);
+      setStatsPassword('');
+      setShowEmployeeStats(true);
+    } else {
+      setError('Mot de passe incorrect pour accéder aux statistiques');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+  const handleStatsClick = (employee) => {
+    setSelectedStatsEmployee(employee);
+    if (employee.hourlyRate > 0) {
+      // Si taux horaire défini, demander authentification
+      setShowStatsAuth(true);
+      setIsStatsAuthenticated(false);
+    } else {
+      // Sinon, afficher directement
+      setShowEmployeeStats(true);
+    }
+  };
+
+  const formatSalary = (hours, hourlyRate) => {
+    if (!hourlyRate || hourlyRate <= 0) return null;
+    const salary = Math.round(hours * hourlyRate);
+    return `${salary.toLocaleString()} FCFA`;
   };
 
   const getFilteredTimeEntries = () => {
