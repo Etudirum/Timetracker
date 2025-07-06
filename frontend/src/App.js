@@ -710,36 +710,48 @@ function App() {
                 }, 0);
 
                 return (
-                  <tr key={entry.id} className="hover:bg-gray-50">
+                  <tr key={entry.id} className={`transition-colors duration-300 ${
+                    darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+                  }`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className={`w-2 h-2 rounded-full mr-2 ${
                           entry.endTime ? 'bg-gray-400' : 'bg-green-500'
                         }`}></div>
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className={`text-sm font-medium transition-colors duration-300 ${
+                          darkMode ? 'text-white' : 'text-gray-900'
+                        }`}>
                           {employee ? employee.name : 'Inconnu'}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-500'
+                    }`}>
                       {editingEntry === entry.id ? (
                         <input
                           type="datetime-local"
                           value={editForm.startTime}
                           onChange={(e) => setEditForm({...editForm, startTime: e.target.value})}
-                          className="border border-gray-300 rounded px-2 py-1 text-xs"
+                          className={`border rounded px-2 py-1 text-xs transition-colors duration-300 ${
+                            darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+                          }`}
                         />
                       ) : (
                         formatTime(entry.startTime)
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-500'
+                    }`}>
                       {editingEntry === entry.id ? (
                         <input
                           type="datetime-local"
                           value={editForm.endTime}
                           onChange={(e) => setEditForm({...editForm, endTime: e.target.value})}
-                          className="border border-gray-300 rounded px-2 py-1 text-xs"
+                          className={`border rounded px-2 py-1 text-xs transition-colors duration-300 ${
+                            darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+                          }`}
                         />
                       ) : (
                         entry.endTime ? formatTime(entry.endTime) : 'En cours'
