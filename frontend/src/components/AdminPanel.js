@@ -18,7 +18,8 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
     startTime: '08:00',
     endTime: '17:00',
     breakDuration: 30,
-    hourlyRate: 0
+    hourlyRate: 0,
+    profileImage: null
   });
   const [editingEmployee, setEditingEmployee] = useState(null);
   const [editingEmployeeData, setEditingEmployeeData] = useState({});
