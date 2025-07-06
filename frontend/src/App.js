@@ -685,7 +685,20 @@ function App() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <span className="font-medium text-purple-600">
-                        {duration.display}
+                        {(() => {
+                          const employee = employees.find(emp => emp.id === entry.employeeId);
+                          const duration = calculateDuration(entry.startTime, entry.endTime, employee);
+                          return (
+                            <div>
+                              <div>{duration.display}</div>
+                              {duration.breakMinutes > 0 && (
+                                <div className="text-xs text-orange-500">
+                                  (Pause auto: {duration.breakMinutes}min)
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
