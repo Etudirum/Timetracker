@@ -518,8 +518,12 @@ function App() {
                 </div>
                 
                 {currentEntry && (
-                  <div className="mb-3 p-2 bg-gray-50 rounded-lg">
-                    <p className="text-sm text-gray-600">
+                  <div className={`mb-3 p-2 rounded-lg transition-colors duration-300 ${
+                    darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                  }`}>
+                    <p className={`text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
                       Arrivée: {formatTime(currentEntry.startTime)}
                     </p>
                     {status === 'on_break' && (
