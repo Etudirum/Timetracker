@@ -267,24 +267,62 @@ function App() {
     return new Date(date).toLocaleDateString('fr-FR');
   };
 
-  const calculateDuration = (startTime, endTime) => {
-    if (!endTime) return { hours: 0, minutes: 0, display: '0h 0min' };
-    const duration = (new Date(endTime) - new Date(startTime)) / (1000 * 60);
-    const hours = Math.floor(duration / 60);
-    const minutes = Math.round(duration % 60);
+  // Fonction pour formater la date/heure locale sans conversion timezone
+  const formatDateTimeLocal = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  // Calcul automatique des pauses selon le critère
+  const calculateAutomaticBreaks = (startTime, endTime, maxBreakDuration) => {
+    if (!endTime) return 0;
+    
+    const totalWorkMinutes = (new Date(endTime) - new Date(startTime)) / (1000 * 60);
+    const totalWorkHours = totalWorkMinutes / 60;
+    
+    // 15 minutes pour chaque tranche de 3 heures
+    const automaticBreakMinutes = Math.floor(totalWorkHours / 3) * 15;
+    
+    // Ne pas dépasser la durée de pause maximale
+    return Math.min(automaticBreakMinutes, maxBreakDuration || 30);
+  };
+
+  const calculateDuration = (startTime, endTime, employee = null) => {
+    if (!endTime) return { hours: 0, minutes: 0, display: '0h 0min', totalHours: 0 };
+    
+    const totalMinutes = (new Date(endTime) - new Date(startTime)) / (1000 * 60);
+    
+    // Calcul automatique des pauses si employé fourni
+    let breakMinutes = 0;
+    if (employee) {
+      breakMinutes = calculateAutomaticBreaks(startTime, endTime, employee.breakDuration || 30);
+    }
+    
+    // Soustraire les pauses automatiques
+    const workMinutes = Math.max(0, totalMinutes - breakMinutes);
+    
+    const hours = Math.floor(workMinutes / 60);
+    const minutes = Math.round(workMinutes % 60);
+    
     return { 
       hours, 
       minutes, 
       display: `${hours}h ${minutes}min`,
-      totalHours: Math.round((duration / 60) * 10) / 10
+      totalHours: Math.round((workMinutes / 60) * 10) / 10,
+      breakMinutes
     };
   };
 
   const handleEditEntry = (entry) => {
     setEditingEntry(entry.id);
     setEditForm({
-      startTime: new Date(entry.startTime).toISOString().slice(0, 16),
-      endTime: entry.endTime ? new Date(entry.endTime).toISOString().slice(0, 16) : '',
+      startTime: formatDateTimeLocal(entry.startTime),
+      endTime: entry.endTime ? formatDateTimeLocal(entry.endTime) : '',
       notes: entry.notes || ''
     });
   };
