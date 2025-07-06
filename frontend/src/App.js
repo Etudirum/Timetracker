@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Clock, Users, BarChart3, Settings, Shield, CheckCircle, XCircle, Play, Pause, Coffee, Calendar, Download, FileText, Users2, Clock4 } from "lucide-react";
+import { Clock, Users, BarChart3, Settings, Shield, CheckCircle, XCircle, Play, Pause, Coffee, Calendar, Download, FileText, Users2, Clock4, X as CloseIcon } from "lucide-react";
 import { db } from "./firebase";
 import { collection, addDoc, query, where, orderBy, onSnapshot, updateDoc, doc, deleteDoc, getDocs } from "firebase/firestore";
 import { offlineStorage } from "./services/offlineStorage";
