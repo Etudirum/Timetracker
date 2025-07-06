@@ -408,7 +408,7 @@ function App() {
             const currentEntry = getEmployeeCurrentEntry(employee.id);
             
             return (
-              <div key={employee.id} className="p-4 border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
+              <div key={employee.id} className="employee-card">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
                     <div className={`w-3 h-3 rounded-full ${
