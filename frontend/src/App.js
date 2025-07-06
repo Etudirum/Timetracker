@@ -334,6 +334,19 @@ function App() {
       filtered = filtered.filter(entry => 
         new Date(entry.startTime) >= weekStart
       );
+    } else if (filter.period === 'month') {
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      filtered = filtered.filter(entry => 
+        new Date(entry.startTime) >= monthStart
+      );
+    } else if (filter.period === 'custom' && filter.startDate && filter.endDate) {
+      const startDate = new Date(filter.startDate);
+      const endDate = new Date(filter.endDate);
+      endDate.setHours(23, 59, 59, 999); // Include the entire end date
+      filtered = filtered.filter(entry => {
+        const entryDate = new Date(entry.startTime);
+        return entryDate >= startDate && entryDate <= endDate;
+      });
     }
 
     return filtered;
