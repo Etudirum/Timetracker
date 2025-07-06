@@ -322,13 +322,32 @@ function App() {
     };
   };
 
+  const handleEditAuth = () => {
+    if (editPassword === 'admin123') {
+      setIsEditAuthenticated(true);
+      setShowEditAuth(false);
+      setEditPassword('');
+      // Procéder avec la modification en attente
+      if (pendingEditEntry) {
+        setEditingEntry(pendingEditEntry.id);
+        setEditForm({
+          startTime: formatDateTimeLocal(pendingEditEntry.startTime),
+          endTime: pendingEditEntry.endTime ? formatDateTimeLocal(pendingEditEntry.endTime) : '',
+          notes: pendingEditEntry.notes || ''
+        });
+        setPendingEditEntry(null);
+      }
+    } else {
+      setError('Mot de passe incorrect pour modifier les heures');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
   const handleEditEntry = (entry) => {
-    setEditingEntry(entry.id);
-    setEditForm({
-      startTime: formatDateTimeLocal(entry.startTime),
-      endTime: entry.endTime ? formatDateTimeLocal(entry.endTime) : '',
-      notes: entry.notes || ''
-    });
+    // Demander l'authentification avant de permettre la modification
+    setPendingEditEntry(entry);
+    setShowEditAuth(true);
+    setIsEditAuthenticated(false);
   };
 
   const handleSaveEdit = async () => {
