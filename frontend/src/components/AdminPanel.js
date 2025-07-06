@@ -439,12 +439,45 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
 
               {/* Employee List */}
               <div>
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Liste des employés</h3>
+                <h3 className={`text-lg font-medium mb-4 transition-colors duration-300 ${
+                  darkMode ? 'text-white' : 'text-gray-900'
+                }`}>Liste des employés</h3>
                 <div className="space-y-3">
                   {employees.map(employee => (
-                    <div key={employee.id} className="bg-white border border-gray-200 rounded-lg p-4">
+                    <div key={employee.id} className={`border rounded-lg p-4 transition-colors duration-300 ${
+                      darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
+                    }`}>
                       {editingEmployee === employee.id ? (
                         <div className="space-y-3">
+                          {/* Photo de profil pour édition */}
+                          <div>
+                            <label className={`form-label transition-colors duration-300 ${
+                              darkMode ? 'text-gray-300' : ''
+                            }`}>Photo de profil</label>
+                            <div className="flex items-center space-x-4">
+                              <div className="w-16 h-16 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center">
+                                {(editingEmployeeData.profileImage || employee.profileImage) ? (
+                                  <img 
+                                    src={editingEmployeeData.profileImage || employee.profileImage} 
+                                    alt="Profil" 
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <span className="text-purple-600 font-semibold text-lg">
+                                    {getInitials(editingEmployeeData.name || employee.name)}
+                                  </span>
+                                )}
+                              </div>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleImageUpload(e, true)}
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
+                              />
+                            </div>
+                          </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             <div>
                               <label className="form-label">Nom</label>
