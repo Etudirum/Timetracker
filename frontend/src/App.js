@@ -664,21 +664,41 @@ function App() {
       </div>
 
       {/* Tableau des pointages */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className={`rounded-2xl shadow-sm border overflow-hidden transition-colors duration-300 ${
+        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className={`transition-colors duration-300 ${
+              darkMode ? 'bg-gray-700' : 'bg-gray-50'
+            }`}>
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employé</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Arrivée</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Départ</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pauses</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Employé</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Arrivée</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Départ</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Durée</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Pauses</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Date</th>
+                <th className={`px-6 py-3 text-left text-xs font-medium uppercase tracking-wider transition-colors duration-300 ${
+                  darkMode ? 'text-gray-300' : 'text-gray-500'
+                }`}>Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className={`divide-y transition-colors duration-300 ${
+              darkMode ? 'bg-gray-800 divide-gray-700' : 'bg-white divide-gray-200'
+            }`}>
               {getFilteredTimeEntries().map(entry => {
                 const employee = employees.find(emp => emp.id === entry.employeeId);
                 const duration = calculateDuration(entry.startTime, entry.endTime);
