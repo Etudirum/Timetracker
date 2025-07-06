@@ -262,9 +262,56 @@ function App() {
   };
 
   const calculateDuration = (startTime, endTime) => {
-    if (!endTime) return 0;
-    const duration = (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60);
-    return Math.round(duration * 10) / 10;
+    if (!endTime) return { hours: 0, minutes: 0, display: '0h 0min' };
+    const duration = (new Date(endTime) - new Date(startTime)) / (1000 * 60);
+    const hours = Math.floor(duration / 60);
+    const minutes = Math.round(duration % 60);
+    return { 
+      hours, 
+      minutes, 
+      display: `${hours}h ${minutes}min`,
+      totalHours: Math.round((duration / 60) * 10) / 10
+    };
+  };
+
+  const handleEditEntry = (entry) => {
+    setEditingEntry(entry.id);
+    setEditForm({
+      startTime: new Date(entry.startTime).toISOString().slice(0, 16),
+      endTime: entry.endTime ? new Date(entry.endTime).toISOString().slice(0, 16) : '',
+      notes: entry.notes || ''
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const updatedData = {
+        startTime: new Date(editForm.startTime).toISOString(),
+        endTime: editForm.endTime ? new Date(editForm.endTime).toISOString() : null,
+        notes: editForm.notes,
+        status: editForm.endTime ? 'completed' : 'active'
+      };
+
+      if (isOnline && !editingEntry.startsWith('offline_')) {
+        await updateDoc(doc(db, 'timeEntries', editingEntry), updatedData);
+      } else {
+        await offlineStorage.updateTimeEntry(editingEntry, updatedData);
+      }
+
+      setEditingEntry(null);
+      setEditForm({});
+      setSuccess('Pointage modifié avec succès');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (error) {
+      console.error('Erreur lors de la modification:', error);
+      setError('Erreur lors de la modification du pointage');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingEntry(null);
+    setEditForm({});
   };
 
   const getFilteredTimeEntries = () => {
