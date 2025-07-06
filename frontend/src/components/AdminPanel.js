@@ -282,13 +282,13 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
                     />
                   </div>
                   <div>
-                    <label className="form-label">Taux horaire (€)</label>
+                    <label className="form-label">Taux horaire (FCFA)</label>
                     <input
                       type="number"
                       value={newEmployee.hourlyRate}
                       onChange={(e) => setNewEmployee({...newEmployee, hourlyRate: parseFloat(e.target.value)})}
                       className="form-input"
-                      placeholder="15.00"
+                      placeholder="1500"
                       step="0.01"
                     />
                   </div>
