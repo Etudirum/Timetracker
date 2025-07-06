@@ -476,15 +476,21 @@ function App() {
       </div>
 
       {/* Liste des employés */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Employés</h2>
+      <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
+        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
+        <h2 className={`text-xl font-semibold mb-6 transition-colors duration-300 ${
+          darkMode ? 'text-white' : 'text-gray-900'
+        }`}>Employés</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {employees.map(employee => {
             const status = getEmployeeStatus(employee.id);
             const currentEntry = getEmployeeCurrentEntry(employee.id);
             
             return (
-              <div key={employee.id} className="employee-card">
+              <div key={employee.id} className={`employee-card transition-colors duration-300 ${
+                darkMode ? 'dark' : ''
+              }`}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
                     <div className={`w-3 h-3 rounded-full ${
@@ -493,13 +499,19 @@ function App() {
                       'bg-red-500'
                     }`}></div>
                     <div>
-                      <h3 className="font-medium text-gray-900">{employee.name}</h3>
-                      <p className="text-sm text-gray-500">{employee.position}</p>
+                      <h3 className={`font-medium transition-colors duration-300 ${
+                        darkMode ? 'text-white' : 'text-gray-900'
+                      }`}>{employee.name}</h3>
+                      <p className={`text-sm transition-colors duration-300 ${
+                        darkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}>{employee.position}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => handleStatsClick(employee)}
-                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                    className={`transition-colors duration-300 ${
+                      darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-400 hover:text-gray-600'
+                    }`}
                   >
                     <BarChart3 className="w-5 h-5" />
                   </button>
