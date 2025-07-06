@@ -494,10 +494,7 @@ function App() {
                     </div>
                   </div>
                   <button 
-                    onClick={() => {
-                      setSelectedStatsEmployee(employee);
-                      setShowEmployeeStats(true);
-                    }}
+                    onClick={() => handleStatsClick(employee)}
                     className="text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     <BarChart3 className="w-5 h-5" />
