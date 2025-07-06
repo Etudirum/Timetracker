@@ -332,71 +332,99 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                     </div>
                   </div>
                   <div>
-                    <label className="form-label">Nom</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Nom</label>
                     <input
                       type="text"
                       value={newEmployee.name}
                       onChange={(e) => setNewEmployee({...newEmployee, name: e.target.value})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="Nom complet"
                     />
                   </div>
                   <div>
-                    <label className="form-label">Poste</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Poste</label>
                     <input
                       type="text"
                       value={newEmployee.position}
                       onChange={(e) => setNewEmployee({...newEmployee, position: e.target.value})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="Poste occupé"
                     />
                   </div>
                   <div>
-                    <label className="form-label">Email</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Email</label>
                     <input
                       type="email"
                       value={newEmployee.email}
                       onChange={(e) => setNewEmployee({...newEmployee, email: e.target.value})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="email@example.com"
                     />
                   </div>
                   <div>
-                    <label className="form-label">Taux horaire (FCFA)</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Taux horaire (FCFA)</label>
                     <input
                       type="number"
                       value={newEmployee.hourlyRate}
                       onChange={(e) => setNewEmployee({...newEmployee, hourlyRate: parseFloat(e.target.value)})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="1500"
                       step="0.01"
                     />
                   </div>
                   <div>
-                    <label className="form-label">Heure de début</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Heure de début</label>
                     <input
                       type="time"
                       value={newEmployee.startTime}
                       onChange={(e) => setNewEmployee({...newEmployee, startTime: e.target.value})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                     />
                   </div>
                   <div>
-                    <label className="form-label">Heure de fin</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Heure de fin</label>
                     <input
                       type="time"
                       value={newEmployee.endTime}
                       onChange={(e) => setNewEmployee({...newEmployee, endTime: e.target.value})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                     />
                   </div>
                   <div>
-                    <label className="form-label">Durée de pause (minutes)</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Durée de pause (minutes)</label>
                     <input
                       type="number"
                       value={newEmployee.breakDuration}
                       onChange={(e) => setNewEmployee({...newEmployee, breakDuration: parseInt(e.target.value)})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="30"
                     />
                   </div>
