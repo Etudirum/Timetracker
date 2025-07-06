@@ -346,7 +346,11 @@
 }
 
 .dark .modal-content {
-  @apply bg-gray-800 text-white;
+  @apply bg-gray-800 text-white border border-gray-700;
+}
+
+.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .dark .success {
