@@ -139,7 +139,24 @@
 
 /* Hover effects */
 .hover-card {
-  @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-2;
+}
+
+.hover-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* Employee cards with beautiful shadows */
+.employee-card {
+  @apply p-4 border border-gray-200 rounded-xl transition-all duration-300 bg-white;
+  box-shadow: 0 2px 10px -3px rgba(0, 0, 0, 0.1);
+}
+
+.employee-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  border-color: rgba(168, 85, 247, 0.3);
 }
 
 /* Focus states */
