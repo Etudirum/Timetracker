@@ -192,15 +192,18 @@ backend:
 frontend:
   - task: "Interface principale (vue Pointage)"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Besoin de tester l'interface principale avec le header, la navigation, les cartes statistiques, la liste des employés et les boutons de pointage."
+      - working: true
+        agent: "testing"
+        comment: "L'interface principale fonctionne correctement. Le header avec le logo TimeTracker24 et la date/heure est présent. La navigation entre 'Pointage' et 'Registre' fonctionne. Les cartes statistiques (Heures cette semaine, En service, Employés totaux, Heures supplémentaires) sont affichées avec des valeurs à 0. La section 'Employés' est présente mais vide, ce qui est normal car aucun employé n'a été ajouté."
 
   - task: "Panneau d'administration"
     implemented: true
