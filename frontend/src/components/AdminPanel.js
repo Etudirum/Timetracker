@@ -222,38 +222,48 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="bg-white rounded-2xl shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden">
+    <div className={`modal-overlay transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+      <div className={`rounded-2xl shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-hidden transition-colors duration-300 ${
+        darkMode ? 'bg-gray-800 text-white border border-gray-700' : 'bg-white'
+      }`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className={`flex items-center justify-between p-6 border-b transition-colors duration-300 ${
+          darkMode ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <div className="flex items-center space-x-2">
             <Shield className="w-6 h-6 text-purple-600" />
-            <h2 className="text-xl font-semibold text-gray-900">Panneau d'Administration</h2>
+            <h2 className={`text-xl font-semibold transition-colors duration-300 ${
+              darkMode ? 'text-white' : 'text-gray-900'
+            }`}>Panneau d'Administration</h2>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button onClick={onClose} className={`transition-colors duration-300 ${
+            darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+          }`}>
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Navigation */}
-        <div className="border-b border-gray-200">
+        <div className={`border-b transition-colors duration-300 ${
+          darkMode ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <nav className="flex space-x-8 px-6">
             <button
               onClick={() => setCurrentView('employees')}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors duration-300 ${
                 currentView === 'employees'
                   ? 'border-purple-500 text-purple-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : `border-transparent hover:${darkMode ? 'text-gray-300' : 'text-gray-700'} ${darkMode ? 'text-gray-400' : 'text-gray-500'}`
               }`}
             >
               Employés
             </button>
             <button
               onClick={() => setCurrentView('settings')}
-              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+              className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors duration-300 ${
                 currentView === 'settings'
                   ? 'border-purple-500 text-purple-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : `border-transparent hover:${darkMode ? 'text-gray-300' : 'text-gray-700'} ${darkMode ? 'text-gray-400' : 'text-gray-500'}`
               }`}
             >
               Paramètres
