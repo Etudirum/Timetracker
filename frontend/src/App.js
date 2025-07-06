@@ -581,19 +581,29 @@ function App() {
   const renderRegistreView = () => (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Registre des Pointages</h1>
-        <p className="text-gray-600">Historique et gestion des temps</p>
+        <h1 className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
+          darkMode ? 'text-white' : 'text-gray-900'
+        }`}>Registre des Pointages</h1>
+        <p className={`transition-colors duration-300 ${
+          darkMode ? 'text-gray-400' : 'text-gray-600'
+        }`}>Historique et gestion des temps</p>
       </div>
 
       {/* Filtres */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+      <div className={`rounded-2xl shadow-sm border p-6 mb-6 transition-colors duration-300 ${
+        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+      }`}>
         <div className="flex flex-wrap gap-4 items-center">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Employé</label>
+            <label className={`block text-sm font-medium mb-1 transition-colors duration-300 ${
+              darkMode ? 'text-gray-300' : 'text-gray-700'
+            }`}>Employé</label>
             <select 
               value={filter.employee} 
               onChange={(e) => setFilter({...filter, employee: e.target.value})}
-              className="border border-gray-300 rounded-lg px-3 py-2"
+              className={`border rounded-lg px-3 py-2 transition-colors duration-300 ${
+                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+              }`}
             >
               <option value="all">Tous les employés</option>
               {employees.map(emp => (
