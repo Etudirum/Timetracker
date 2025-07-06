@@ -20,6 +20,8 @@ function App() {
   const [selectedStatsEmployee, setSelectedStatsEmployee] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
   const [editForm, setEditForm] = useState({});
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
   const [stats, setStats] = useState({
     weeklyHours: 0,
     activeEmployees: 0,
