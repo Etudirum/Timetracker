@@ -522,9 +522,32 @@ function App() {
               <option value="today">Aujourd'hui</option>
               <option value="week">Cette semaine</option>
               <option value="month">Ce mois</option>
+              <option value="custom">Période personnalisée</option>
               <option value="all">Tout</option>
             </select>
           </div>
+          {filter.period === 'custom' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date de début</label>
+                <input
+                  type="date"
+                  value={filter.startDate}
+                  onChange={(e) => setFilter({...filter, startDate: e.target.value})}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date de fin</label>
+                <input
+                  type="date"
+                  value={filter.endDate}
+                  onChange={(e) => setFilter({...filter, endDate: e.target.value})}
+                  className="border border-gray-300 rounded-lg px-3 py-2"
+                />
+              </div>
+            </>
+          )}
           <ExportManager timeEntries={getFilteredTimeEntries()} employees={employees} />
         </div>
       </div>
