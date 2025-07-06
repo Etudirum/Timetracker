@@ -123,7 +123,25 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
     }
   };
 
-  const handleUpdateSettings = async () => {
+  const handleImageUpload = (e, isEdit = false) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target.result;
+        if (isEdit) {
+          setEditingEmployeeData({...editingEmployeeData, profileImage: base64});
+        } else {
+          setNewEmployee({...newEmployee, profileImage: base64});
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const getInitials = (name) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
     try {
       await offlineStorage.saveSettings(settings);
       setSuccess('Paramètres mis à jour avec succès');
