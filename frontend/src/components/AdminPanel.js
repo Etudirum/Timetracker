@@ -341,10 +341,11 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
                               type="text"
                               value={employee.name}
                               onChange={(e) => {
-                                const updated = employees.map(emp => 
+                                // Update local state for immediate feedback
+                                const updatedEmployees = employees.map(emp => 
                                   emp.id === employee.id ? {...emp, name: e.target.value} : emp
                                 );
-                                // Update local state for immediate feedback
+                                setEmployees && setEmployees(updatedEmployees);
                               }}
                               className="form-input"
                               placeholder="Nom"
@@ -353,13 +354,72 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
                               type="text"
                               value={employee.position}
                               onChange={(e) => {
-                                const updated = employees.map(emp => 
+                                const updatedEmployees = employees.map(emp => 
                                   emp.id === employee.id ? {...emp, position: e.target.value} : emp
                                 );
-                                // Update local state for immediate feedback
+                                setEmployees && setEmployees(updatedEmployees);
                               }}
                               className="form-input"
                               placeholder="Poste"
+                            />
+                            <input
+                              type="email"
+                              value={employee.email || ''}
+                              onChange={(e) => {
+                                const updatedEmployees = employees.map(emp => 
+                                  emp.id === employee.id ? {...emp, email: e.target.value} : emp
+                                );
+                                setEmployees && setEmployees(updatedEmployees);
+                              }}
+                              className="form-input"
+                              placeholder="Email"
+                            />
+                            <input
+                              type="number"
+                              value={employee.hourlyRate || 0}
+                              onChange={(e) => {
+                                const updatedEmployees = employees.map(emp => 
+                                  emp.id === employee.id ? {...emp, hourlyRate: parseFloat(e.target.value)} : emp
+                                );
+                                setEmployees && setEmployees(updatedEmployees);
+                              }}
+                              className="form-input"
+                              placeholder="Taux horaire (FCFA)"
+                              step="0.01"
+                            />
+                            <input
+                              type="time"
+                              value={employee.startTime || '08:00'}
+                              onChange={(e) => {
+                                const updatedEmployees = employees.map(emp => 
+                                  emp.id === employee.id ? {...emp, startTime: e.target.value} : emp
+                                );
+                                setEmployees && setEmployees(updatedEmployees);
+                              }}
+                              className="form-input"
+                            />
+                            <input
+                              type="time"
+                              value={employee.endTime || '17:00'}
+                              onChange={(e) => {
+                                const updatedEmployees = employees.map(emp => 
+                                  emp.id === employee.id ? {...emp, endTime: e.target.value} : emp
+                                );
+                                setEmployees && setEmployees(updatedEmployees);
+                              }}
+                              className="form-input"
+                            />
+                            <input
+                              type="number"
+                              value={employee.breakDuration || 30}
+                              onChange={(e) => {
+                                const updatedEmployees = employees.map(emp => 
+                                  emp.id === employee.id ? {...emp, breakDuration: parseInt(e.target.value)} : emp
+                                );
+                                setEmployees && setEmployees(updatedEmployees);
+                              }}
+                              className="form-input"
+                              placeholder="Durée pause max (min)"
                             />
                           </div>
                           <div className="flex justify-end space-x-2">
