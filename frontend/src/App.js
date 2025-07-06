@@ -775,13 +775,19 @@ function App() {
                         })()}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-500'
+                    }`}>
                       {totalBreakTime > 0 ? `${Math.round(totalBreakTime)}min` : '-'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-500'
+                    }`}>
                       {formatDate(entry.startTime)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-500'
+                    }`}>
                       <div className="flex space-x-2">
                         {editingEntry === entry.id ? (
                           <>
@@ -793,7 +799,9 @@ function App() {
                             </button>
                             <button 
                               onClick={cancelEdit}
-                              className="text-gray-600 hover:text-gray-800"
+                              className={`transition-colors duration-300 ${
+                                darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-600 hover:text-gray-800'
+                              }`}
                             >
                               Annuler
                             </button>
