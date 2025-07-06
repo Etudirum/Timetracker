@@ -358,6 +358,7 @@ function App() {
       setIsStatsAuthenticated(true);
       setShowStatsAuth(false);
       setStatsPassword('');
+      // Ouvrir le modal des statistiques après authentification réussie
       setShowEmployeeStats(true);
     } else {
       setError('Mot de passe incorrect pour accéder aux statistiques');
