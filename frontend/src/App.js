@@ -427,8 +427,12 @@ function App() {
   const renderPointageView = () => (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Pointage des Heures</h1>
-        <p className="text-gray-600">Système de gestion des temps de travail</p>
+        <h1 className={`text-3xl font-bold mb-2 transition-colors duration-300 ${
+          darkMode ? 'text-white' : 'text-gray-900'
+        }`}>Pointage des Heures</h1>
+        <p className={`transition-colors duration-300 ${
+          darkMode ? 'text-gray-400' : 'text-gray-600'
+        }`}>Système de gestion des temps de travail</p>
       </div>
 
       {/* Statistiques */}
