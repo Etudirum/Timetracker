@@ -1021,7 +1021,7 @@ function App() {
             setShowEmployeeStats(false);
             setIsStatsAuthenticated(false);
           }}
-          showSalary={isStatsAuthenticated || selectedStatsEmployee.hourlyRate <= 0}
+          showSalary={isStatsAuthenticated && selectedStatsEmployee.hourlyRate > 0}
           formatSalary={formatSalary}
         />
       )}
