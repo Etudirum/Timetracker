@@ -279,11 +279,11 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
                     {Math.round((stats.completedEntries / Math.max(stats.totalEntries, 1)) * 100)}%
                   </span>
                 </div>
-                {employee.hourlyRate > 0 && (
+                {employee.hourlyRate > 0 && showSalary && (
                   <div className="flex justify-between items-center pt-2 border-t border-gray-200">
                     <span className="text-gray-600">Salaire estimé</span>
                     <span className="font-semibold text-purple-600">
-                      {Math.round(stats.totalHours * employee.hourlyRate)}€
+                      {formatSalary ? formatSalary(stats.totalHours, employee.hourlyRate) : `${Math.round(stats.totalHours * employee.hourlyRate)} FCFA`}
                     </span>
                   </div>
                 )}
