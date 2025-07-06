@@ -190,17 +190,65 @@ backend:
         comment: "Successfully tested time entries filtering by employee ID, status, and date range. All filters returned the expected results."
 
 frontend:
-  - task: "Frontend Implementation"
+  - task: "Interface principale (vue Pointage)"
     implemented: true
     working: "NA"
     file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "testing"
-        comment: "Frontend testing is not part of the current test scope. Only backend APIs were tested."
+        comment: "Besoin de tester l'interface principale avec le header, la navigation, les cartes statistiques, la liste des employés et les boutons de pointage."
+
+  - task: "Panneau d'administration"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/AdminPanel.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Besoin de tester l'accès au panneau admin, l'authentification, l'ajout d'employés et les paramètres."
+
+  - task: "Vue Registre"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Besoin de tester la navigation vers l'onglet Registre, les filtres, le tableau des pointages et les boutons d'export."
+
+  - task: "Statistiques employé"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/EmployeeStats.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Besoin de tester l'affichage des statistiques détaillées d'un employé via l'icône statistiques."
+
+  - task: "Gestionnaire de synchronisation"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/SyncManager.js"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "testing"
+        comment: "Besoin de tester l'indicateur en ligne/hors ligne et le statut de synchronisation des données."
 
 metadata:
   created_by: "testing_agent"
