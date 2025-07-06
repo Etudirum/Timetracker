@@ -18,6 +18,8 @@ function App() {
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showEmployeeStats, setShowEmployeeStats] = useState(false);
   const [selectedStatsEmployee, setSelectedStatsEmployee] = useState(null);
+  const [editingEntry, setEditingEntry] = useState(null);
+  const [editForm, setEditForm] = useState({});
   const [stats, setStats] = useState({
     weeklyHours: 0,
     activeEmployees: 0,
@@ -26,7 +28,9 @@ function App() {
   });
   const [filter, setFilter] = useState({
     employee: 'all',
-    period: 'week'
+    period: 'week',
+    startDate: '',
+    endDate: ''
   });
   const isOnline = useNetworkStatus();
 
