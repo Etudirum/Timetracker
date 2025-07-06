@@ -91,6 +91,7 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
       }
 
       setEditingEmployee(null);
+      setEditingEmployeeData({});
       setSuccess('Employé mis à jour avec succès');
       onEmployeeUpdate();
       setTimeout(() => setSuccess(''), 3000);
