@@ -142,6 +142,8 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
   const getInitials = (name) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   };
+
+  const handleUpdateSettings = async () => {
     try {
       await offlineStorage.saveSettings(settings);
       setSuccess('Paramètres mis à jour avec succès');
