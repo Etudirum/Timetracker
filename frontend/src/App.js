@@ -22,6 +22,10 @@ function App() {
   const [editForm, setEditForm] = useState({});
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
+  const [showStatsAuth, setShowStatsAuth] = useState(false);
+  const [statsPassword, setStatsPassword] = useState('');
+  const [isStatsAuthenticated, setIsStatsAuthenticated] = useState(false);
   const [stats, setStats] = useState({
     weeklyHours: 0,
     activeEmployees: 0,
