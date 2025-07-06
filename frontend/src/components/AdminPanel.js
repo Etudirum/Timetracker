@@ -480,12 +480,16 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             <div>
-                              <label className="form-label">Nom</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Nom</label>
                               <input
                                 type="text"
                                 value={editingEmployeeData.name || employee.name}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, name: e.target.value})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                                 placeholder="Nom"
                               />
                             </div>
