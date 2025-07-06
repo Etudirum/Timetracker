@@ -721,6 +721,22 @@ function App() {
 
       {/* Content */}
       <main>
+        {success && (
+          <div className="max-w-7xl mx-auto px-6 py-2">
+            <div className="success p-3 rounded-lg border mb-4">
+              {success}
+            </div>
+          </div>
+        )}
+        
+        {error && (
+          <div className="max-w-7xl mx-auto px-6 py-2">
+            <div className="error p-3 rounded-lg border mb-4">
+              {error}
+            </div>
+          </div>
+        )}
+        
         {currentView === 'pointage' && renderPointageView()}
         {currentView === 'registre' && renderRegistreView()}
       </main>
