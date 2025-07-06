@@ -591,13 +591,33 @@ function App() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatTime(entry.startTime)}
+                      {editingEntry === entry.id ? (
+                        <input
+                          type="datetime-local"
+                          value={editForm.startTime}
+                          onChange={(e) => setEditForm({...editForm, startTime: e.target.value})}
+                          className="border border-gray-300 rounded px-2 py-1 text-xs"
+                        />
+                      ) : (
+                        formatTime(entry.startTime)
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {entry.endTime ? formatTime(entry.endTime) : 'En cours'}
+                      {editingEntry === entry.id ? (
+                        <input
+                          type="datetime-local"
+                          value={editForm.endTime}
+                          onChange={(e) => setEditForm({...editForm, endTime: e.target.value})}
+                          className="border border-gray-300 rounded px-2 py-1 text-xs"
+                        />
+                      ) : (
+                        entry.endTime ? formatTime(entry.endTime) : 'En cours'
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {duration > 0 ? `${duration}h` : '-'}
+                      <span className="font-medium text-purple-600">
+                        {duration.display}
+                      </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {totalBreakTime > 0 ? `${Math.round(totalBreakTime)}min` : '-'}
@@ -606,12 +626,31 @@ function App() {
                       {formatDate(entry.startTime)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <button 
-                        onClick={() => setShowAdminPanel(true)}
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        Modifier
-                      </button>
+                      <div className="flex space-x-2">
+                        {editingEntry === entry.id ? (
+                          <>
+                            <button 
+                              onClick={handleSaveEdit}
+                              className="text-green-600 hover:text-green-800 font-medium"
+                            >
+                              Sauver
+                            </button>
+                            <button 
+                              onClick={cancelEdit}
+                              className="text-gray-600 hover:text-gray-800"
+                            >
+                              Annuler
+                            </button>
+                          </>
+                        ) : (
+                          <button 
+                            onClick={() => handleEditEntry(entry)}
+                            className="text-blue-600 hover:text-blue-800 font-medium"
+                          >
+                            Modifier
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );
