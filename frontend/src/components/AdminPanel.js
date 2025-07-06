@@ -442,12 +442,16 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate }) {
                             <p className="text-sm text-gray-500">{employee.position}</p>
                             <p className="text-sm text-gray-500">
                               {employee.startTime} - {employee.endTime}
-                              {employee.hourlyRate > 0 && ` • ${employee.hourlyRate}€/h`}
+                              {employee.hourlyRate > 0 && ` • ${employee.hourlyRate} FCFA/h`}
+                              {employee.breakDuration && ` • Pause max: ${employee.breakDuration}min`}
                             </p>
                           </div>
                           <div className="flex space-x-2">
                             <button
-                              onClick={() => setEditingEmployee(employee.id)}
+                              onClick={() => {
+                                setEditingEmployee(employee.id);
+                                setEditingEmployeeData({});
+                              }}
                               className="text-blue-600 hover:text-blue-800"
                             >
                               <Edit2 className="w-4 h-4" />
