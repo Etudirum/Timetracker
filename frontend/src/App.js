@@ -1259,6 +1259,24 @@ function App() {
         </div>
       )}
 
+      {/* Popup de bienvenue NFC */}
+      {showWelcomePopup && welcomeData && (
+        <WelcomePopup 
+          data={welcomeData} 
+          onClose={() => setShowWelcomePopup(false)}
+          darkMode={darkMode}
+        />
+      )}
+
+      {/* Gestionnaire NFC (mode Electron) */}
+      {isElectron && (
+        <NFCManager 
+          employees={employees}
+          onEmployeeUpdate={loadEmployees}
+          darkMode={darkMode}
+        />
+      )}
+
       {/* Employee Stats */}
       {showEmployeeStats && selectedStatsEmployee && (
         <EmployeeStats 
@@ -1270,6 +1288,7 @@ function App() {
           }}
           showSalary={selectedStatsEmployee.hourlyRate > 0}
           formatSalary={formatSalary}
+          darkMode={darkMode}
         />
       )}
     </div>
