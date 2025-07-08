@@ -136,10 +136,76 @@ function App() {
     loadTimeEntries();
   }, []);
 
-  // Calculer les statistiques
-  useEffect(() => {
-    calculateStats();
-  }, [employees, timeEntries]);
+  // Fonction pour traiter les tags NFC
+  const processNFCTag = async (tagData) => {
+    const { uid } = tagData;
+    
+    // Chercher l'employé correspondant au tag
+    const employee = employees.find(emp => emp.nfcTag === uid);
+    
+    if (!employee) {
+      return { 
+        success: false, 
+        error: 'Tag non reconnu', 
+        tagUid: uid 
+      };
+    }
+
+    // Déterminer l'action (arrivée ou départ)
+    const currentEntry = timeEntries.find(entry => 
+      entry.employeeId === employee.id && !entry.endTime
+    );
+
+    const action = currentEntry ? 'clock-out' : 'clock-in';
+
+    // Effectuer le pointage
+    try {
+      if (action === 'clock-in') {
+        await handleClockIn(employee.id);
+      } else {
+        await handleClockOut(employee.id);
+      }
+
+      return {
+        success: true,
+        employee: {
+          ...employee,
+          lastName: employee.name.split(' ').pop(),
+          gender: employee.gender || 'M' // Par défaut masculin
+        },
+        action,
+        timestamp: new Date().toISOString()
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        employee,
+        action
+      };
+    }
+  };
+
+  // Fonction pour basculer le mode sombre
+  const toggleDarkMode = async () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    
+    if (isElectron) {
+      // Sauvegarder dans le store d'Electron
+      await window.electronAPI.setTheme(newMode);
+    } else {
+      // Sauvegarder dans localStorage
+      localStorage.setItem('timetracker-theme', newMode ? 'dark' : 'light');
+    }
+    
+    // Appliquer au DOM
+    if (newMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
 
   const loadEmployees = async () => {
     try {
