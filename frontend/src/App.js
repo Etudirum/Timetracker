@@ -1043,9 +1043,25 @@ function App() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <SyncManager />
+              {/* Afficher le statut NFC en mode Electron */}
+              {isElectron && (
+                <div className={`flex items-center space-x-2 px-3 py-1 rounded-lg text-sm ${
+                  nfcStatus.available 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-red-100 text-red-800'
+                }`}>
+                  <div className={`w-2 h-2 rounded-full ${
+                    nfcStatus.scanning ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+                  }`}></div>
+                  <span>NFC {nfcStatus.available ? 'Actif' : 'Inactif'}</span>
+                </div>
+              )}
+
+              {/* Supprimer l'indicateur "En ligne" pour web */}
+              {!isElectron && <SyncManager />}
+              
               <button 
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={toggleDarkMode}
                 className={`p-2 rounded-lg transition-colors duration-300 ${
                   darkMode 
                     ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
