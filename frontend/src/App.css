@@ -364,3 +364,181 @@
 .dark .warning {
   @apply bg-yellow-900 border-yellow-700 text-yellow-200;
 }
+
+/* Dark mode buttons */
+.dark .btn-secondary {
+  @apply bg-gray-700 text-gray-200 hover:bg-gray-600 border-gray-600;
+}
+
+/* NFC Welcome Popup */
+.nfc-popup-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.nfc-popup-overlay.visible {
+  opacity: 1;
+}
+
+.nfc-popup-overlay.closing {
+  opacity: 0;
+}
+
+.nfc-popup-container {
+  @apply bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 relative;
+  transform: scale(0.8) translateY(50px);
+  transition: transform 0.3s ease-out;
+}
+
+.nfc-popup-overlay.visible .nfc-popup-container {
+  transform: scale(1) translateY(0);
+}
+
+.nfc-popup-container.dark {
+  @apply bg-gray-800 text-white;
+}
+
+.nfc-popup-close {
+  @apply absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors;
+}
+
+.nfc-popup-close.dark {
+  @apply hover:bg-gray-700 text-gray-400;
+}
+
+.nfc-popup-content {
+  @apply text-center space-y-4;
+}
+
+.nfc-popup-avatar {
+  @apply w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-white shadow-lg;
+}
+
+.nfc-popup-content.arrival .nfc-popup-avatar {
+  @apply border-green-500;
+}
+
+.nfc-popup-content.departure .nfc-popup-avatar {
+  @apply border-red-500;
+}
+
+.nfc-popup-message {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.nfc-popup-message.dark {
+  @apply text-white;
+}
+
+.nfc-popup-position {
+  @apply text-lg text-gray-600;
+}
+
+.nfc-popup-position.dark {
+  @apply text-gray-300;
+}
+
+.nfc-popup-time {
+  @apply flex items-center justify-center space-x-2 text-sm text-gray-500;
+}
+
+.nfc-popup-time.dark {
+  @apply text-gray-400;
+}
+
+.nfc-popup-action {
+  @apply flex items-center justify-center space-x-2 px-4 py-2 rounded-full text-white font-semibold;
+}
+
+.nfc-popup-action.arrival {
+  @apply bg-green-500;
+}
+
+.nfc-popup-action.departure {
+  @apply bg-red-500;
+}
+
+.nfc-popup-action-icon {
+  @apply w-6 h-6;
+}
+
+.nfc-popup-action-text {
+  @apply text-sm;
+}
+
+.nfc-popup-progress {
+  @apply absolute bottom-0 left-0 right-0 h-1 bg-gray-200 rounded-b-3xl overflow-hidden;
+}
+
+.nfc-popup-container.dark .nfc-popup-progress {
+  @apply bg-gray-700;
+}
+
+.nfc-popup-progress-bar {
+  @apply h-full bg-purple-500;
+  animation: progress 4s linear forwards;
+}
+
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* NFC Status Indicator */
+.nfc-status-indicator {
+  @apply flex items-center space-x-2 px-3 py-1 rounded-lg text-sm;
+}
+
+.nfc-status-indicator.connected {
+  @apply bg-green-100 text-green-800;
+}
+
+.nfc-status-indicator.disconnected {
+  @apply bg-red-100 text-red-800;
+}
+
+.nfc-status-indicator.scanning {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.nfc-scanning-dot {
+  @apply w-2 h-2 rounded-full bg-current animate-pulse;
+}
+
+/* Animations pour les éléments NFC */
+@keyframes nfc-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.nfc-pulse {
+  animation: nfc-pulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive design pour popup NFC */
+@media (max-width: 640px) {
+  .nfc-popup-container {
+    @apply p-6 max-w-sm;
+  }
+  
+  .nfc-popup-avatar {
+    @apply w-20 h-20;
+  }
+  
+  .nfc-popup-message {
+    @apply text-xl;
+  }
+  
+  .nfc-popup-position {
+    @apply text-base;
+  }
+}
