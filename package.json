@@ -1,0 +1,43 @@
+{
+  "name": "timetracker24-desktop",
+  "version": "1.0.0",
+  "description": "TimeTracker24 Desktop App with NFC Support",
+  "main": "electron/main.js",
+  "scripts": {
+    "electron": "electron .",
+    "electron-dev": "ELECTRON_IS_DEV=true electron .",
+    "build-electron": "npm run build && electron-builder",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "electron": "^28.0.0",
+    "nfc-pcsc": "^0.8.0",
+    "node-speaker": "^0.5.4",
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.timetracker24.desktop",
+    "productName": "TimeTracker24",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/build/**/*",
+      "backend/**/*",
+      "sounds/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.business"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
