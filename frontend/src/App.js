@@ -9,6 +9,13 @@ import { SyncManager } from "./components/SyncManager";
 import { AdminPanel } from "./components/AdminPanel";
 import { EmployeeStats } from "./components/EmployeeStats";
 import { ExportManager } from "./components/ExportManager";
+import { NFCManager } from "./components/NFCManager";
+import { WelcomePopup } from "./components/WelcomePopup";
+
+// Hook pour détecter si on est dans Electron
+const useElectron = () => {
+  return typeof window !== 'undefined' && window.electronAPI;
+};
 
 function App() {
   const [currentView, setCurrentView] = useState('pointage');
