@@ -56,6 +56,80 @@ function App() {
   const isElectron = useElectron();
   const isOnline = useNetworkStatus();
 
+  // Initialisation du thème persistant
+  useEffect(() => {
+    const initializeTheme = async () => {
+      if (isElectron) {
+        // Mode Electron - utiliser le store d'Electron
+        const savedTheme = await window.electronAPI.getTheme();
+        setDarkMode(savedTheme);
+        
+        // Écouter les changements de thème
+        window.electronAPI.onThemeChanged((event, isDark) => {
+          setDarkMode(isDark);
+        });
+      } else {
+        // Mode web - utiliser localStorage
+        const savedTheme = localStorage.getItem('timetracker-theme');
+        if (savedTheme) {
+          setDarkMode(savedTheme === 'dark');
+        } else {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          setDarkMode(prefersDark);
+        }
+      }
+    };
+    
+    initializeTheme();
+  }, [isElectron]);
+
+  // Gestion des événements NFC (mode Electron)
+  useEffect(() => {
+    if (isElectron) {
+      // Gestionnaire pour les tags NFC détectés
+      const handleNFCTag = async (event) => {
+        const { detail } = event;
+        const { tagData, resolve } = detail;
+        
+        try {
+          const result = await processNFCTag(tagData);
+          resolve(result);
+        } catch (error) {
+          console.error('Erreur traitement NFC:', error);
+          resolve({ success: false, error: error.message });
+        }
+      };
+
+      // Gestionnaire pour les popups de bienvenue
+      const handleWelcomePopup = (event, data) => {
+        setWelcomeData(data);
+        setShowWelcomePopup(true);
+        
+        // Auto-fermeture après 4 secondes
+        setTimeout(() => {
+          setShowWelcomePopup(false);
+        }, 4000);
+      };
+
+      // Gestionnaire pour le statut NFC
+      const handleNFCStatus = (event, status) => {
+        setNfcStatus(status);
+      };
+
+      // Écouter les événements
+      window.addEventListener('nfc-tag-detected', handleNFCTag);
+      window.electronAPI.onShowWelcomePopup(handleWelcomePopup);
+      window.electronAPI.onNFCStatus(handleNFCStatus);
+
+      // Cleanup
+      return () => {
+        window.removeEventListener('nfc-tag-detected', handleNFCTag);
+        window.electronAPI.removeAllListeners('show-welcome-popup');
+        window.electronAPI.removeAllListeners('nfc-status');
+      };
+    }
+  }, [isElectron, employees]);
+
   // Charger les employés et les pointages
   useEffect(() => {
     loadEmployees();
