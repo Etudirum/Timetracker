@@ -49,6 +49,11 @@ function App() {
     startDate: '',
     endDate: ''
   });
+  const [showWelcomePopup, setShowWelcomePopup] = useState(false);
+  const [welcomeData, setWelcomeData] = useState(null);
+  const [nfcStatus, setNfcStatus] = useState({ available: false, scanning: false });
+
+  const isElectron = useElectron();
   const isOnline = useNetworkStatus();
 
   // Charger les employés et les pointages
