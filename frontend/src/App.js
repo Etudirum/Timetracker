@@ -1061,9 +1061,6 @@ function App() {
                   <span>NFC {nfcStatus.available ? 'Actif' : 'Inactif'}</span>
                 </div>
               )}
-
-              {/* Supprimer l'indicateur "En ligne" pour web */}
-              {!isElectron && <SyncManager />}
               
               <button 
                 onClick={toggleDarkMode}
