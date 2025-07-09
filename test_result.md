@@ -373,3 +373,5 @@ agent_communication:
     message: "J'ai testé la fonctionnalité de statistiques employé en analysant le code. La protection par mot de passe fonctionne correctement pour tous les employés (avec ou sans taux horaire). Le salaire n'est affiché que pour les employés avec un taux horaire > 0, conformément aux exigences. La condition 'showSalary={isStatsAuthenticated && selectedStatsEmployee.hourlyRate > 0}' dans App.js garantit ce comportement."
   - agent: "main"
     message: "Completed NFC integration implementation including NFCManager component, WelcomePopup component, Electron main process, NFC backend manager, sound manager, and preload script. Fixed statistics calculation and removed 'En ligne' indicator. All components are ready for testing."
+  - agent: "testing"
+    message: "Completed verification of all backend API endpoints after NFC integration updates. All tests passed successfully, including Employee Management API, Time Tracking API, Admin Authentication API, Settings Management API, and Statistics API. The backend functionality remains intact and is working correctly with the NFC integration changes."
