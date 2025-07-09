@@ -118,30 +118,46 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
   ];
 
   return (
-    <div className="modal-overlay">
-      <div className="bg-white rounded-2xl shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden">
+    <div className={`modal-overlay transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+      <div className={`rounded-2xl shadow-xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-hidden transition-colors duration-300 ${
+        darkMode ? 'bg-gray-800 text-white border border-gray-700' : 'bg-white'
+      }`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className={`flex items-center justify-between p-6 border-b transition-colors duration-300 ${
+          darkMode ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <BarChart3 className="w-6 h-6 text-blue-600" />
+            <div className={`p-2 rounded-lg transition-colors duration-300 ${
+              darkMode ? 'bg-blue-900' : 'bg-blue-100'
+            }`}>
+              <BarChart3 className={`w-6 h-6 transition-colors duration-300 ${
+                darkMode ? 'text-blue-400' : 'text-blue-600'
+              }`} />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900">{employee.name}</h2>
-              <p className="text-sm text-gray-500">{employee.position}</p>
+              <h2 className={`text-xl font-semibold transition-colors duration-300 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>{employee.name}</h2>
+              <p className={`text-sm transition-colors duration-300 ${
+                darkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}>{employee.position}</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <select
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className={`border rounded-lg px-3 py-2 text-sm transition-colors duration-300 ${
+                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'border-gray-300'
+              }`}
             >
               <option value="week">Cette semaine</option>
               <option value="month">Ce mois</option>
               <option value="all">Tout</option>
             </select>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+            <button onClick={onClose} className={`transition-colors duration-300 ${
+              darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
+            }`}>
               <CloseIcon className="w-5 h-5" />
             </button>
           </div>
@@ -151,7 +167,7 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div className="stats-card stats-card-total">
+            <div className={`stats-card stats-card-total ${darkMode ? 'dark' : ''}`}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-white/80">Total heures</p>
@@ -160,7 +176,7 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
                 <Clock className="w-8 h-8 text-white/60" />
               </div>
             </div>
-            <div className="stats-card stats-card-completed">
+            <div className={`stats-card stats-card-completed ${darkMode ? 'dark' : ''}`}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-white/80">Jours travaillés</p>
@@ -169,7 +185,7 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
                 <Calendar className="w-8 h-8 text-white/60" />
               </div>
             </div>
-            <div className="stats-card stats-card-pending">
+            <div className={`stats-card stats-card-pending ${darkMode ? 'dark' : ''}`}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-white/80">Moyenne/jour</p>
@@ -178,7 +194,7 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
                 <TrendingUp className="w-8 h-8 text-white/60" />
               </div>
             </div>
-            <div className="stats-card stats-card-overdue">
+            <div className={`stats-card stats-card-overdue ${darkMode ? 'dark' : ''}`}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-white/80">Heures sup.</p>
@@ -192,15 +208,25 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Daily Hours Chart */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Heures quotidiennes</h3>
+            <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
+              darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
+            }`}>
+              <h3 className={`text-lg font-semibold mb-4 transition-colors duration-300 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>Heures quotidiennes</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={stats.chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#374151' : '#f3f4f6'} />
+                  <XAxis dataKey="date" stroke={darkMode ? '#9CA3AF' : '#6B7280'} />
+                  <YAxis stroke={darkMode ? '#9CA3AF' : '#6B7280'} />
                   <Tooltip 
                     formatter={(value, name) => [`${value}h`, name === 'hours' ? 'Heures' : 'Pauses (min)']}
+                    contentStyle={{
+                      backgroundColor: darkMode ? '#374151' : '#ffffff',
+                      border: `1px solid ${darkMode ? '#4B5563' : '#e5e7eb'}`,
+                      borderRadius: '8px',
+                      color: darkMode ? '#ffffff' : '#000000'
+                    }}
                   />
                   <Line type="monotone" dataKey="hours" stroke="#8B5CF6" strokeWidth={2} />
                 </LineChart>
@@ -208,14 +234,26 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
             </div>
 
             {/* Work Pattern */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Modèle de travail</h3>
+            <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
+              darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
+            }`}>
+              <h3 className={`text-lg font-semibold mb-4 transition-colors duration-300 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>Modèle de travail</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={stats.patternData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="hour" />
-                  <YAxis />
-                  <Tooltip formatter={(value) => [`${value}`, 'Jours actifs']} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? '#374151' : '#f3f4f6'} />
+                  <XAxis dataKey="hour" stroke={darkMode ? '#9CA3AF' : '#6B7280'} />
+                  <YAxis stroke={darkMode ? '#9CA3AF' : '#6B7280'} />
+                  <Tooltip 
+                    formatter={(value) => [`${value}`, 'Jours actifs']}
+                    contentStyle={{
+                      backgroundColor: darkMode ? '#374151' : '#ffffff',
+                      border: `1px solid ${darkMode ? '#4B5563' : '#e5e7eb'}`,
+                      borderRadius: '8px',
+                      color: darkMode ? '#ffffff' : '#000000'
+                    }}
+                  />
                   <Bar dataKey="count" fill="#10B981" />
                 </BarChart>
               </ResponsiveContainer>
@@ -225,8 +263,12 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
           {/* Time Distribution */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pie Chart */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Répartition du temps</h3>
+            <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
+              darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
+            }`}>
+              <h3 className={`text-lg font-semibold mb-4 transition-colors duration-300 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>Répartition du temps</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <RechartsPieChart>
                   <Pie
@@ -242,46 +284,78 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value}h`, 'Durée']} />
+                  <Tooltip 
+                    formatter={(value) => [`${value}h`, 'Durée']}
+                    contentStyle={{
+                      backgroundColor: darkMode ? '#374151' : '#ffffff',
+                      border: `1px solid ${darkMode ? '#4B5563' : '#e5e7eb'}`,
+                      borderRadius: '8px',
+                      color: darkMode ? '#ffffff' : '#000000'
+                    }}
+                  />
                 </RechartsPieChart>
               </ResponsiveContainer>
               <div className="flex justify-center space-x-4 mt-4">
                 {pieData.map((entry, index) => (
                   <div key={index} className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></div>
-                    <span className="text-sm text-gray-600">{entry.name}</span>
+                    <span className={`text-sm transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>{entry.name}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Summary */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Résumé</h3>
+            <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
+              darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'
+            }`}>
+              <h3 className={`text-lg font-semibold mb-4 transition-colors duration-300 ${
+                darkMode ? 'text-white' : 'text-gray-900'
+              }`}>Résumé</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Pointages terminés</span>
-                  <span className="font-semibold text-gray-900">{stats.completedEntries}/{stats.totalEntries}</span>
+                  <span className={`transition-colors duration-300 ${
+                    darkMode ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Pointages terminés</span>
+                  <span className={`font-semibold transition-colors duration-300 ${
+                    darkMode ? 'text-white' : 'text-gray-900'
+                  }`}>{stats.completedEntries}/{stats.totalEntries}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Temps de pause total</span>
-                  <span className="font-semibold text-gray-900">{stats.totalBreakTime} min</span>
+                  <span className={`transition-colors duration-300 ${
+                    darkMode ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Temps de pause total</span>
+                  <span className={`font-semibold transition-colors duration-300 ${
+                    darkMode ? 'text-white' : 'text-gray-900'
+                  }`}>{stats.totalBreakTime} min</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Heures standard</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className={`transition-colors duration-300 ${
+                    darkMode ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Heures standard</span>
+                  <span className={`font-semibold transition-colors duration-300 ${
+                    darkMode ? 'text-white' : 'text-gray-900'
+                  }`}>
                     {period === 'week' ? '40h' : period === 'month' ? '160h' : `${stats.totalHours}h`}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Efficacité</span>
+                  <span className={`transition-colors duration-300 ${
+                    darkMode ? 'text-gray-300' : 'text-gray-600'
+                  }`}>Efficacité</span>
                   <span className="font-semibold text-green-600">
                     {Math.round((stats.completedEntries / Math.max(stats.totalEntries, 1)) * 100)}%
                   </span>
                 </div>
                 {employee.hourlyRate > 0 && showSalary && (
-                  <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                    <span className="text-gray-600">Salaire estimé</span>
+                  <div className={`flex justify-between items-center pt-2 border-t transition-colors duration-300 ${
+                    darkMode ? 'border-gray-600' : 'border-gray-200'
+                  }`}>
+                    <span className={`transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : 'text-gray-600'
+                    }`}>Salaire estimé</span>
                     <span className="font-semibold text-purple-600">
                       {formatSalary ? formatSalary(stats.totalHours, employee.hourlyRate) : `${Math.round(stats.totalHours * employee.hourlyRate)} FCFA`}
                     </span>
