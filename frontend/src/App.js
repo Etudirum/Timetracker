@@ -136,6 +136,11 @@ function App() {
     loadTimeEntries();
   }, []);
 
+  // Calculer les statistiques quand les données changent
+  useEffect(() => {
+    calculateStats();
+  }, [employees, timeEntries]);
+
   // Fonction pour traiter les tags NFC
   const processNFCTag = async (tagData) => {
     const { uid } = tagData;
