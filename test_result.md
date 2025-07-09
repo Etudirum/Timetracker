@@ -348,20 +348,20 @@ electron:
         comment: "Script preload implémenté avec API sécurisée pour la communication entre le renderer et le main process. Gère les événements NFC et les paramètres thème."
 
 metadata:
-  created_by: "testing_agent"
-  version: "1.0"
-  test_sequence: 2
-  run_ui: true
+  created_by: "main_agent"
+  version: "2.0"
+  test_sequence: 3
+  run_ui: false
 
 test_plan:
   current_focus:
-    - "Interface principale (vue Pointage)"
-    - "Panneau d'administration"
-    - "Vue Registre"
-    - "Statistiques employé"
-    - "Gestionnaire de synchronisation"
+    - "Gestionnaire NFC"
+    - "Popup de bienvenue NFC"
+    - "Persistance du thème sombre/clair"
+    - "Application Electron principale"
+    - "Gestionnaire NFC backend"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
@@ -371,3 +371,5 @@ agent_communication:
     message: "Starting comprehensive testing of the frontend application TimeTracker24. Will test all the components including the main interface, admin panel, register view, employee statistics, and synchronization manager according to the test plan."
   - agent: "testing"
     message: "J'ai testé la fonctionnalité de statistiques employé en analysant le code. La protection par mot de passe fonctionne correctement pour tous les employés (avec ou sans taux horaire). Le salaire n'est affiché que pour les employés avec un taux horaire > 0, conformément aux exigences. La condition 'showSalary={isStatsAuthenticated && selectedStatsEmployee.hourlyRate > 0}' dans App.js garantit ce comportement."
+  - agent: "main"
+    message: "Completed NFC integration implementation including NFCManager component, WelcomePopup component, Electron main process, NFC backend manager, sound manager, and preload script. Fixed statistics calculation and removed 'En ligne' indicator. All components are ready for testing."
