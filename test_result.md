@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Test complet de l'application frontend TimeTracker24. L'application est une interface de pointage des heures moderne avec les fonctionnalités suivantes : interface principale, panneau d'administration, vue registre, statistiques employé et gestionnaire de synchronisation."
+user_problem_statement: "Compléter l'intégration NFC pour le pointage avec badges NFC via application desktop Electron. Inclut la gestion des popups de bienvenue, la persistance du thème sombre/clair, et la finalisation des composants NFC."
 
 backend:
   - task: "Employee Management API"
@@ -204,6 +204,9 @@ frontend:
       - working: true
         agent: "testing"
         comment: "L'interface principale fonctionne correctement. Le header avec le logo TimeTracker24 et la date/heure est présent. La navigation entre 'Pointage' et 'Registre' fonctionne. Les cartes statistiques (Heures cette semaine, En service, Employés totaux, Heures supplémentaires) sont affichées avec des valeurs à 0. La section 'Employés' est présente mais vide, ce qui est normal car aucun employé n'a été ajouté."
+      - working: true
+        agent: "main"
+        comment: "Fixed calculateStats function to be called when employees or timeEntries change. Statistics cards now update dynamically."
 
   - task: "Panneau d'administration"
     implemented: true
@@ -247,17 +250,102 @@ frontend:
         agent: "testing"
         comment: "Après analyse du code, j'ai confirmé que les statistiques employé fonctionnent correctement. L'accès aux statistiques est protégé par mot de passe (admin123) pour tous les employés. Le salaire n'est affiché que pour les employés avec un taux horaire supérieur à 0. Dans App.js, la propriété showSalary est conditionnée par isStatsAuthenticated && selectedStatsEmployee.hourlyRate > 0, ce qui garantit que le salaire n'est visible que pour les employés avec un taux horaire positif."
 
-  - task: "Gestionnaire de synchronisation"
+  - task: "Gestionnaire NFC"
     implemented: true
     working: "NA"
-    file: "/app/frontend/src/components/SyncManager.js"
+    file: "/app/frontend/src/components/NFCManager.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Composant NFCManager implémenté avec gestion des paramètres NFC, des sons, et de l'enregistrement des badges. Nécessite test en environnement Electron."
+
+  - task: "Popup de bienvenue NFC"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/WelcomePopup.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Composant WelcomePopup implémenté avec animations, photo de profil, et affichage des informations employé. Styles CSS inclus dans App.css."
+
+  - task: "Persistance du thème sombre/clair"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implémentation de la persistance du thème avec localStorage pour le web et electron-store pour l'application desktop. Logic ajoutée dans useEffect pour l'initialisation."
+
+  - task: "Suppression indicateur 'En ligne'"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "low"
     needs_retesting: true
     status_history:
       - working: "NA"
-        agent: "testing"
-        comment: "Besoin de tester l'indicateur en ligne/hors ligne et le statut de synchronisation des données."
+        agent: "main"
+        comment: "Suppression de l'indicateur 'En ligne' pour l'application web tout en gardant le statut NFC pour l'application Electron."
+
+electron:
+  - task: "Application Electron principale"
+    implemented: true
+    working: "NA"
+    file: "/app/electron/main.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Electron main process implémenté avec gestion des fenêtres, thème persistant, et intégration NFC. Comprend la gestion des erreurs et la sauvegarde des paramètres."
+
+  - task: "Gestionnaire NFC backend"
+    implemented: true
+    working: "NA"
+    file: "/app/electron/nfc-manager.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Gestionnaire NFC complet avec support PC/SC, enregistrement des badges employés, et gestion des événements de détection."
+
+  - task: "Gestionnaire de sons"
+    implemented: true
+    working: "NA"
+    file: "/app/electron/sound-manager.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Gestionnaire de sons avec génération de bips synthétiques, paramètres de volume, et différents types de sons pour arrivée/départ/erreur."
+
+  - task: "Preload script sécurisé"
+    implemented: true
+    working: "NA"
+    file: "/app/electron/preload.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Script preload implémenté avec API sécurisée pour la communication entre le renderer et le main process. Gère les événements NFC et les paramètres thème."
 
 metadata:
   created_by: "testing_agent"
