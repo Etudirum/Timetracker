@@ -6,7 +6,7 @@ from datetime import datetime
 import unittest
 
 # Backend URL from frontend/.env
-BACKEND_URL = "https://a947a9f7-c958-4db8-b80b-2d726cf505d0.preview.emergentagent.com/api"
+BACKEND_URL = "https://a3feaf67-3a48-4133-ae5a-9d16ba752f57.preview.emergentagent.com/api"
 
 class TimeTrackerAPITest(unittest.TestCase):
     """Test suite for TimeTracker24 API"""
