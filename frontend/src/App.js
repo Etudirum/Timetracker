@@ -243,6 +243,7 @@ function App() {
   };
 
   const loadEmployees = async () => {
+    console.log('loadEmployees called, isOnline:', isOnline);
     try {
       if (isOnline) {
         const q = query(collection(db, 'employees'), orderBy('name'));
@@ -251,16 +252,19 @@ function App() {
             id: doc.id,
             ...doc.data()
           }));
+          console.log('Employees loaded from Firebase:', employeeData);
           setEmployees(employeeData);
         });
         return unsubscribe;
       } else {
         const offlineEmployees = await offlineStorage.getOfflineEmployees();
+        console.log('Employees loaded from offline storage:', offlineEmployees);
         setEmployees(offlineEmployees);
       }
     } catch (error) {
       console.error('Erreur lors du chargement des employés:', error);
       const offlineEmployees = await offlineStorage.getOfflineEmployees();
+      console.log('Fallback to offline employees:', offlineEmployees);
       setEmployees(offlineEmployees);
     }
   };
