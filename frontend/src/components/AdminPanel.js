@@ -585,41 +585,57 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                               />
                             </div>
                             <div>
-                              <label className="form-label">Taux horaire (FCFA)</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Taux horaire (FCFA)</label>
                               <input
                                 type="number"
                                 value={editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : (employee.hourlyRate || 0)}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, hourlyRate: parseFloat(e.target.value)})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                                 placeholder="Taux horaire"
                                 step="0.01"
                               />
                             </div>
                             <div>
-                              <label className="form-label">Heure de début</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Heure de début</label>
                               <input
                                 type="time"
                                 value={editingEmployeeData.startTime || employee.startTime || '08:00'}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, startTime: e.target.value})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                               />
                             </div>
                             <div>
-                              <label className="form-label">Heure de fin</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Heure de fin</label>
                               <input
                                 type="time"
                                 value={editingEmployeeData.endTime || employee.endTime || '17:00'}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, endTime: e.target.value})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                               />
                             </div>
                             <div>
-                              <label className="form-label">Durée pause max (min)</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Durée pause max (min)</label>
                               <input
                                 type="number"
                                 value={editingEmployeeData.breakDuration !== undefined ? editingEmployeeData.breakDuration : (employee.breakDuration || 30)}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, breakDuration: parseInt(e.target.value)})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                                 placeholder="30"
                               />
                             </div>
