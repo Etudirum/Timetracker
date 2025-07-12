@@ -52,6 +52,10 @@ function App() {
   const [showWelcomePopup, setShowWelcomePopup] = useState(false);
   const [welcomeData, setWelcomeData] = useState(null);
   const [nfcStatus, setNfcStatus] = useState({ available: false, scanning: false });
+  const [displaySettings, setDisplaySettings] = useState({
+    showStats: true,
+    showEmployees: true
+  });
 
   const isElectron = useElectron();
   const isOnline = useNetworkStatus();
