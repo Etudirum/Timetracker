@@ -56,6 +56,8 @@ function App() {
     showStats: true,
     showEmployees: true
   });
+  const [showStatsModal, setShowStatsModal] = useState(false);
+  const [selectedStatsEmployee, setSelectedStatsEmployee] = useState(null);
 
   const isElectron = useElectron();
   const isOnline = useNetworkStatus();
