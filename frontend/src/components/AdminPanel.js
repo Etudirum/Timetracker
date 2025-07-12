@@ -339,15 +339,29 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                   <div>
                     <label className={`form-label transition-colors duration-300 ${
                       darkMode ? 'text-gray-300' : ''
-                    }`}>Nom</label>
+                    }`}>Prénom</label>
                     <input
                       type="text"
-                      value={newEmployee.name}
-                      onChange={(e) => setNewEmployee({...newEmployee, name: e.target.value})}
+                      value={newEmployee.firstName}
+                      onChange={(e) => setNewEmployee({...newEmployee, firstName: e.target.value})}
                       className={`form-input transition-colors duration-300 ${
                         darkMode ? 'dark' : ''
                       }`}
-                      placeholder="Nom complet"
+                      placeholder="Prénom"
+                    />
+                  </div>
+                  <div>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Nom</label>
+                    <input
+                      type="text"
+                      value={newEmployee.lastName}
+                      onChange={(e) => setNewEmployee({...newEmployee, lastName: e.target.value})}
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
+                      placeholder="Nom de famille"
                     />
                   </div>
                   <div>
