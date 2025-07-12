@@ -876,10 +876,9 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
               
               <div className="flex justify-end">
                 <button onClick={handleUpdateSettings} className="btn btn-primary">
-                    <Save className="w-4 h-4 mr-2" />
-                    Sauvegarder
-                  </button>
-                </div>
+                  <Save className="w-4 h-4 mr-2" />
+                  Sauvegarder
+                </button>
               </div>
             </div>
           )}
