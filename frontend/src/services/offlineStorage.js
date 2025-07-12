@@ -91,6 +91,22 @@ class OfflineStorageService {
     await this.store.setItem('settings', settings);
   }
 
+  async deleteEmployee(employeeId) {
+    const offlineEmployees = await this.getOfflineEmployees();
+    const updatedEmployees = offlineEmployees.filter(emp => emp.id !== employeeId);
+    await this.store.setItem('employees', updatedEmployees);
+  }
+
+  async deleteEmployeeAndActivities(employeeId) {
+    // Supprimer l'employé
+    await this.deleteEmployee(employeeId);
+    
+    // Supprimer toutes ses activités
+    const offlineEntries = await this.getOfflineEntries();
+    const updatedEntries = offlineEntries.filter(entry => entry.employeeId !== employeeId);
+    await this.store.setItem('timeEntries', updatedEntries);
+  }
+
   async getSyncQueue() {
     return (await this.store.getItem('syncQueue')) || [];
   }
