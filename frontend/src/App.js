@@ -672,7 +672,8 @@ function App() {
       </div>
 
       {/* Statistiques */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      {displaySettings.showStats && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="stats-card stats-card-total">
           <div className="flex items-center justify-between">
             <div>
