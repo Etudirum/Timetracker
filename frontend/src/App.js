@@ -772,8 +772,6 @@ function App() {
             const currentEntry = getEmployeeCurrentEntry(employee.id);
             const isWorking = status === 'active' || status === 'on_break';
             const isOnBreak = status === 'on_break';
-            const isWorking = status === 'active' || status === 'on_break';
-            const isOnBreak = status === 'on_break';
             
             return (
                 <div key={employee.id} className={`employee-card p-4 rounded-xl transition-all duration-300 hover:shadow-md border ${
