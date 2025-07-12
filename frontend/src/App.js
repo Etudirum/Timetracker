@@ -323,9 +323,12 @@ function App() {
   };
 
   const showWelcomeMessage = (employee, action) => {
+    console.log('showWelcomeMessage called with:', { employee, action });
+    
     const isArrival = action === 'clock-in';
-    const greeting = employee.gender === 'F' ? 'Madame' : 'Monsieur';
-    const lastName = employee.lastName || employee.name?.split(' ').slice(-1)[0] || '';
+    const gender = employee.gender || 'M'; // Par défaut masculin si pas de genre
+    const greeting = gender === 'F' ? 'Madame' : 'Monsieur';
+    const lastName = employee.lastName || employee.name?.split(' ').slice(-1)[0] || employee.name || '';
     const message = isArrival 
       ? `Bienvenue ${greeting} ${lastName}`
       : `Au revoir ${greeting} ${lastName}`;
@@ -338,6 +341,7 @@ function App() {
       timestamp: new Date().toISOString()
     };
     
+    console.log('Setting welcome data:', welcomeData);
     setWelcomeData(welcomeData);
     setShowWelcomePopup(true);
     
