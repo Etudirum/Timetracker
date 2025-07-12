@@ -516,34 +516,71 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                             <div>
                               <label className={`form-label transition-colors duration-300 ${
                                 darkMode ? 'text-gray-300' : ''
-                              }`}>Nom</label>
+                              }`}>Prénom</label>
                               <input
                                 type="text"
-                                value={editingEmployeeData.name || employee.name}
-                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, name: e.target.value})}
+                                value={editingEmployeeData.firstName || employee.firstName || employee.name?.split(' ')[0] || ''}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, firstName: e.target.value})}
                                 className={`form-input transition-colors duration-300 ${
                                   darkMode ? 'dark' : ''
                                 }`}
-                                placeholder="Nom"
+                                placeholder="Prénom"
                               />
                             </div>
                             <div>
-                              <label className="form-label">Poste</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Nom</label>
+                              <input
+                                type="text"
+                                value={editingEmployeeData.lastName || employee.lastName || employee.name?.split(' ').slice(1).join(' ') || ''}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, lastName: e.target.value})}
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
+                                placeholder="Nom de famille"
+                              />
+                            </div>
+                            <div>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Genre</label>
+                              <select
+                                value={editingEmployeeData.gender || employee.gender || 'M'}
+                                onChange={(e) => setEditingEmployeeData({...editingEmployeeData, gender: e.target.value})}
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
+                              >
+                                <option value="M">Masculin</option>
+                                <option value="F">Féminin</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Poste</label>
                               <input
                                 type="text"
                                 value={editingEmployeeData.position || employee.position}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, position: e.target.value})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                                 placeholder="Poste"
                               />
                             </div>
                             <div>
-                              <label className="form-label">Email</label>
+                              <label className={`form-label transition-colors duration-300 ${
+                                darkMode ? 'text-gray-300' : ''
+                              }`}>Email</label>
                               <input
                                 type="email"
                                 value={editingEmployeeData.email || employee.email || ''}
                                 onChange={(e) => setEditingEmployeeData({...editingEmployeeData, email: e.target.value})}
-                                className="form-input"
+                                className={`form-input transition-colors duration-300 ${
+                                  darkMode ? 'dark' : ''
+                                }`}
                                 placeholder="Email"
                               />
                             </div>
