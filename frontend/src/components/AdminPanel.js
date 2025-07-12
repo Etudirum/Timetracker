@@ -367,6 +367,21 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                   <div>
                     <label className={`form-label transition-colors duration-300 ${
                       darkMode ? 'text-gray-300' : ''
+                    }`}>Genre</label>
+                    <select
+                      value={newEmployee.gender}
+                      onChange={(e) => setNewEmployee({...newEmployee, gender: e.target.value})}
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
+                    >
+                      <option value="M">Masculin</option>
+                      <option value="F">Féminin</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
                     }`}>Poste</label>
                     <input
                       type="text"
