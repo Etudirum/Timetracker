@@ -841,7 +841,7 @@ function App() {
                     <button
                       onClick={() => {
                         setSelectedStatsEmployee(employee);
-                        setShowStatsModal(true);
+                        setShowEmployeeStats(true);
                       }}
                       className={`w-full py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
                         darkMode ? 'bg-gray-600 hover:bg-gray-500 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
