@@ -12,9 +12,11 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
   const [currentView, setCurrentView] = useState('employees');
   const [settings, setSettings] = useState({});
   const [newEmployee, setNewEmployee] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     position: '',
     email: '',
+    gender: 'M', // M pour Masculin, F pour Féminin
     startTime: '08:00',
     endTime: '17:00',
     breakDuration: 30,
