@@ -322,7 +322,7 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                           />
                         ) : (
                           <span className="text-purple-600 font-semibold text-lg">
-                            {newEmployee.name ? getInitials(newEmployee.name) : 'PP'}
+                            {newEmployee.firstName || newEmployee.lastName ? getInitials(`${newEmployee.firstName} ${newEmployee.lastName}`) : 'PP'}
                           </span>
                         )}
                       </div>
