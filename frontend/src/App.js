@@ -356,8 +356,10 @@ function App() {
   };
 
   const handleClockIn = async (employeeId) => {
+    console.log('handleClockIn called for employee:', employeeId);
     try {
       const employee = employees.find(emp => emp.id === employeeId);
+      console.log('Found employee:', employee);
       
       const entry = {
         employeeId,
@@ -376,16 +378,25 @@ function App() {
       
       // Afficher le popup de bienvenue
       if (employee) {
+        console.log('Showing welcome message for employee:', employee);
         showWelcomeMessage(employee, 'clock-in');
+      } else {
+        console.log('Employee not found for popup');
       }
+      
+      // Recharger les données
+      loadTimeEntries();
     } catch (error) {
       console.error('Erreur lors du pointage d\'arrivée:', error);
     }
   };
 
   const handleClockOut = async (employeeId) => {
+    console.log('handleClockOut called for employee:', employeeId);
     try {
       const employee = employees.find(emp => emp.id === employeeId);
+      console.log('Found employee for clock out:', employee);
+      
       const activeEntry = timeEntries.find(entry => 
         entry.employeeId === employeeId && !entry.endTime
       );
@@ -407,8 +418,14 @@ function App() {
         
         // Afficher le popup de bienvenue
         if (employee) {
+          console.log('Showing goodbye message for employee:', employee);
           showWelcomeMessage(employee, 'clock-out');
+        } else {
+          console.log('Employee not found for goodbye popup');
         }
+        
+        // Recharger les données
+        loadTimeEntries();
       }
     } catch (error) {
       console.error('Erreur lors du pointage de départ:', error);
