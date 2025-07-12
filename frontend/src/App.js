@@ -138,12 +138,27 @@ function App() {
   useEffect(() => {
     loadEmployees();
     loadTimeEntries();
+    loadDisplaySettings();
   }, []);
 
   // Calculer les statistiques quand les données changent
   useEffect(() => {
     calculateStats();
   }, [employees, timeEntries]);
+
+  const loadDisplaySettings = async () => {
+    try {
+      const settings = await offlineStorage.getSettings();
+      if (settings.display) {
+        setDisplaySettings({
+          showStats: settings.display.showStats !== false,
+          showEmployees: settings.display.showEmployees !== false
+        });
+      }
+    } catch (error) {
+      console.error('Erreur chargement paramètres d\'affichage:', error);
+    }
+  };
 
   // Fonction pour traiter les tags NFC
   const processNFCTag = async (tagData) => {
