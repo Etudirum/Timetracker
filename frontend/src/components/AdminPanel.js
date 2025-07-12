@@ -49,14 +49,15 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
   };
 
   const handleAddEmployee = async () => {
-    if (!newEmployee.name || !newEmployee.position) {
-      setError('Nom et poste sont requis');
+    if (!newEmployee.firstName || !newEmployee.lastName || !newEmployee.position) {
+      setError('Prénom, nom et poste sont requis');
       return;
     }
 
     try {
       const employeeData = {
         ...newEmployee,
+        name: `${newEmployee.firstName} ${newEmployee.lastName}`, // Garder la compatibilité
         createdAt: new Date().toISOString(),
         isActive: true
       };
