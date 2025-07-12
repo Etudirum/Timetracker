@@ -712,27 +712,16 @@ function App() {
           </div>
         </div>
       )}
-          </div>
-        </div>
-        <div className="stats-card stats-card-overdue">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-white/80">Heures supplémentaires</p>
-              <p className="text-2xl font-bold text-white">{stats.overtimeHours}h</p>
-            </div>
-            <Clock4 className="w-8 h-8 text-white/60" />
-          </div>
-        </div>
-      </div>
 
       {/* Liste des employés */}
-      <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
-        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-      }`}>
-        <h2 className={`text-xl font-semibold mb-6 transition-colors duration-300 ${
-          darkMode ? 'text-white' : 'text-gray-900'
-        }`}>Employés</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {displaySettings.showEmployees && (
+        <div className={`rounded-2xl shadow-sm border p-6 transition-colors duration-300 ${
+          darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+        }`}>
+          <h2 className={`text-xl font-semibold mb-6 transition-colors duration-300 ${
+            darkMode ? 'text-white' : 'text-gray-900'
+          }`}>Employés</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {employees.map(employee => {
             const status = getEmployeeStatus(employee.id);
             const currentEntry = getEmployeeCurrentEntry(employee.id);
