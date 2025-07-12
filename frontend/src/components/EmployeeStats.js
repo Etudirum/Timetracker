@@ -356,7 +356,9 @@ export function EmployeeStats({ employee, timeEntries, onClose, showSalary = fal
                     <span className={`transition-colors duration-300 ${
                       darkMode ? 'text-gray-300' : 'text-gray-600'
                     }`}>Salaire estimé</span>
-                    <span className="font-semibold text-purple-600">
+                    <span className={`font-semibold transition-colors duration-300 ${
+                      darkMode ? 'text-green-400' : 'text-purple-600'
+                    }`}>
                       {formatSalary ? formatSalary(stats.totalHours, employee.hourlyRate) : `${Math.round(stats.totalHours * employee.hourlyRate)} FCFA`}
                     </span>
                   </div>
