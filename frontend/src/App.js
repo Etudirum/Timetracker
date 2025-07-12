@@ -338,6 +338,8 @@ function App() {
 
   const handleClockIn = async (employeeId) => {
     try {
+      const employee = employees.find(emp => emp.id === employeeId);
+      
       const entry = {
         employeeId,
         startTime: new Date().toISOString(),
@@ -352,6 +354,11 @@ function App() {
       } else {
         await offlineStorage.saveTimeEntry(entry);
       }
+      
+      // Afficher le popup de bienvenue
+      if (employee) {
+        showWelcomeMessage(employee, 'clock-in');
+      }
     } catch (error) {
       console.error('Erreur lors du pointage d\'arrivée:', error);
     }
@@ -359,6 +366,7 @@ function App() {
 
   const handleClockOut = async (employeeId) => {
     try {
+      const employee = employees.find(emp => emp.id === employeeId);
       const activeEntry = timeEntries.find(entry => 
         entry.employeeId === employeeId && !entry.endTime
       );
@@ -376,6 +384,11 @@ function App() {
             endTime,
             status: 'completed'
           });
+        }
+        
+        // Afficher le popup de bienvenue
+        if (employee) {
+          showWelcomeMessage(employee, 'clock-out');
         }
       }
     } catch (error) {
