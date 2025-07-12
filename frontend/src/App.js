@@ -780,16 +780,28 @@ function App() {
             const isOnBreak = status === 'on_break';
             
             return (
-                <div key={employee.id} className={`employee-card p-4 rounded-xl transition-all duration-300 hover:shadow-md border ${
-                  darkMode ? 'bg-gray-700 border-gray-600 hover:bg-gray-650' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                <div key={employee.id} className={`employee-card transition-colors duration-300 ${
+                  darkMode ? 'dark' : ''
                 }`}>
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold">
+                      <div className={`w-3 h-3 rounded-full ${
+                        status === 'active' ? 'bg-green-500' : 
+                        status === 'on_break' ? 'bg-yellow-500' : 
+                        'bg-red-500'
+                      }`}></div>
+                      {/* Photo de profil */}
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center">
                         {employee.profileImage ? (
-                          <img src={employee.profileImage} alt={employee.name} className="w-full h-full rounded-full object-cover" />
+                          <img 
+                            src={employee.profileImage} 
+                            alt={employee.name || `${employee.firstName || ''} ${employee.lastName || ''}`} 
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
-                          getInitials(employee.name || `${employee.firstName || ''} ${employee.lastName || ''}`)
+                          <span className="text-purple-600 font-semibold text-sm">
+                            {getInitials(employee.name || `${employee.firstName || ''} ${employee.lastName || ''}`)}
+                          </span>
                         )}
                       </div>
                       <div>
@@ -801,55 +813,72 @@ function App() {
                         }`}>{employee.position}</p>
                       </div>
                     </div>
-                    <div className={`w-3 h-3 rounded-full ${isWorking ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                    <button 
+                      onClick={() => handleStatsClick(employee)}
+                      className={`transition-colors duration-300 ${
+                        darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-400 hover:text-gray-600'
+                      }`}
+                    >
+                      <BarChart3 className="w-5 h-5" />
+                    </button>
                   </div>
-                  <div className="space-y-2">
-                    {!isWorking ? (
-                      <button
-                        onClick={() => handleClockIn(employee.id)}
-                        className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"
+                  
+                  {currentEntry && (
+                    <div className={`mb-3 p-2 rounded-lg transition-colors duration-300 ${
+                      darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                    }`}>
+                      <p className={`text-sm transition-colors duration-300 ${
+                        darkMode ? 'text-gray-300' : 'text-gray-600'
+                      }`}>
+                        Arrivée: {formatTime(currentEntry.startTime)}
+                      </p>
+                      {status === 'on_break' && (
+                        <p className="text-sm text-yellow-600">En pause</p>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {status === 'absent' ? (
+                      <button 
+                        onClick={() => {
+                          handleClockIn(employee.id);
+                        }}
+                        className="flex items-center space-x-1 px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
                       >
                         <Play className="w-4 h-4" />
                         <span>Arrivée</span>
                       </button>
                     ) : (
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => handleClockOut(employee.id)}
-                          className="w-full bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition-colors flex items-center justify-center space-x-2"
+                      <>
+                        <button 
+                          onClick={() => {
+                            handleClockOut(employee.id);
+                          }}
+                          className="flex items-center space-x-1 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
                         >
-                          <XCircle className="w-4 h-4" />
+                          <Pause className="w-4 h-4" />
                           <span>Départ</span>
                         </button>
-                        <button
-                          onClick={() => {
-                            if (isOnBreak) {
-                              handleEndBreak(employee.id);
-                            } else {
-                              handleStartBreak(employee.id);
-                            }
-                          }}
-                          className={`w-full py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
-                            isOnBreak ? 'bg-orange-500 hover:bg-orange-600' : 'bg-yellow-500 hover:bg-yellow-600'
-                          } text-white`}
-                        >
-                          <Coffee className="w-4 h-4" />
-                          <span>{isOnBreak ? 'Fin pause' : 'Pause'}</span>
-                        </button>
-                      </div>
+                        {status === 'on_break' ? (
+                          <button 
+                            onClick={() => handleEndBreak(employee.id)}
+                            className="flex items-center space-x-1 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                          >
+                            <Coffee className="w-4 h-4" />
+                            <span>Fin pause</span>
+                          </button>
+                        ) : (
+                          <button 
+                            onClick={() => handleStartBreak(employee.id)}
+                            className="flex items-center space-x-1 px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm"
+                          >
+                            <Coffee className="w-4 h-4" />
+                            <span>Pause</span>
+                          </button>
+                        )}
+                      </>
                     )}
-                    <button
-                      onClick={() => {
-                        setSelectedStatsEmployee(employee);
-                        setShowEmployeeStats(true);
-                      }}
-                      className={`w-full py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
-                        darkMode ? 'bg-gray-600 hover:bg-gray-500 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                      }`}
-                    >
-                      <BarChart3 className="w-4 h-4" />
-                      <span>Statistiques</span>
-                    </button>
                   </div>
                 </div>
               );
