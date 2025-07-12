@@ -674,31 +674,44 @@ function App() {
       {/* Statistiques */}
       {displaySettings.showStats && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="stats-card stats-card-total">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-white/80">Heures cette semaine</p>
-              <p className="text-2xl font-bold text-white">{stats.weeklyHours}h</p>
+          <div className="stats-card stats-card-total">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-white/80">Heures cette semaine</p>
+                <p className="text-2xl font-bold text-white">{stats.weeklyHours}h</p>
+              </div>
+              <Clock className="w-8 h-8 text-white/60" />
             </div>
-            <Clock className="w-8 h-8 text-white/60" />
+          </div>
+          <div className="stats-card stats-card-completed">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-white/80">En service</p>
+                <p className="text-2xl font-bold text-white">{stats.activeEmployees}</p>
+              </div>
+              <Users className="w-8 h-8 text-white/60" />
+            </div>
+          </div>
+          <div className="stats-card stats-card-pending">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-white/80">Employés totaux</p>
+                <p className="text-2xl font-bold text-white">{stats.totalEmployees}</p>
+              </div>
+              <Users2 className="w-8 h-8 text-white/60" />
+            </div>
+          </div>
+          <div className="stats-card stats-card-overdue">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-white/80">Heures supplémentaires</p>
+                <p className="text-2xl font-bold text-white">{stats.overtimeHours}h</p>
+              </div>
+              <Clock4 className="w-8 h-8 text-white/60" />
+            </div>
           </div>
         </div>
-        <div className="stats-card stats-card-completed">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-white/80">En service</p>
-              <p className="text-2xl font-bold text-white">{stats.activeEmployees}</p>
-            </div>
-            <Users className="w-8 h-8 text-white/60" />
-          </div>
-        </div>
-        <div className="stats-card stats-card-pending">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-white/80">Employés totaux</p>
-              <p className="text-2xl font-bold text-white">{stats.totalEmployees}</p>
-            </div>
-            <Users2 className="w-8 h-8 text-white/60" />
+      )}
           </div>
         </div>
         <div className="stats-card stats-card-overdue">
