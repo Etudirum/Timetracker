@@ -1211,7 +1211,10 @@ function App() {
         <AdminPanel 
           onClose={() => setShowAdminPanel(false)}
           employees={employees}
-          onEmployeeUpdate={loadEmployees}
+          onEmployeeUpdate={() => {
+            loadEmployees();
+            loadDisplaySettings();
+          }}
           darkMode={darkMode}
         />
       )}
