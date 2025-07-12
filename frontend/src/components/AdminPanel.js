@@ -651,16 +651,25 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                               Annuler
                             </button>
                             <button
-                              onClick={() => handleUpdateEmployee(employee.id, {
-                                name: editingEmployeeData.name || employee.name,
-                                position: editingEmployeeData.position || employee.position,
-                                email: editingEmployeeData.email || employee.email,
-                                startTime: editingEmployeeData.startTime || employee.startTime,
-                                endTime: editingEmployeeData.endTime || employee.endTime,
-                                breakDuration: editingEmployeeData.breakDuration !== undefined ? editingEmployeeData.breakDuration : employee.breakDuration,
-                                hourlyRate: editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : employee.hourlyRate,
-                                profileImage: editingEmployeeData.profileImage || employee.profileImage
-                              })}
+                              onClick={() => {
+                                const updatedData = {
+                                  ...editingEmployeeData,
+                                  name: `${editingEmployeeData.firstName || employee.firstName || employee.name?.split(' ')[0] || ''} ${editingEmployeeData.lastName || employee.lastName || employee.name?.split(' ').slice(1).join(' ') || ''}`.trim()
+                                };
+                                handleUpdateEmployee(employee.id, {
+                                  firstName: editingEmployeeData.firstName || employee.firstName || employee.name?.split(' ')[0] || '',
+                                  lastName: editingEmployeeData.lastName || employee.lastName || employee.name?.split(' ').slice(1).join(' ') || '',
+                                  gender: editingEmployeeData.gender || employee.gender || 'M',
+                                  name: updatedData.name,
+                                  position: editingEmployeeData.position || employee.position,
+                                  email: editingEmployeeData.email || employee.email,
+                                  startTime: editingEmployeeData.startTime || employee.startTime,
+                                  endTime: editingEmployeeData.endTime || employee.endTime,
+                                  breakDuration: editingEmployeeData.breakDuration !== undefined ? editingEmployeeData.breakDuration : employee.breakDuration,
+                                  hourlyRate: editingEmployeeData.hourlyRate !== undefined ? editingEmployeeData.hourlyRate : employee.hourlyRate,
+                                  profileImage: editingEmployeeData.profileImage || employee.profileImage
+                                });
+                              }}
                               className="btn btn-primary"
                             >
                               <Save className="w-4 h-4 mr-2" />
