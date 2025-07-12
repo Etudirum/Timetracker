@@ -311,6 +311,31 @@ function App() {
     });
   };
 
+  const showWelcomeMessage = (employee, action) => {
+    const isArrival = action === 'clock-in';
+    const greeting = employee.gender === 'F' ? 'Madame' : 'Monsieur';
+    const lastName = employee.lastName || employee.name?.split(' ').slice(-1)[0] || '';
+    const message = isArrival 
+      ? `Bienvenue ${greeting} ${lastName}`
+      : `Au revoir ${greeting} ${lastName}`;
+    
+    const welcomeData = {
+      employee,
+      message,
+      action,
+      isArrival,
+      timestamp: new Date().toISOString()
+    };
+    
+    setWelcomeData(welcomeData);
+    setShowWelcomePopup(true);
+    
+    // Auto-fermeture après 4 secondes
+    setTimeout(() => {
+      setShowWelcomePopup(false);
+    }, 4000);
+  };
+
   const handleClockIn = async (employeeId) => {
     try {
       const entry = {
