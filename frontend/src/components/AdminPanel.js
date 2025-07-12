@@ -109,23 +109,66 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
   };
 
   const handleDeleteEmployee = async (employeeId) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cet employé ?')) {
+    const employee = employees.find(emp => emp.id === employeeId);
+    const employeeName = employee ? employee.name : 'cet employé';
+    
+    // Popup de confirmation amélioré
+    const confirmDelete = window.confirm(
+      `⚠️ ATTENTION: Suppression définitive\n\n` +
+      `Voulez-vous vraiment supprimer ${employeeName} ?\n\n` +
+      `Cette action va également supprimer :\n` +
+      `• Toutes ses activités de pointage\n` +
+      `• Son historique complet\n` +
+      `• Ses données personnelles\n\n` +
+      `Cette action est IRRÉVERSIBLE.\n\n` +
+      `Tapez "OUI" pour confirmer la suppression.`
+    );
+    
+    if (!confirmDelete) {
+      return;
+    }
+
+    // Demander une double confirmation
+    const doubleConfirm = window.prompt(
+      `Pour confirmer la suppression de ${employeeName}, tapez "SUPPRIMER" (en majuscules):`
+    );
+    
+    if (doubleConfirm !== 'SUPPRIMER') {
+      setError('Suppression annulée. Le texte de confirmation ne correspond pas.');
+      setTimeout(() => setError(''), 3000);
       return;
     }
 
     try {
-      if (isOnline && !employeeId.startsWith('offline_')) {
+      // Supprimer toutes les activités de l'employé d'abord
+      if (isOnline) {
+        // Récupérer toutes les entrées de temps pour cet employé
+        const timeEntriesQuery = query(
+          collection(db, 'timeEntries'),
+          where('employeeId', '==', employeeId)
+        );
+        const timeEntriesSnapshot = await getDocs(timeEntriesQuery);
+        
+        // Supprimer toutes les entrées de temps
+        const deletePromises = timeEntriesSnapshot.docs.map(doc => 
+          deleteDoc(doc.ref)
+        );
+        await Promise.all(deletePromises);
+        
+        // Supprimer l'employé
         await deleteDoc(doc(db, 'employees', employeeId));
       } else {
-        await offlineStorage.deleteEmployee(employeeId);
+        // Mode offline - supprimer via offlineStorage
+        await offlineStorage.deleteEmployeeAndActivities(employeeId);
       }
 
-      setSuccess('Employé supprimé avec succès');
+      setSuccess(`Employé ${employeeName} et toutes ses activités supprimés avec succès`);
       onEmployeeUpdate();
-      setTimeout(() => setSuccess(''), 3000);
+      setTimeout(() => setSuccess(''), 5000);
     } catch (error) {
       console.error('Erreur lors de la suppression de l\'employé:', error);
-      setError('Erreur lors de la suppression de l\'employé');
+      setError('Erreur lors de la suppression de l\'employé et de ses activités');
+      setTimeout(() => setError(''), 3000);
     }
   };
 
