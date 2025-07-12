@@ -738,22 +738,32 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
 
           {currentView === 'settings' && (
             <div className="space-y-6">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Paramètres généraux</h3>
+              <div className={`p-4 rounded-lg transition-colors duration-300 ${
+                darkMode ? 'bg-gray-700' : 'bg-gray-50'
+              }`}>
+                <h3 className={`text-lg font-medium mb-4 transition-colors duration-300 ${
+                  darkMode ? 'text-white' : 'text-gray-900'
+                }`}>Paramètres généraux</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="form-label">Mot de passe administrateur</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Mot de passe administrateur</label>
                     <input
                       type="password"
                       value={settings.adminPassword || ''}
                       onChange={(e) => setSettings({...settings, adminPassword: e.target.value})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="Nouveau mot de passe"
                     />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="form-label">Heure de début par défaut</label>
+                      <label className={`form-label transition-colors duration-300 ${
+                        darkMode ? 'text-gray-300' : ''
+                      }`}>Heure de début par défaut</label>
                       <input
                         type="time"
                         value={settings.workingHours?.start || '08:00'}
@@ -764,11 +774,15 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                             start: e.target.value
                           }
                         })}
-                        className="form-input"
+                        className={`form-input transition-colors duration-300 ${
+                          darkMode ? 'dark' : ''
+                        }`}
                       />
                     </div>
                     <div>
-                      <label className="form-label">Heure de fin par défaut</label>
+                      <label className={`form-label transition-colors duration-300 ${
+                        darkMode ? 'text-gray-300' : ''
+                      }`}>Heure de fin par défaut</label>
                       <input
                         type="time"
                         value={settings.workingHours?.end || '17:00'}
@@ -779,23 +793,89 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
                             end: e.target.value
                           }
                         })}
-                        className="form-input"
+                        className={`form-input transition-colors duration-300 ${
+                          darkMode ? 'dark' : ''
+                        }`}
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="form-label">Durée de pause par défaut (minutes)</label>
+                    <label className={`form-label transition-colors duration-300 ${
+                      darkMode ? 'text-gray-300' : ''
+                    }`}>Durée de pause par défaut (minutes)</label>
                     <input
                       type="number"
                       value={settings.breakDuration || 30}
                       onChange={(e) => setSettings({...settings, breakDuration: parseInt(e.target.value)})}
-                      className="form-input"
+                      className={`form-input transition-colors duration-300 ${
+                        darkMode ? 'dark' : ''
+                      }`}
                       placeholder="30"
                     />
                   </div>
                 </div>
-                <div className="flex justify-end mt-4">
-                  <button onClick={handleUpdateSettings} className="btn btn-primary">
+              </div>
+
+              <div className={`p-4 rounded-lg transition-colors duration-300 ${
+                darkMode ? 'bg-gray-700' : 'bg-gray-50'
+              }`}>
+                <h3 className={`text-lg font-medium mb-4 transition-colors duration-300 ${
+                  darkMode ? 'text-white' : 'text-gray-900'
+                }`}>Affichage de l'interface</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className={`font-medium transition-colors duration-300 ${
+                        darkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Afficher la section Statistiques</label>
+                      <p className={`text-sm transition-colors duration-300 ${
+                        darkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}>Masquer ou afficher les cartes de statistiques sur le tableau de bord</p>
+                    </div>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={settings.display?.showStats !== false}
+                        onChange={(e) => setSettings({
+                          ...settings,
+                          display: {
+                            ...settings.display,
+                            showStats: e.target.checked
+                          }
+                        })}
+                        className="mr-2"
+                      />
+                    </label>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className={`font-medium transition-colors duration-300 ${
+                        darkMode ? 'text-gray-300' : 'text-gray-700'
+                      }`}>Afficher la section Employés</label>
+                      <p className={`text-sm transition-colors duration-300 ${
+                        darkMode ? 'text-gray-400' : 'text-gray-500'
+                      }`}>Masquer ou afficher la liste des employés sur le tableau de bord</p>
+                    </div>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={settings.display?.showEmployees !== false}
+                        onChange={(e) => setSettings({
+                          ...settings,
+                          display: {
+                            ...settings.display,
+                            showEmployees: e.target.checked
+                          }
+                        })}
+                        className="mr-2"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end">
+                <button onClick={handleUpdateSettings} className="btn btn-primary">
                     <Save className="w-4 h-4 mr-2" />
                     Sauvegarder
                   </button>
