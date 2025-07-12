@@ -154,9 +154,20 @@ function App() {
           showStats: settings.display.showStats !== false,
           showEmployees: settings.display.showEmployees !== false
         });
+      } else {
+        // Valeurs par défaut si aucun paramètre n'existe
+        setDisplaySettings({
+          showStats: true,
+          showEmployees: true
+        });
       }
     } catch (error) {
       console.error('Erreur chargement paramètres d\'affichage:', error);
+      // En cas d'erreur, utiliser les valeurs par défaut
+      setDisplaySettings({
+        showStats: true,
+        showEmployees: true
+      });
     }
   };
 
