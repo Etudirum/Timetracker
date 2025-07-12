@@ -134,6 +134,12 @@ function App() {
     }
   }, [isElectron, employees]);
 
+  // Fonction utilitaire pour obtenir les initiales
+  const getInitials = (name) => {
+    if (!name) return 'PP';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
   // Charger les employés et les pointages
   useEffect(() => {
     loadEmployees();
