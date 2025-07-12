@@ -69,9 +69,11 @@ export function AdminPanel({ onClose, employees, onEmployeeUpdate, darkMode = fa
       }
 
       setNewEmployee({
-        name: '',
+        firstName: '',
+        lastName: '',
         position: '',
         email: '',
+        gender: 'M',
         startTime: '08:00',
         endTime: '17:00',
         breakDuration: 30,
