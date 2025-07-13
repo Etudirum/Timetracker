@@ -6,9 +6,7 @@ class NFCManager extends EventEmitter {
     super();
     this.nfc = new NFC();
     this.isScanning = false;
-    this.connectedReaders = new Map();
-    this.employeeTags = new Map();
-    this.setupNFC();
+    this.readers = new Map();
   }
 
   setupNFC() {
