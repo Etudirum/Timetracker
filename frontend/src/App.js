@@ -1157,7 +1157,7 @@ function App() {
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <header className={`shadow-sm border-b transition-colors duration-300 ${
+      <header className={`native-header shadow-sm border-b transition-colors duration-300 ${
         darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -1170,6 +1170,11 @@ function App() {
                 <h1 className={`text-2xl font-bold transition-colors duration-300 ${
                   darkMode ? 'text-white' : 'text-gray-900'
                 }`}>TimeTracker24</h1>
+                {isPWA && (
+                  <p className={`text-xs font-medium transition-colors duration-300 ${
+                    darkMode ? 'text-purple-400' : 'text-purple-600'
+                  }`}>📱 Application Native</p>
+                )}
                 <p className={`text-sm transition-colors duration-300 ${
                   darkMode ? 'text-gray-400' : 'text-gray-500'
                 }`}>
@@ -1199,7 +1204,7 @@ function App() {
               
               <button 
                 onClick={toggleDarkMode}
-                className={`p-2 rounded-lg transition-colors duration-300 ${
+                className={`native-button p-2 rounded-lg transition-colors duration-300 hover:scale-105 ${
                   darkMode 
                     ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' 
                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'
