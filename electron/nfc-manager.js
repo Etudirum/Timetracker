@@ -35,54 +35,60 @@ class NFCManager extends EventEmitter {
     });
   }
 
-  async handleCard(card, reader) {
-    if (!this.isScanning) {
-      return;
-    }
-
+  async handleCard(card) {
+    console.log('🏷️  Tag NFC détecté');
+    
     try {
-      const tagData = {
-        uid: card.uid,
-        atr: card.atr,
-        standard: card.standard,
-        type: card.type,
-        reader: reader.name,
-        timestamp: new Date().toISOString()
-      };
-
-      // Lire les données du tag si possible
-      try {
-        const data = await this.readTagData(card, reader);
-        tagData.data = data;
-      } catch (readError) {
-        console.log('Info: Impossible de lire les données du tag (normal pour certains types)');
+      // Lire les données du tag
+      const data = await this.readEmployeeData(card);
+      
+      if (data && data.type === 'timetracker24_employee') {
+        console.log(`✅ Tag employé reconnu: ${data.name}`);
+        
+        this.emit('employee-scan', {
+          tagId: data.tagId,
+          employeeId: data.employeeId,
+          name: data.name,
+          position: data.position,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.log('❌ Tag non reconnu ou vide');
+        this.emit('unknown-tag', {
+          uid: card.uid,
+          type: card.type,
+          timestamp: new Date().toISOString()
+        });
       }
-
-      this.emit('tag-detected', tagData);
     } catch (error) {
-      console.error('Erreur traitement tag:', error);
-      this.emit('error', {
-        message: `Erreur traitement tag: ${error.message}`,
-        code: error.code
-      });
+      console.error('❌ Erreur lecture tag:', error);
+      this.emit('read-error', { error: error.message });
     }
   }
 
-  async readTagData(card, reader) {
-    // Tentative de lecture des données NDEF si disponibles
+  async readEmployeeData(card) {
     try {
-      const data = await reader.read(0, 16); // Lire les premiers 16 bytes
-      return {
-        raw: data,
-        hex: data.toString('hex'),
-        text: this.parseNDEF(data)
-      };
+      // Lire le contenu NDEF du tag
+      const data = await card.readNdefMessage();
+      
+      if (data && data.length > 0) {
+        // Parser les enregistrements NDEF
+        for (const record of data) {
+          if (record.type === 'T') { // Text record
+            const text = record.payload.toString('utf8');
+            try {
+              const employeeData = JSON.parse(text);
+              return employeeData;
+            } catch (e) {
+              console.log('Tag contient du texte mais pas du JSON valide');
+            }
+          }
+        }
+      }
+      return null;
     } catch (error) {
-      // Retourner seulement l'UID si la lecture échoue
-      return {
-        uid: card.uid,
-        readable: false
-      };
+      console.error('Erreur lecture NDEF:', error);
+      return null;
     }
   }
 
