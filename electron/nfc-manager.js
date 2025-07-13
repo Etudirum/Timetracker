@@ -9,41 +9,29 @@ class NFCManager extends EventEmitter {
     this.readers = new Map();
   }
 
-  setupNFC() {
-    this.nfc.on('reader', (reader) => {
-      console.log(`📖 Lecteur NFC connecté: ${reader.name}`);
-      this.connectedReaders.set(reader.name, reader);
-      
-      reader.on('card', (card) => {
-        console.log(`🏷️ Tag détecté sur ${reader.name}:`, card.uid);
-        this.handleCard(card, reader);
-      });
+  async initialize() {
+    try {
+      this.nfc.on('reader', this.handleReader.bind(this));
+      this.nfc.on('error', this.handleError.bind(this));
+      console.log('✅ NFC Manager initialisé');
+      return true;
+    } catch (error) {
+      console.error('❌ Erreur initialisation NFC:', error);
+      return false;
+    }
+  }
 
-      reader.on('card.off', (card) => {
-        console.log(`📤 Tag retiré de ${reader.name}:`, card.uid);
-      });
-
-      reader.on('error', (err) => {
-        console.error(`❌ Erreur lecteur ${reader.name}:`, err);
-        this.emit('error', {
-          message: `Erreur lecteur ${reader.name}: ${err.message}`,
-          code: err.code,
-          reader: reader.name
-        });
-      });
-
-      reader.on('end', () => {
-        console.log(`🔌 Lecteur ${reader.name} déconnecté`);
-        this.connectedReaders.delete(reader.name);
-      });
-    });
-
-    this.nfc.on('error', (err) => {
-      console.error('❌ Erreur NFC:', err);
-      this.emit('error', {
-        message: `Erreur NFC: ${err.message}`,
-        code: err.code
-      });
+  handleReader(reader) {
+    console.log(`📱 Lecteur NFC détecté: ${reader.reader.name}`);
+    this.readers.set(reader.reader.name, reader);
+    
+    reader.on('card', this.handleCard.bind(this));
+    reader.on('card.off', this.handleCardRemoved.bind(this));
+    reader.on('error', this.handleReaderError.bind(this));
+    
+    this.emit('reader-connected', {
+      name: reader.reader.name,
+      status: 'connected'
     });
   }
 
