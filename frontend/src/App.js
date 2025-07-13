@@ -18,6 +18,7 @@ const useElectron = () => {
 };
 
 function App() {
+  // États existants...
   const [currentView, setCurrentView] = useState('pointage');
   const [employees, setEmployees] = useState([]);
   const [timeEntries, setTimeEntries] = useState([]);
@@ -59,6 +60,21 @@ function App() {
 
   const isElectron = useElectron();
   const isOnline = useNetworkStatus();
+
+  // Détection du mode PWA
+  const [isPWA, setIsPWA] = useState(false);
+
+  useEffect(() => {
+    // Détecter si l'app est en mode PWA
+    const isPWAMode = window.matchMedia('(display-mode: standalone)').matches || 
+                     window.navigator.standalone || 
+                     document.referrer.includes('android-app://');
+    setIsPWA(isPWAMode);
+    
+    if (isPWAMode) {
+      document.body.classList.add('standalone-mode', 'native-app-feel');
+    }
+  }, []);
 
   // Initialisation du thème persistant
   useEffect(() => {
