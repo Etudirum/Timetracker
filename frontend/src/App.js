@@ -796,7 +796,7 @@ function App() {
             const isOnBreak = status === 'on_break';
             
             return (
-                <div key={employee.id} className={`employee-card transition-colors duration-300 ${
+                <div key={employee.id} className={`employee-card native-card transition-colors duration-300 ${
                   darkMode ? 'dark' : ''
                 }`}>
                   <div className="flex items-center justify-between mb-3">
@@ -831,7 +831,7 @@ function App() {
                     </div>
                     <button 
                       onClick={() => handleStatsClick(employee)}
-                      className={`transition-colors duration-300 ${
+                      className={`native-button transition-colors duration-300 ${
                         darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-400 hover:text-gray-600'
                       }`}
                     >
@@ -860,7 +860,7 @@ function App() {
                         onClick={() => {
                           handleClockIn(employee.id);
                         }}
-                        className="flex items-center space-x-1 px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
+                        className="native-button flex items-center space-x-1 px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
                       >
                         <Play className="w-4 h-4" />
                         <span>Arrivée</span>
@@ -871,7 +871,7 @@ function App() {
                           onClick={() => {
                             handleClockOut(employee.id);
                           }}
-                          className="flex items-center space-x-1 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
+                          className="native-button flex items-center space-x-1 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
                         >
                           <Pause className="w-4 h-4" />
                           <span>Départ</span>
@@ -879,7 +879,7 @@ function App() {
                         {status === 'on_break' ? (
                           <button 
                             onClick={() => handleEndBreak(employee.id)}
-                            className="flex items-center space-x-1 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                            className="native-button flex items-center space-x-1 px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
                           >
                             <Coffee className="w-4 h-4" />
                             <span>Fin pause</span>
@@ -887,7 +887,7 @@ function App() {
                         ) : (
                           <button 
                             onClick={() => handleStartBreak(employee.id)}
-                            className="flex items-center space-x-1 px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm"
+                            className="native-button flex items-center space-x-1 px-3 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm"
                           >
                             <Coffee className="w-4 h-4" />
                             <span>Pause</span>
