@@ -149,72 +149,58 @@ class NFCManager extends EventEmitter {
   }
 
   startScanning() {
-    console.log('🔍 Démarrage de la détection NFC...');
     this.isScanning = true;
-    return true;
+    console.log('🔍 Scan NFC démarré');
+    this.emit('scanning-started');
   }
 
   stopScanning() {
-    console.log('⏹️ Arrêt de la détection NFC');
     this.isScanning = false;
-    return true;
+    console.log('⏹️  Scan NFC arrêté');
+    this.emit('scanning-stopped');
   }
 
-  isAvailable() {
-    return this.connectedReaders.size > 0;
-  }
-
-  isScanning() {
-    return this.isScanning;
-  }
-
-  getConnectedReaders() {
-    return Array.from(this.connectedReaders.keys());
-  }
-
-  cleanup() {
-    console.log('🧹 Nettoyage gestionnaire NFC...');
-    this.stopScanning();
-    this.employeeTags.clear();
-    this.connectedReaders.clear();
-    
-    if (this.nfc) {
-      this.nfc.close();
-    }
-  }
-
-  // Méthodes utilitaires
-  getTagStats() {
+  getStatus() {
     return {
-      registeredTags: this.employeeTags.size,
-      connectedReaders: this.connectedReaders.size,
-      isScanning: this.isScanning
+      isScanning: this.isScanning,
+      readersCount: this.readers.size,
+      readers: Array.from(this.readers.keys())
     };
   }
 
-  exportTagDatabase() {
-    const data = {
-      employeeTags: Array.from(this.employeeTags.entries()),
-      timestamp: new Date().toISOString()
-    };
-    return JSON.stringify(data, null, 2);
+  async registerNewTag(employeeData) {
+    return new Promise((resolve, reject) => {
+      console.log(`🏷️  Placez le tag NFC pour ${employeeData.name}...`);
+      
+      const timeout = setTimeout(() => {
+        this.removeListener('card', cardHandler);
+        reject(new Error('Timeout: Aucun tag détecté'));
+      }, 30000); // 30 secondes timeout
+
+      const cardHandler = async (card) => {
+        try {
+          clearTimeout(timeout);
+          this.removeListener('card', cardHandler);
+          
+          const result = await this.writeEmployeeData(card, employeeData);
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      };
+
+      // Écouter temporairement pour un nouveau tag
+      this.readers.forEach(reader => {
+        reader.once('card', cardHandler);
+      });
+    });
   }
 
-  importTagDatabase(jsonData) {
-    try {
-      const data = JSON.parse(jsonData);
-      this.employeeTags.clear();
-      
-      for (const [tagUid, employeeId] of data.employeeTags) {
-        this.employeeTags.set(tagUid, employeeId);
-      }
-      
-      console.log(`📥 Importé ${this.employeeTags.size} associations tag-employé`);
-      return true;
-    } catch (error) {
-      console.error('Erreur import base tags:', error);
-      return false;
-    }
+  destroy() {
+    this.stopScanning();
+    this.readers.clear();
+    this.removeAllListeners();
+    console.log('🔌 NFC Manager fermé');
   }
 }
 
