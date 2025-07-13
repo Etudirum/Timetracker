@@ -92,41 +92,60 @@ class NFCManager extends EventEmitter {
     }
   }
 
-  parseNDEF(data) {
-    // Parser basique pour les données NDEF
+  async writeEmployeeData(card, employeeData) {
     try {
-      // Détecter si c'est du texte simple
-      const text = data.toString('utf8').replace(/\x00/g, '');
-      return text.match(/^[\x20-\x7E]*$/) ? text : null;
+      const nfcData = {
+        type: 'timetracker24_employee',
+        tagId: this.generateTagId(),
+        employeeId: employeeData.id,
+        name: employeeData.name,
+        position: employeeData.position || '',
+        firstName: employeeData.firstName || '',
+        lastName: employeeData.lastName || '',
+        gender: employeeData.gender || 'M',
+        created: new Date().toISOString(),
+        version: '1.0'
+      };
+
+      const jsonData = JSON.stringify(nfcData);
+      
+      // Créer l'enregistrement NDEF Text
+      const textRecord = {
+        type: 'T',
+        payload: Buffer.from(jsonData, 'utf8')
+      };
+
+      // Écrire sur le tag
+      await card.writeNdefMessage([textRecord]);
+      
+      console.log(`✅ Tag écrit avec succès pour ${employeeData.name}`);
+      return nfcData;
     } catch (error) {
-      return null;
+      console.error('❌ Erreur écriture tag:', error);
+      throw error;
     }
   }
 
-  async registerEmployeeTag(employeeId, tagUid) {
-    console.log(`📝 Enregistrement tag ${tagUid} pour employé ${employeeId}`);
-    
-    // Vérifier si le tag n'est pas déjà utilisé
-    if (this.employeeTags.has(tagUid)) {
-      throw new Error('Ce tag est déjà associé à un autre employé');
-    }
+  generateTagId() {
+    return 'tag_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
 
-    // Ajouter l'association
-    this.employeeTags.set(tagUid, employeeId);
-    
-    // Ici, vous pourriez sauvegarder dans une base de données
-    // Pour l'instant, on garde en mémoire
-    
-    return {
-      success: true,
-      employeeId,
-      tagUid,
+  handleCardRemoved(card) {
+    console.log('🏷️  Tag NFC retiré');
+    this.emit('card-removed', {
+      uid: card.uid,
       timestamp: new Date().toISOString()
-    };
+    });
   }
 
-  getEmployeeByTag(tagUid) {
-    return this.employeeTags.get(tagUid);
+  handleReaderError(err) {
+    console.error('❌ Erreur lecteur NFC:', err);
+    this.emit('reader-error', { error: err.message });
+  }
+
+  handleError(err) {
+    console.error('❌ Erreur NFC globale:', err);
+    this.emit('nfc-error', { error: err.message });
   }
 
   startScanning() {
