@@ -1090,6 +1090,27 @@
         }
         
         
+        // Filter functions
+        function updateEmployeeFilter(value) {
+            appState.filter.employee = value;
+            render();
+        }
+        
+        function updatePeriodFilter(value) {
+            appState.filter.period = value;
+            render();
+        }
+        
+        function updateStartDate(value) {
+            appState.filter.startDate = value;
+            render();
+        }
+        
+        function updateEndDate(value) {
+            appState.filter.endDate = value;
+            render();
+        }
+        
         function updateSettings(key, value) {
             appState.settings[key] = value;
             localStorage.setItem(key.replace(/([A-Z])/g, '-$1').toLowerCase(), value);
