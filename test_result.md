@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Compléter l'intégration NFC pour le pointage avec badges NFC via application desktop Electron. Inclut la gestion des popups de bienvenue, la persistance du thème sombre/clair, et la finalisation des composants NFC."
+user_problem_statement: "Problèmes de déploiement Firebase : erreurs 400 Firestore, CSS cassé, et demande de configuration NFC + récupération du code complet"
 
 backend:
   - task: "Employee Management API"
