@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timetracker24-v2';
+const CACHE_NAME = 'timetracker24-v3';
 const urlsToCache = [
   '/',
   '/manifest.json',
