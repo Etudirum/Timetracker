@@ -235,6 +235,57 @@
         .status-break { background: #eab308; }
         .status-absent { background: #ef4444; }
         
+        /* Employee Stats Modal */
+        .employee-stats-modal {
+            max-width: 56rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+        
+        body.dark .stat-item {
+            background: #374151;
+            border-color: #4b5563;
+        }
+        
+        .stat-item-purple { border-left: 4px solid #8B5CF6; }
+        .stat-item-blue { border-left: 4px solid #3B82F6; }
+        .stat-item-green { border-left: 4px solid #22C55E; }
+        .stat-item-orange { border-left: 4px solid #F59E0B; }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value-purple { color: #8B5CF6; }
+        .stat-value-blue { color: #3B82F6; }
+        .stat-value-green { color: #22C55E; }
+        .stat-value-orange { color: #F59E0B; }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        body.dark .stat-label {
+            color: #9ca3af;
+        }
+        
         /* Modal */
         .modal {
             position: fixed;
