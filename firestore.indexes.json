@@ -1,26 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "employees",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "name",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "timeEntries",
-      "queryScope": "COLLECTION", 
-      "fields": [
-        {
-          "fieldPath": "startTime",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "timeEntries",
       "queryScope": "COLLECTION",
       "fields": [
