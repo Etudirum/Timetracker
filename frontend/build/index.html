@@ -1035,6 +1035,13 @@
             return filtered;
         }
         
+        
+        function updateSettings(key, value) {
+            appState.settings[key] = value;
+            localStorage.setItem(key.replace(/([A-Z])/g, '-$1').toLowerCase(), value);
+            render();
+        }
+        
         // Export functions
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
