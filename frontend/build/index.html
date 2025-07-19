@@ -1616,7 +1616,7 @@
                                 <input
                                     type="date"
                                     value="${appState.filter.startDate}"
-                                    onchange="appState.filter.startDate = this.value; render();"
+                                    onchange="updateStartDate(this.value)"
                                     class="form-input"
                                 />
                             </div>
@@ -1625,7 +1625,7 @@
                                 <input
                                     type="date"
                                     value="${appState.filter.endDate}"
-                                    onchange="appState.filter.endDate = this.value; render();"
+                                    onchange="updateEndDate(this.value)"
                                     class="form-input"
                                 />
                             </div>
