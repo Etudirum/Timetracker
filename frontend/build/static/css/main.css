@@ -1,0 +1,12 @@
+/* CSS compilé de base pour TimeTracker24 */
+body { margin: 0; font-family: system-ui; background: #f8fafc; }
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.header { background: white; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.card { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+.btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
+.btn-primary { background: #8B5CF6; color: white; }
+.btn-success { background: #22C55E; color: white; }
+.btn-danger { background: #EF4444; color: white; }
+.grid { display: grid; gap: 1rem; }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.stats-card { background: linear-gradient(135deg, #8B5CF6, #6366F1); color: white; padding: 1.5rem; border-radius: 12px; }
