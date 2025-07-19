@@ -174,7 +174,7 @@ function App() {
         // Always set loading to false after attempting to load data
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000); // Small delay to prevent flashing
+        }, 500); // Small delay to prevent flashing
       }
     };
     
