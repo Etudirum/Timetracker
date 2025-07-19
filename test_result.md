@@ -367,3 +367,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "🔥 DÉPLOIEMENT FIREBASE RÉPARÉ AVEC SUCCÈS ! Corrections effectuées: 1) firebase.json corrigé pour pointer vers frontend/build avec règles SPA et headers optimisés, 2) Règles Firestore sécurisées créées, 3) Build de production manuel généré avec HTML/CSS/PWA complet, 4) Configuration NFC intégrée avec script Python et app Electron, 5) Archive complète du code créée (874KB). Tous les problèmes résolus: erreurs 400 Firestore ✅, CSS cassé ✅, PWA fonctionnelle ✅. Prêt pour firebase deploy!"
+  - agent: "main"
+    message: "🔧 Reprise du travail sur version Firebase déployée. Problèmes identifiés à corriger: 1) Bouton 'Modifier' dans le registre ne fonctionne pas (problème JSON parsing dans editTimeEntry), 2) Touche 'Entrée' ne fonctionne pas pour connexion admin. Fichier index.html restauré depuis archive, prêt pour corrections spécifiques."
