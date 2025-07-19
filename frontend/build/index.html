@@ -973,18 +973,29 @@
             render();
         }
         
-        function calculateDuration(startTime, endTime) {
+        function calculateDuration(startTime, endTime, employee = null) {
             if (!endTime) return { hours: 0, minutes: 0, display: '0h 0min', totalHours: 0 };
             
             const totalMinutes = (new Date(endTime) - new Date(startTime)) / (1000 * 60);
-            const hours = Math.floor(totalMinutes / 60);
-            const minutes = Math.round(totalMinutes % 60);
+            
+            // Auto break calculation if employee provided
+            let breakMinutes = 0;
+            if (employee && employee.breakDuration && endTime) {
+                const totalWorkHours = totalMinutes / 60;
+                const automaticBreakMinutes = Math.floor(totalWorkHours / 3) * 15; // 15min per 3h
+                breakMinutes = Math.min(automaticBreakMinutes, employee.breakDuration);
+            }
+            
+            const workMinutes = Math.max(0, totalMinutes - breakMinutes);
+            const hours = Math.floor(workMinutes / 60);
+            const minutes = Math.round(workMinutes % 60);
             
             return { 
                 hours, 
                 minutes, 
                 display: `${hours}h ${minutes}min`,
-                totalHours: Math.round((totalMinutes / 60) * 10) / 10
+                totalHours: Math.round((workMinutes / 60) * 10) / 10,
+                breakMinutes
             };
         }
         
