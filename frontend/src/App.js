@@ -162,12 +162,24 @@ function App() {
     const initializeApp = async () => {
       setIsLoading(true);
       try {
+        // Create a global timeout for initialization
+        const initializationTimeout = new Promise((resolve) => {
+          setTimeout(() => {
+            console.log('App initialization timeout reached - proceeding with available data');
+            resolve();
+          }, 4000); // 4 second maximum for full initialization
+        });
+        
         // Load all initial data
-        await Promise.allSettled([
+        const dataLoading = Promise.allSettled([
           loadEmployees(),
           loadTimeEntries(),
           loadDisplaySettings()
         ]);
+        
+        // Race between data loading and timeout
+        await Promise.race([dataLoading, initializationTimeout]);
+        
       } catch (error) {
         console.error('Erreur lors de l\'initialisation:', error);
       } finally {
