@@ -1,79 +1,70 @@
 <analysis>
-The previous AI engineer successfully established a time-tracking application, shifting from local JSON to Firebase with offline capabilities based on user feedback. The core work involved extensive React frontend and FastAPI backend development, including comprehensive CRUD operations for employees and time entries, and admin controls. Significant effort was dedicated to iterative UI/UX refinements, such as fixing time modification issues, enhancing employee editing, implementing complex break calculations, adding salary display, introducing a robust dark mode, and integrating employee profile photos. A critical platform-level bug preventing deployment was identified and escalated to . The latest development phase, which is currently ongoing, focuses on integrating NFC-based clock-in/out via an Electron desktop wrapper, alongside requested UI adjustments and theme persistence.
+The previous AI engineer successfully developed a full-stack time-tracking application, transitioning from local JSON to Firebase with offline capabilities. The core functionalities implemented include employee and time entry CRUD operations, detailed statistics with salary display, and a robust admin panel. Significant effort was dedicated to UI/UX, incorporating dark mode, responsive design, and iterative refinements for features like break calculations and employee photo uploads. The latest development phase primarily focused on integrating NFC-based clock-in/out via an Electron desktop wrapper, along with various UI adjustments and theme persistence. While many features were successfully integrated, persistent issues with Firebase data synchronization (employees disappearing after admin operations) and the welcome pop-up's activation on manual clock-in remain. The project has also recently progressed into converting the application into a Progressive Web App (PWA) for a native app experience, and the initial steps for NFC tag enrollment are underway.
 </analysis>
 
 <product_requirements>
-The user requested a local JSON-based time tracking application inspired by a provided image, featuring employee management (add, edit, delete), individual statistics, admin password protection, and a modern, responsive design.
-
-Key evolving requirements include:
--   **Data Storage**: Switched from local JSON to Firebase with offline capabilities.
--   **Employee Management**: Visible employee list with status (green/red); admin-protected add, edit (name, position, hourly rate, start/end times, break duration), and delete functionalities. Employee profile photos for cards and addition forms.
--   **Time Tracking**: Ability to modify specific clock-in/out times; automatic duration calculation displayed in hours and minutes; automatic 15-minute break deduction per 3 hours of work, up to a defined maximum break duration.
--   **Statistics**: View employee statistics, including salary in FCFA. Statistics viewing was initially password-protected, then password removed for viewing, but added for time entry modifications.
--   **Design**: Modern, responsive, light theme with dark text, pastel colors, specific Tailwind CSS classes (, , , ), purple theme, gradient backgrounds for cards, hover effects, and SVGs. Implement a dark mode with persistent selection across sessions.
--   **New Features**: Integrate NFC tag-based clock-in/out via a PC-connected NFC reader. This should trigger a brief pop-up displaying the employee's photo, position, and a welcome/goodbye message, accompanied by a sound. Remove the En ligne (Online) indicator from the main menu.
+The initial requirement was a local JSON-based time tracking app with employee management, individual statistics, admin protection, and a modern, responsive design. This evolved significantly to:
+-   **Data Storage**: Migrate from local JSON to Firebase with offline capabilities.
+-   **Employee Management**: Visible employee list (green/red status); admin-protected CRUD with photo upload, separated Nom and Prénom fields, and a Genre (Gender) field.
+-   **Time Tracking**: Modify clock-in/out times; auto-calculate duration; auto 15-min break deduction per 3 hours, up to a max break.
+-   **Statistics**: Display employee stats including salary in FCFA; initial password protection for stats viewing (later removed for viewing, but retained for time entry modifications).
+-   **Design**: Modern, responsive, light/dark mode with persistence, specific Tailwind CSS classes, purple theme, gradients, hover effects, SVGs, and a restored old employee card design with compact buttons.
+-   **New Features**: NFC tag-based clock-in/out via PC-connected reader, triggering a temporary pop-up with employee photo/info and welcome/goodbye message, plus sound. Remove En ligne indicator. Allow showing/hiding Employee/Statistics sections in settings. Display 4 employees per row. Change estimated salary color to green in dark mode. Transform the app into a Progressive Web App (PWA) for a native app-like experience (no browser navigation elements).
 </product_requirements>
 
 <key_technical_concepts>
-
--   **Full-stack Stack**: React (frontend), FastAPI (backend), and Firebase (database with offline sync).
--   **UI/UX**: Tailwind CSS for styling and Recharts for data visualization (charts).
--   **Desktop App**: Electron and Node.js to create a cross-platform desktop wrapper for the web app, enabling native functionalities like NFC reader access.
--   **NFC Integration**: Utilizes PC/SC NFC readers for employee clock-in/out.
--   **Authentication**: Password-based admin access and specific feature protection.
--   **Frontend State & Persistence**: React's hooks for UI state management and  for theme persistence.
-
+-   **Full-stack**: React (frontend), FastAPI (backend), Firebase Firestore (database with offline sync).
+-   **UI/UX**: Tailwind CSS, Recharts (data visualization),  (theme persistence).
+-   **Desktop**: Electron and Node.js (for NFC reader interaction).
+-   **NFC**: PC/SC NFC readers for clock-in/out,  (Python) for tag writing.
+-   **Web App**: Progressive Web App (PWA) manifest and service worker for native app experience.
 </key_technical_concepts>
 
 <code_architecture>
-
-The application features a standard full-stack setup with a React frontend and a FastAPI backend, now primarily utilizing Firebase for data persistence. An Electron layer is being introduced to enable desktop-specific features like NFC interaction.
-
+The application employs a standard full-stack architecture with React for the frontend, FastAPI for the backend, and Firebase for data persistence. An Electron layer has been introduced to facilitate desktop-specific functionalities like NFC interaction. The project has been recently converted to a PWA.
 
 
--   ****: The core FastAPI application.
-    -   *Summary*: Manages API endpoints for employee and time entry CRUD operations, integrated with Firebase, and implements business logic for break calculations.
+
+-   ****: The FastAPI backend, managing API endpoints for employee and time entry CRUD operations, integrated with Firebase.
 -   ****: The main React component.
-    -   *Summary*: Renders the overall application, manages global state (e.g., dark mode), integrates various sub-components, handles user authentication, and coordinates the NFC interaction. Extensive modifications were made to accommodate all user-requested features including UI updates and new components.
--   ****: Application-wide CSS styles.
-    -   *Summary*: Defines the visual theme, including custom gradients, rounded corners, and provides the base for the light and dark mode implementations. Styles for new elements like the NFC pop-up have been added.
--   ****: Admin interface for employee management.
-    -   *Summary*: Allows adding and comprehensive editing of employee details (name, position, hourly rate, work hours, break duration), and integrates photo uploads. Features updated dark mode styling.
--   ****: Displays employee work statistics.
-    -   *Summary*: Shows detailed time and salary statistics using Recharts. Has undergone multiple revisions to correctly display salary (in FCFA), manage authentication for access (then removed, then re-secured salary display logic), and correctly apply dark mode. Resolved a critical import conflict with .
--   ****: Firebase integration service.
-    -   *Summary*: Handles all data interactions with the Firebase database, supporting offline capabilities.
+    -   *Summary*: Renders the application, manages global state (dark mode, display settings), handles authentication and NFC interaction. Modified extensively for UI updates (e.g., En ligne removal, 4-column employee grid, native app styling), welcome popup integration for manual clock-in, and display settings logic.
+-   ****: Application-wide CSS.
+    -   *Summary*: Defines visual themes, including gradients and dark mode. Styles for NFC pop-up, and native app look have been added.
+-   ****: Admin interface.
+    -   *Summary*: Manages employee details (add/edit with separated name fields, gender, photo upload) and application display settings. Modified for new fields, display settings, and enhanced employee deletion logic (to include Firebase time entries) and improved confirmation dialog. Adjusted for dark mode styling.
+-   ****: Displays employee statistics.
+    -   *Summary*: Shows time and salary statistics. Modified to ensure correct salary color in dark mode.
+-   ****: Firebase integration.
+    -   *Summary*: Handles data interactions with Firebase, supporting offline capabilities.
 -   ****: New component.
-    -   *Summary*: Designed to display a temporary, personalized pop-up (with employee photo, info, and welcome/goodbye message) upon NFC tag scan.
+    -   *Summary*: Displays a temporary, personalized pop-up (employee photo, info, message) upon NFC tag scan or manual clock-in/out.
 -   ****: New component.
-    -   *Summary*: Orchestrates frontend-side NFC event handling and communicates with the Electron-based NFC logic.
--   ** (Directory)**: New Electron application structure.
-    -   *Summary*: Contains  (Electron's entry point),  (to securely bridge Node.js APIs to the renderer process),  (for NFC reader interaction), and  (for audio feedback), enabling the desktop application and NFC functionality.
+    -   *Summary*: Orchestrates frontend-side NFC event handling and communicates with Electron.
+-   ****: Local data persistence.
+    -   *Summary*: Manages offline data with . Updated to include default display settings and support deletion of time entries associated with an employee.
+-   ** (Directory)**: Electron application.
+    -   *Summary*: Contains  (Electron entry),  (secure Node.js API bridge),  (NFC reader interaction), and  (audio feedback).  content was recently updated.
+-   ****: New Python script.
+    -   *Summary*: Created for preparing (writing data to) empty NFC tags for employee enrollment.
 -   ****: Root-level package file.
-    -   *Summary*: Manages dependencies for the Electron application, including Electron itself and other Node.js modules required for native features like NFC.
-
+    -   *Summary*: Manages Electron dependencies.
+-   ****: Frontend public assets.
+    -   *Summary*: Now includes , , , and the  directory for PWA functionality.  was updated to link these PWA-related files.
 </code_architecture>
 
 <pending_tasks>
--   None. All explicit feature requests by the user are currently being addressed or have been implemented. The deployment issue is a platform-level bug reported to , not a pending development task for the application itself.
+-   **Firebase Persistence Issue**: Employees added via the admin panel disappear after closing the panel or refreshing, indicating an issue with data persistence or loading from Firebase.
+-   **Welcome Popup Activation**: The welcome popup does not display when manually clicking Arrivée (Clock-in) or Départ (Clock-out).
+-   **NFC Tag Enrollment Implementation**: The process for writing employee information onto empty NFC tags using the provided reader and the  script needs to be fully implemented and integrated.
 </pending_tasks>
 
 <current_work>
-The AI engineer is actively working on integrating NFC (Near Field Communication) tag-based clock-in/out functionality into the TimeTracker24 application, specifically leveraging Electron and Node.js to create a desktop version with native NFC reader support.
-
-This involves:
-1.  **Electron Application Setup**: Core Electron files (, ) are being established to provide a desktop wrapper for the existing React frontend. A new root  has been created to manage Electron-specific dependencies.
-2.  **NFC and Sound Management**: Dedicated Node.js modules (, ) are being developed to handle the low-level NFC reader communication and manage sound feedback for clock-in/out events.
-3.  **Frontend NFC Integration**: The React frontend is being modified (, ) to interact with the Electron-NFC bridge, process NFC tag data, and trigger time entries.
-4.  **Welcome Pop-up**: A  component and corresponding CSS () have been created to display a temporary, personalized pop-up with employee details and welcome/goodbye messages upon NFC scan.
-5.  **UI Refinements**:
-    *   The En ligne (Online) status indicator is being removed from the main menu.
-    *   The dark mode styling for the  modal is being refined to ensure proper display.
-    *   Logic for persistent dark/light mode selection (using ) is being implemented so the theme choice is remembered across sessions.
-
-The immediate last action was updating  for dark mode, followed by a user prompt to continue, indicating the ongoing nature of these comprehensive NFC and UI improvements.
+The AI engineer's most immediate work involved several key areas based on user feedback:
+1.  **UI Refinements & PWA Conversion**: The application was transformed into a Progressive Web App (PWA) to provide a native app-like experience by removing browser navigation elements. This involved creating , , , generating various icon sizes, and modifying , , and  to adopt native-looking styles for the header and employee cards, and restoring the user-preferred old employee card design. The UI now appears clean and without browser artifacts.
+2.  **Employee Management Enhancements**: The  was updated to separate Prénom and Nom fields for employees and add a Genre (Gender) selection. Display settings (show/hide employee/statistics sections) were added, and the employee deletion logic was enhanced to also remove associated time entries from Firebase. The estimated salary color in dark mode was changed to green in .
+3.  **NFC & Welcome Popup Debugging (Ongoing)**: Despite initial attempts, the welcome popup is not consistently displaying for manual clock-in/out events. Critically, employees added via the admin panel are not persisting correctly in Firebase, disappearing upon closing the panel, which directly impacts the employee list. The AI engineer is in the initial phases of addressing the user's explicit request on how to *enroll* NFC tags by creating supporting files like  and updating  to handle tag data.
 </current_work>
 
 <optional_next_step>
-The next step is to complete the NFC integration by implementing the  and  components and ensuring the persistence of the dark/light mode setting.
+My next step will be to debug and resolve the Firebase employee persistence issue and ensure the welcome popup displays correctly for manual clock-in/out.
 </optional_next_step>
