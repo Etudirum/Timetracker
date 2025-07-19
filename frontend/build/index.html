@@ -18,22 +18,47 @@
     <!-- Manifest -->
     <link rel="manifest" href="/manifest.json" />
     
-    <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/main.css" />
+    <title>TimeTracker24 - Gestion des Temps v2.2</title>
     
-    <title>TimeTracker24 - Gestion des Temps</title>
+    <!-- Tailwind CSS et styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        purple: {
+                            600: '#8B5CF6',
+                            700: '#7C3AED'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
     <style>
-        .loading { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            flex-direction: column; 
-            background: linear-gradient(135deg, #8B5CF6, #6366F1); 
-            color: white; 
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .native-header { backdrop-filter: blur(10px); }
+        .employee-card { 
+            transition: all 0.3s ease; 
+            background: white; 
+            border-radius: 16px; 
+            padding: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
         }
-        .spinner { 
+        .employee-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .employee-card.dark { background: #1f2937; }
+        .stats-card { 
+            border-radius: 16px; 
+            padding: 24px; 
+            color: white; 
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .stats-card:hover { transform: translateY(-4px); }
+        .loading-spinner { 
             width: 40px; 
             height: 40px; 
             border: 3px solid rgba(255,255,255,0.3); 
@@ -42,53 +67,886 @@
             animation: spin 1s linear infinite; 
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .modal { 
+            backdrop-filter: blur(10px); 
+            background: rgba(0,0,0,0.5); 
+        }
+        .welcome-popup {
+            animation: welcome-bounce 0.6s ease-out;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        @keyframes welcome-bounce {
+            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.05) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
     </style>
 </head>
-<body>
-    <div id="app-loading" class="loading">
-        <div class="spinner"></div>
-        <h2 style="margin-top: 20px;">TimeTracker24</h2>
-        <p>Chargement de l'application...</p>
-    </div>
-    
-    <div id="root"></div>
-    
-    <script>
-        // Message temporaire pour Firebase
-        setTimeout(() => {
-            document.getElementById('app-loading').style.display = 'none';
-            document.getElementById('root').innerHTML = `
-                <div style="padding: 40px; text-align: center; max-width: 800px; margin: 0 auto;">
-                    <h1 style="color: #8B5CF6; margin-bottom: 20px;">🕒 TimeTracker24</h1>
-                    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                        <h2>Application de Pointage</h2>
-                        <p style="color: #666; line-height: 1.6;">
-                            L'application TimeTracker24 est maintenant déployée sur Firebase !
-                            <br><br>
-                            <strong>Fonctionnalités disponibles :</strong><br>
-                            ✅ Gestion des employés<br>
-                            ✅ Pointage des heures<br>
-                            ✅ Statistiques en temps réel<br>
-                            ✅ Mode sombre/clair<br>
-                            ✅ Support PWA (Application Native)<br>
-                            ✅ Support NFC (avec Electron)<br>
-                        </p>
-                        <div style="margin-top: 30px;">
-                            <button onclick="location.reload()" style="background: #8B5CF6; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px;">
-                                Recharger l'application
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600">
+            <div class="text-center text-white">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <h1 class="text-2xl font-bold mb-2">TimeTracker24</h1>
+                <p class="text-white/80">Initialisation...</p>
+            </div>
+        </div>
+
+        <!-- Main App -->
+        <div id="main-app" style="display: none;">
+            <!-- Header -->
+            <header class="native-header shadow-sm border-b bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="p-2 bg-purple-100 dark:bg-purple-900 rounded-lg">
+                                <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors duration-300">TimeTracker24</h1>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300" id="current-date"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <button onclick="toggleTheme()" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300">
+                                <span id="theme-icon">🌙</span>
+                            </button>
+                            <button onclick="showAdminPanel()" class="p-2 rounded-lg bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-800 transition-all duration-300">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
                             </button>
                         </div>
                     </div>
-                    <div style="margin-top: 30px; color: #666; font-size: 14px;">
-                        Configuration Firebase terminée ✅<br>
-                        CSS et PWA configurés ✅<br>
-                        Prêt pour l'utilisation !
+                </div>
+            </header>
+
+            <!-- Navigation -->
+            <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="flex space-x-8">
+                        <button onclick="setCurrentView('pointage')" class="nav-item flex items-center space-x-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-300" id="nav-pointage">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>Pointage</span>
+                        </button>
+                        <button onclick="setCurrentView('registre')" class="nav-item flex items-center space-x-2 px-4 py-3 text-sm font-medium border-b-2 transition-all duration-300" id="nav-registre">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Registre</span>
+                        </button>
                     </div>
                 </div>
-            `;
-        }, 2000);
+            </nav>
+
+            <!-- Main Content -->
+            <main class="max-w-7xl mx-auto px-6 py-8">
+                <!-- Pointage View -->
+                <div id="pointage-view" class="view-content">
+                    <!-- Statistics Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="stats-card" style="background: linear-gradient(135deg, #E879F9 0%, #C084FC 50%, #A855F7 100%);">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm font-medium">Heures cette semaine</p>
+                                    <p class="text-2xl font-bold text-white" id="weekly-hours">0h</p>
+                                </div>
+                                <svg class="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stats-card" style="background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 50%, #0284C7 100%);">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm font-medium">En service</p>
+                                    <p class="text-2xl font-bold text-white" id="active-employees">0</p>
+                                </div>
+                                <svg class="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stats-card" style="background: linear-gradient(135deg, #4ADE80 0%, #22C55E 50%, #16A34A 100%);">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm font-medium">Employés totaux</p>
+                                    <p class="text-2xl font-bold text-white" id="total-employees">0</p>
+                                </div>
+                                <svg class="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stats-card" style="background: linear-gradient(135deg, #FB7185 0%, #F87171 50%, #EF4444 100%);">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/80 text-sm font-medium">Heures supplémentaires</p>
+                                    <p class="text-2xl font-bold text-white" id="overtime-hours">0h</p>
+                                </div>
+                                <svg class="w-8 h-8 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employees List -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-300">
+                        <h2 class="text-xl font-semibold mb-6 text-gray-900 dark:text-white transition-colors duration-300">Employés</h2>
+                        <div id="employees-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Employees will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registre View -->
+                <div id="registre-view" class="view-content" style="display: none;">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Registre des pointages</h2>
+                                <div class="flex flex-wrap gap-3">
+                                    <button onclick="exportToPDF()" class="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                        <span>PDF</span>
+                                    </button>
+                                    <button onclick="exportToExcel()" class="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                        <span>Excel</span>
+                                    </button>
+                                    <button onclick="exportToCSV()" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                                        </svg>
+                                        <span>CSV</span>
+                                    </button>
+                                    <button onclick="printRegister()" class="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                                        </svg>
+                                        <span>Imprimer</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50 dark:bg-gray-700 transition-colors duration-300">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Employé</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Arrivée</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Départ</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Durée</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="time-entries-table" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700 transition-colors duration-300">
+                                        <!-- Time entries will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Admin Panel Modal -->
+        <div id="admin-modal" class="fixed inset-0 z-50 modal" style="display: none;">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Panneau d'administration</h3>
+                            <button onclick="hideAdminPanel()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <!-- Admin Login Form -->
+                        <div id="admin-login-form">
+                            <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Connexion administrateur</h4>
+                            <div class="space-y-4">
+                                <input 
+                                    type="password" 
+                                    id="admin-password" 
+                                    placeholder="Mot de passe"
+                                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300"
+                                    onkeyup="handleAdminPasswordKeyup(event)"
+                                />
+                                <button onclick="authenticateAdmin()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                                    Se connecter
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Panel Content (hidden by default) -->
+                        <div id="admin-panel-content" style="display: none;">
+                            <div class="space-y-6">
+                                <h4 class="text-md font-medium text-gray-900 dark:text-white">Ajouter un employé</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <input type="text" id="employee-firstname" placeholder="Prénom" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                                    <input type="text" id="employee-lastname" placeholder="Nom" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                                </div>
+                                <input type="text" id="employee-position" placeholder="Poste" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <select id="employee-gender" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300">
+                                        <option value="">Sélectionner le genre</option>
+                                        <option value="Homme">Homme</option>
+                                        <option value="Femme">Femme</option>
+                                    </select>
+                                    <input type="number" id="employee-hourlyrate" placeholder="Taux horaire (FCFA)" min="0" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Photo de profil</label>
+                                    <input type="file" id="employee-photo" accept="image/*" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                                </div>
+                                <button onclick="addEmployee()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                                    Ajouter l'employé
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Time Entry Modal -->
+        <div id="edit-modal" class="fixed inset-0 z-50 modal" style="display: none;">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full transition-colors duration-300">
+                    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Modifier l'entrée</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Heure d'arrivée</label>
+                                <input type="datetime-local" id="edit-start-time" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Heure de départ</label>
+                                <input type="datetime-local" id="edit-end-time" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors duration-300" />
+                            </div>
+                        </div>
+                        <div class="flex space-x-4 mt-6">
+                            <button onclick="saveTimeEntry()" class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300">
+                                Enregistrer
+                            </button>
+                            <button onclick="hideEditModal()" class="flex-1 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors duration-300">
+                                Annuler
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        // Firebase configuration et imports
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
         
-        // Service Worker registration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCimLoYpJOlCJdxXr5Qyo7UHxrwb_ss-04",
+            authDomain: "timetracker-10.firebaseapp.com",
+            projectId: "timetracker-10",
+            storageBucket: "timetracker-10.firebasestorage.app",
+            messagingSenderId: "535538347269",
+            appId: "1:535538347269:web:af5762ce4cdfb24045db6c"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global variables
+        window.db = db;
+        window.currentView = 'pointage';
+        window.employees = [];
+        window.timeEntries = [];
+        window.isDarkMode = localStorage.getItem('timetracker-theme') === 'dark';
+        window.isAdminAuthenticated = false;
+        window.currentEditingEntry = null;
+
+        // Initialize app
+        async function initializeApp() {
+            try {
+                updateDateTime();
+                setInterval(updateDateTime, 1000);
+                
+                await loadEmployees();
+                await loadTimeEntries();
+                
+                updateUI();
+                hideLoadingScreen();
+            } catch (error) {
+                console.error('Erreur lors de l\'initialisation:', error);
+                hideLoadingScreen();
+            }
+        }
+
+        // Load employees from Firestore
+        async function loadEmployees() {
+            try {
+                const q = query(collection(db, 'employees'), orderBy('lastname', 'asc'));
+                onSnapshot(q, (snapshot) => {
+                    window.employees = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    updateEmployeesList();
+                    updateStats();
+                });
+            } catch (error) {
+                console.error('Erreur lors du chargement des employés:', error);
+            }
+        }
+
+        // Load time entries from Firestore
+        async function loadTimeEntries() {
+            try {
+                const q = query(collection(db, 'timeEntries'), orderBy('startTime', 'desc'));
+                onSnapshot(q, (snapshot) => {
+                    window.timeEntries = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    updateTimeEntriesTable();
+                    updateStats();
+                });
+            } catch (error) {
+                console.error('Erreur lors du chargement des pointages:', error);
+            }
+        }
+
+        // Update employees list
+        function updateEmployeesList() {
+            const grid = document.getElementById('employees-grid');
+            if (window.employees.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                        <p>Aucun employé ajouté</p>
+                        <p class="text-sm mt-2">Utilisez le panneau d'administration pour ajouter des employés</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = window.employees.map(employee => {
+                const initials = `${employee.firstname?.[0] || ''}${employee.lastname?.[0] || ''}`.toUpperCase() || 'NN';
+                const fullName = `${employee.firstname || ''} ${employee.lastname || ''}`.trim() || 'Nom inconnu';
+                
+                return `
+                    <div class="employee-card ${window.isDarkMode ? 'dark' : ''}">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                                ${employee.photoUrl ? 
+                                    `<img src="${employee.photoUrl}" alt="${fullName}" class="w-12 h-12 rounded-full object-cover" />` :
+                                    `<span class="text-purple-600 dark:text-purple-400 font-semibold">${initials}</span>`
+                                }
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">${fullName}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">${employee.position || 'Poste non défini'}</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="clockIn('${employee.id}')" class="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition-colors duration-300">
+                                Arrivée
+                            </button>
+                            <button onclick="clockOut('${employee.id}')" class="flex-1 bg-red-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-700 transition-colors duration-300">
+                                Départ
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Update time entries table
+        function updateTimeEntriesTable() {
+            const tbody = document.getElementById('time-entries-table');
+            
+            if (window.timeEntries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                            Aucun pointage enregistré
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = window.timeEntries.map(entry => {
+                const employee = window.employees.find(emp => emp.id === entry.employeeId);
+                const fullName = employee ? 
+                    `${employee.firstname || ''} ${employee.lastname || ''}`.trim() || 'Inconnu' : 
+                    'Employé inconnu';
+
+                const startTime = entry.startTime ? new Date(entry.startTime.seconds * 1000).toLocaleString('fr-FR') : 'N/A';
+                const endTime = entry.endTime ? new Date(entry.endTime.seconds * 1000).toLocaleString('fr-FR') : 'En cours';
+                const date = entry.startTime ? new Date(entry.startTime.seconds * 1000).toLocaleDateString('fr-FR') : 'N/A';
+
+                // Calculate duration
+                let duration = 'En cours';
+                if (entry.startTime && entry.endTime) {
+                    const start = new Date(entry.startTime.seconds * 1000);
+                    const end = new Date(entry.endTime.seconds * 1000);
+                    const diffMs = end - start;
+                    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+                    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                    duration = `${hours}h ${minutes}min`;
+                }
+
+                return `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 rounded-full mr-2 ${entry.endTime ? 'bg-gray-400' : 'bg-green-500'}"></div>
+                                <span class="text-sm font-medium text-gray-900 dark:text-white">${fullName}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${startTime}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${endTime}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-purple-600">${duration}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button onclick="editTimeEntry('${entry.id}')" class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 mr-3 transition-colors duration-300">
+                                Modifier
+                            </button>
+                            <button onclick="deleteTimeEntry('${entry.id}')" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-300">
+                                Supprimer
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Update statistics
+        function updateStats() {
+            const weeklyHours = calculateWeeklyHours();
+            const activeCount = calculateActiveEmployees();
+            const totalCount = window.employees.length;
+            const overtimeHours = calculateOvertimeHours();
+
+            document.getElementById('weekly-hours').textContent = `${weeklyHours}h`;
+            document.getElementById('active-employees').textContent = activeCount;
+            document.getElementById('total-employees').textContent = totalCount;
+            document.getElementById('overtime-hours').textContent = `${overtimeHours}h`;
+        }
+
+        // Calculate weekly hours
+        function calculateWeeklyHours() {
+            const now = new Date();
+            const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+            
+            let totalHours = 0;
+            window.timeEntries.forEach(entry => {
+                if (entry.startTime && entry.endTime) {
+                    const startDate = new Date(entry.startTime.seconds * 1000);
+                    if (startDate >= weekStart) {
+                        const start = new Date(entry.startTime.seconds * 1000);
+                        const end = new Date(entry.endTime.seconds * 1000);
+                        const hours = (end - start) / (1000 * 60 * 60);
+                        totalHours += hours;
+                    }
+                }
+            });
+            
+            return Math.round(totalHours);
+        }
+
+        // Calculate active employees
+        function calculateActiveEmployees() {
+            return window.timeEntries.filter(entry => 
+                entry.startTime && !entry.endTime
+            ).length;
+        }
+
+        // Calculate overtime hours
+        function calculateOvertimeHours() {
+            // Assuming 8 hours is standard work day
+            const standardHours = 8;
+            let overtimeTotal = 0;
+            
+            window.timeEntries.forEach(entry => {
+                if (entry.startTime && entry.endTime) {
+                    const start = new Date(entry.startTime.seconds * 1000);
+                    const end = new Date(entry.endTime.seconds * 1000);
+                    const hours = (end - start) / (1000 * 60 * 60);
+                    if (hours > standardHours) {
+                        overtimeTotal += (hours - standardHours);
+                    }
+                }
+            });
+            
+            return Math.round(overtimeTotal);
+        }
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) + ' - ' + now.toLocaleTimeString('fr-FR');
+            
+            document.getElementById('current-date').textContent = dateStr;
+        }
+
+        // Clock in function
+        window.clockIn = async function(employeeId) {
+            try {
+                // Check if employee already has an active entry
+                const activeEntry = window.timeEntries.find(entry => 
+                    entry.employeeId === employeeId && entry.startTime && !entry.endTime
+                );
+                
+                if (activeEntry) {
+                    alert('Cet employé a déjà un pointage en cours');
+                    return;
+                }
+
+                await addDoc(collection(db, 'timeEntries'), {
+                    employeeId: employeeId,
+                    startTime: new Date(),
+                    endTime: null
+                });
+                
+                console.log('Pointage d\'arrivée enregistré');
+            } catch (error) {
+                console.error('Erreur lors du pointage d\'arrivée:', error);
+                alert('Erreur lors du pointage d\'arrivée');
+            }
+        };
+
+        // Clock out function
+        window.clockOut = async function(employeeId) {
+            try {
+                // Find the active entry for this employee
+                const activeEntry = window.timeEntries.find(entry => 
+                    entry.employeeId === employeeId && entry.startTime && !entry.endTime
+                );
+                
+                if (!activeEntry) {
+                    alert('Aucun pointage d\'arrivée trouvé pour cet employé');
+                    return;
+                }
+
+                await updateDoc(doc(db, 'timeEntries', activeEntry.id), {
+                    endTime: new Date()
+                });
+                
+                console.log('Pointage de départ enregistré');
+            } catch (error) {
+                console.error('Erreur lors du pointage de départ:', error);
+                alert('Erreur lors du pointage de départ');
+            }
+        };
+
+        // Fixed editTimeEntry function with proper parameter handling
+        window.editTimeEntry = function(entryId) {
+            const entry = window.timeEntries.find(e => e.id === entryId);
+            if (!entry) {
+                console.error('Entrée non trouvée:', entryId);
+                return;
+            }
+            
+            window.currentEditingEntry = entry;
+            
+            // Format dates for datetime-local input
+            const startTime = entry.startTime ? new Date(entry.startTime.seconds * 1000).toISOString().slice(0, 16) : '';
+            const endTime = entry.endTime ? new Date(entry.endTime.seconds * 1000).toISOString().slice(0, 16) : '';
+            
+            document.getElementById('edit-start-time').value = startTime;
+            document.getElementById('edit-end-time').value = endTime;
+            
+            document.getElementById('edit-modal').style.display = 'flex';
+        };
+
+        // Save time entry function
+        window.saveTimeEntry = async function() {
+            if (!window.currentEditingEntry) return;
+            
+            try {
+                const startTime = new Date(document.getElementById('edit-start-time').value);
+                const endTime = document.getElementById('edit-end-time').value ? 
+                    new Date(document.getElementById('edit-end-time').value) : null;
+                
+                await updateDoc(doc(db, 'timeEntries', window.currentEditingEntry.id), {
+                    startTime: startTime,
+                    endTime: endTime
+                });
+                
+                hideEditModal();
+                console.log('Entrée modifiée avec succès');
+            } catch (error) {
+                console.error('Erreur lors de la modification:', error);
+                alert('Erreur lors de la modification de l\'entrée');
+            }
+        };
+
+        // Delete time entry
+        window.deleteTimeEntry = async function(entryId) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce pointage ?')) return;
+            
+            try {
+                await deleteDoc(doc(db, 'timeEntries', entryId));
+                console.log('Pointage supprimé');
+            } catch (error) {
+                console.error('Erreur lors de la suppression:', error);
+                alert('Erreur lors de la suppression du pointage');
+            }
+        };
+
+        // Hide edit modal
+        window.hideEditModal = function() {
+            document.getElementById('edit-modal').style.display = 'none';
+            window.currentEditingEntry = null;
+        };
+
+        // Navigation functions
+        window.setCurrentView = function(view) {
+            window.currentView = view;
+            updateUI();
+        };
+
+        // Update UI based on current view and theme
+        function updateUI() {
+            // Update theme
+            if (window.isDarkMode) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon').textContent = '☀️';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon').textContent = '🌙';
+            }
+
+            // Update navigation
+            const navPointage = document.getElementById('nav-pointage');
+            const navRegistre = document.getElementById('nav-registre');
+            
+            if (window.currentView === 'pointage') {
+                navPointage.className = 'nav-item flex items-center space-x-2 px-4 py-3 text-sm font-medium border-b-2 text-purple-600 border-purple-500 transition-all duration-300';
+                navRegistre.className = 'nav-item flex items-center space-x-2 px-4 py-3 text-sm font-medium border-b-2 text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300';
+                
+                document.getElementById('pointage-view').style.display = 'block';
+                document.getElementById('registre-view').style.display = 'none';
+            } else {
+                navPointage.className = 'nav-item flex items-center space-x-2 px-4 py-3 text-sm font-medium border-b-2 text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300';
+                navRegistre.className = 'nav-item flex items-center space-x-2 px-4 py-3 text-sm font-medium border-b-2 text-purple-600 border-purple-500 transition-all duration-300';
+                
+                document.getElementById('pointage-view').style.display = 'none';
+                document.getElementById('registre-view').style.display = 'block';
+            }
+        }
+
+        // Theme toggle
+        window.toggleTheme = function() {
+            window.isDarkMode = !window.isDarkMode;
+            localStorage.setItem('timetracker-theme', window.isDarkMode ? 'dark' : 'light');
+            updateUI();
+        };
+
+        // Admin panel functions
+        window.showAdminPanel = function() {
+            document.getElementById('admin-modal').style.display = 'flex';
+        };
+
+        window.hideAdminPanel = function() {
+            document.getElementById('admin-modal').style.display = 'none';
+            window.isAdminAuthenticated = false;
+            document.getElementById('admin-login-form').style.display = 'block';
+            document.getElementById('admin-panel-content').style.display = 'none';
+            document.getElementById('admin-password').value = '';
+        };
+
+        // Fixed admin authentication with Enter key support
+        window.handleAdminPasswordKeyup = function(event) {
+            if (event.key === 'Enter') {
+                authenticateAdmin();
+            }
+        };
+
+        window.authenticateAdmin = function() {
+            const password = document.getElementById('admin-password').value;
+            if (password === 'admin123') {
+                window.isAdminAuthenticated = true;
+                document.getElementById('admin-login-form').style.display = 'none';
+                document.getElementById('admin-panel-content').style.display = 'block';
+            } else {
+                alert('Mot de passe incorrect');
+            }
+        };
+
+        // Add employee function
+        window.addEmployee = async function() {
+            if (!window.isAdminAuthenticated) return;
+            
+            try {
+                const firstname = document.getElementById('employee-firstname').value.trim();
+                const lastname = document.getElementById('employee-lastname').value.trim();
+                const position = document.getElementById('employee-position').value.trim();
+                const gender = document.getElementById('employee-gender').value;
+                const hourlyRate = parseFloat(document.getElementById('employee-hourlyrate').value) || 0;
+                
+                if (!firstname || !lastname || !position) {
+                    alert('Veuillez remplir tous les champs obligatoires');
+                    return;
+                }
+
+                // Handle photo upload (convert to base64)
+                let photoUrl = null;
+                const photoFile = document.getElementById('employee-photo').files[0];
+                if (photoFile) {
+                    photoUrl = await convertToBase64(photoFile);
+                }
+
+                await addDoc(collection(db, 'employees'), {
+                    firstname: firstname,
+                    lastname: lastname,
+                    position: position,
+                    gender: gender,
+                    hourlyRate: hourlyRate,
+                    photoUrl: photoUrl,
+                    createdAt: new Date()
+                });
+                
+                // Clear form
+                document.getElementById('employee-firstname').value = '';
+                document.getElementById('employee-lastname').value = '';
+                document.getElementById('employee-position').value = '';
+                document.getElementById('employee-gender').value = '';
+                document.getElementById('employee-hourlyrate').value = '';
+                document.getElementById('employee-photo').value = '';
+                
+                console.log('Employé ajouté avec succès');
+            } catch (error) {
+                console.error('Erreur lors de l\'ajout de l\'employé:', error);
+                alert('Erreur lors de l\'ajout de l\'employé');
+            }
+        };
+
+        // Convert file to base64
+        function convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Export functions
+        window.exportToPDF = function() {
+            alert('Export PDF en cours de développement');
+        };
+
+        window.exportToExcel = function() {
+            alert('Export Excel en cours de développement');
+        };
+
+        window.exportToCSV = function() {
+            let csv = 'Employé,Arrivée,Départ,Durée,Date\n';
+            
+            window.timeEntries.forEach(entry => {
+                const employee = window.employees.find(emp => emp.id === entry.employeeId);
+                const fullName = employee ? 
+                    `${employee.firstname || ''} ${employee.lastname || ''}`.trim() || 'Inconnu' : 
+                    'Employé inconnu';
+                const startTime = entry.startTime ? new Date(entry.startTime.seconds * 1000).toLocaleString('fr-FR') : 'N/A';
+                const endTime = entry.endTime ? new Date(entry.endTime.seconds * 1000).toLocaleString('fr-FR') : 'En cours';
+                const date = entry.startTime ? new Date(entry.startTime.seconds * 1000).toLocaleDateString('fr-FR') : 'N/A';
+                
+                let duration = 'En cours';
+                if (entry.startTime && entry.endTime) {
+                    const start = new Date(entry.startTime.seconds * 1000);
+                    const end = new Date(entry.endTime.seconds * 1000);
+                    const diffMs = end - start;
+                    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+                    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+                    duration = `${hours}h ${minutes}min`;
+                }
+                
+                csv += `"${fullName}","${startTime}","${endTime}","${duration}","${date}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `timetracker_export_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        window.printRegister = function() {
+            const printWindow = window.open('', '_blank');
+            const registreContent = document.getElementById('registre-view').outerHTML;
+            
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Registre TimeTracker24</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #f5f5f5; }
+                        h2 { color: #8B5CF6; }
+                        .no-print { display: none !important; }
+                    </style>
+                </head>
+                <body>
+                    ${registreContent.replace(/class="[^"]*flex[^"]*"/g, 'class="no-print"')}
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.print();
+        };
+
+        // Hide loading screen
+        function hideLoadingScreen() {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+        }
+
+        // Initialize the application
+        initializeApp();
+    </script>
+
+    <!-- Service Worker registration -->
+    <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js')
                 .then(reg => console.log('SW registered:', reg))
