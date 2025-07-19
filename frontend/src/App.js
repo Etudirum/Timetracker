@@ -1239,6 +1239,11 @@ function App() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+      {/* Debug info */}
+      <div style={{position: 'fixed', top: 0, right: 0, background: 'red', color: 'white', padding: '10px', zIndex: 9999}}>
+        isLoading: {isLoading.toString()}
+      </div>
+      
       {/* Loading Screen */}
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600">
