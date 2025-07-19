@@ -1,6 +1,8 @@
-const CACHE_NAME = 'timetracker24-v3';
+const CACHE_NAME = 'timetracker24-v1.0.0';
 const urlsToCache = [
   '/',
+  '/static/js/bundle.js',
+  '/static/css/main.css',
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
@@ -12,7 +14,10 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Cache ouvert');
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache.map(url => new Request(url, {cache: 'reload'})));
+      })
+      .catch((error) => {
+        console.log('Erreur lors de la mise en cache:', error);
       })
   );
 });
@@ -24,7 +29,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Suppression ancien cache:', cacheName);
+            console.log('Suppression de l\'ancien cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -33,53 +38,74 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Interception des requêtes
+// Stratégie de cache - Network First avec fallback
 self.addEventListener('fetch', (event) => {
-  // Ne pas mettre en cache les requêtes POST, PUT, DELETE
-  if (event.request.method !== 'GET') {
-    return;
-  }
-  
-  // Ne pas mettre en cache les requêtes vers Firebase
-  if (event.request.url.includes('firebase') || 
-      event.request.url.includes('google') ||
-      event.request.url.includes('googleapis')) {
-    return;
-  }
-  
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then((response) => {
-        // Retourner le cache si trouvé
-        if (response) {
-          return response;
-        }
-        
-        // Sinon, faire la requête réseau
-        return fetch(event.request).then((response) => {
-          // Vérifier si on a une réponse valide
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          
-          // Cloner la réponse
-          const responseToCache = response.clone();
-          
+        // Si la requête réussit, mettre en cache et retourner
+        if (response.status === 200) {
+          const responseClone = response.clone();
           caches.open(CACHE_NAME)
             .then((cache) => {
-              cache.put(event.request, responseToCache);
+              cache.put(event.request, responseClone);
             });
-          
-          return response;
-        });
-      }
-    )
+        }
+        return response;
+      })
+      .catch(() => {
+        // En cas d'échec, essayer de récupérer depuis le cache
+        return caches.match(event.request)
+          .then((response) => {
+            if (response) {
+              return response;
+            }
+            // Si pas en cache, retourner une page d'erreur offline
+            if (event.request.destination === 'document') {
+              return caches.match('/');
+            }
+          });
+      })
   );
 });
 
-// Gestion des messages
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
+// Gestion des notifications push (optionnel)
+self.addEventListener('push', (event) => {
+  const options = {
+    body: event.data ? event.data.text() : 'Notification TimeTracker24',
+    icon: '/icons/icon-192x192.png',
+    badge: '/icons/icon-72x72.png',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Ouvrir l\'app',
+        icon: '/icons/icon-192x192.png'
+      },
+      {
+        action: 'close',
+        title: 'Fermer',
+        icon: '/icons/icon-192x192.png'
+      }
+    ]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification('TimeTracker24', options)
+  );
+});
+
+// Gestion des clics sur les notifications
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/')
+    );
   }
 });
