@@ -288,23 +288,28 @@ function App() {
       if (isOnline) {
         const q = query(collection(db, 'employees'), orderBy('name'));
         
-        // Create a timeout promise
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Firebase timeout')), 3000)
-        );
-        
-        // Create the Firebase promise
+        // Create Firebase promise with unsubscribe handling
+        let unsubscribeRef = null;
         const firebasePromise = new Promise((resolve) => {
-          const unsubscribe = onSnapshot(q, (snapshot) => {
+          unsubscribeRef = onSnapshot(q, (snapshot) => {
             const employeeData = snapshot.docs.map(doc => ({
               id: doc.id,
               ...doc.data()
             }));
             console.log('Employees loaded from Firebase:', employeeData);
             setEmployees(employeeData);
-            resolve(unsubscribe);
+            resolve(unsubscribeRef);
           });
         });
+        
+        // Create a timeout promise that also resolves
+        const timeoutPromise = new Promise((resolve) =>
+          setTimeout(() => {
+            console.log('Firebase employees loading timed out - using offline fallback');
+            if (unsubscribeRef) unsubscribeRef();
+            resolve(null);
+          }, 3000)
+        );
         
         // Race between timeout and Firebase
         return await Promise.race([firebasePromise, timeoutPromise]);
