@@ -1202,10 +1202,23 @@ function App() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Header */}
-      <header className={`native-header shadow-sm border-b transition-colors duration-300 ${
-        darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-      }`}>
+      {/* Loading Screen */}
+      {isLoading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-600">
+          <div className="text-center text-white">
+            <div className="w-16 h-16 border-4 border-white border-opacity-30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+            <h1 className="text-2xl font-bold mb-2">TimeTracker24</h1>
+            <p className="text-white/80">Chargement de l'application...</p>
+          </div>
+        </div>
+      )}
+      
+      {!isLoading && (
+        <>
+          {/* Header */}
+          <header className={`native-header shadow-sm border-b transition-colors duration-300 ${
+            darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          }`}>
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
