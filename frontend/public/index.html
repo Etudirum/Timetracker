@@ -139,9 +139,8 @@
       window.addEventListener('load', () => {
         const loadingScreen = document.getElementById('app-loading');
         if (loadingScreen) {
-          setTimeout(() => {
-            loadingScreen.style.display = 'none';
-          }, 1000);
+          // Hide immediately without timeout for faster loading
+          loadingScreen.style.display = 'none';
         }
       });
       
