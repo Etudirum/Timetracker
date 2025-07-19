@@ -1487,6 +1487,8 @@ function App() {
           darkMode={darkMode}
         />
       )}
+      </>
+      )}
     </div>
   );
 }
