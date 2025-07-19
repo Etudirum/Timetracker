@@ -330,7 +330,7 @@ function App() {
         
         // Create a timeout promise
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Firebase timeout')), 8000)
+          setTimeout(() => reject(new Error('Firebase timeout')), 3000)
         );
         
         // Create the Firebase promise
