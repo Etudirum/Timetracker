@@ -1587,7 +1587,7 @@
                             <label class="form-label">Employé</label>
                             <select 
                                 value="${appState.filter.employee}" 
-                                onchange="appState.filter.employee = this.value; render();"
+                                onchange="updateEmployeeFilter(this.value)"
                                 class="form-select"
                             >
                                 <option value="all">Tous les employés</option>
@@ -1600,7 +1600,7 @@
                             <label class="form-label">Période</label>
                             <select 
                                 value="${appState.filter.period}" 
-                                onchange="appState.filter.period = this.value; render();"
+                                onchange="updatePeriodFilter(this.value)"
                                 class="form-select"
                             >
                                 <option value="today">Aujourd'hui</option>
