@@ -1997,34 +1997,49 @@
         }
         
         function renderEmployeeStats() {
-            const employee = appState.employees.find(emp => emp.id === appState.selectedStatsEmployee);
+            const employee = appState.selectedStatsEmployee;
             if (!employee) return '';
             
             const employeeEntries = appState.timeEntries.filter(entry => entry.employeeId === employee.id);
             const completedEntries = employeeEntries.filter(entry => entry.endTime);
             
+            // Calculate statistics
             const totalHours = completedEntries.reduce((total, entry) => {
-                const duration = calculateDuration(entry.startTime, entry.endTime);
+                const duration = calculateDuration(entry.startTime, entry.endTime, employee);
                 return total + duration.totalHours;
             }, 0);
             
             const avgHoursPerDay = completedEntries.length > 0 ? totalHours / completedEntries.length : 0;
             const estimatedSalary = employee.hourlyRate > 0 ? totalHours * employee.hourlyRate : 0;
             
+            // This week stats
+            const now = new Date();
+            const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+            const weeklyEntries = completedEntries.filter(entry => {
+                const entryDate = new Date(entry.startTime);
+                return entryDate >= weekStart;
+            });
+            
+            const weeklyHours = weeklyEntries.reduce((total, entry) => {
+                const duration = calculateDuration(entry.startTime, entry.endTime, employee);
+                return total + duration.totalHours;
+            }, 0);
+            
             return `
                 <div class="modal">
-                    <div class="modal-content">
+                    <div class="modal-content employee-stats-modal">
                         <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center space-x-3">
-                                <div class="avatar">
+                            <div class="flex items-center space-x-4">
+                                <div class="avatar" style="width: 4rem; height: 4rem;">
                                     ${employee.profileImage ? 
                                         `<img src="${employee.profileImage}" alt="${employee.name}" />` : 
-                                        `<span>${getInitials(employee.name)}</span>`
+                                        `<span style="font-size: 1.5rem;">${getInitials(employee.name)}</span>`
                                     }
                                 </div>
                                 <div>
-                                    <h2 class="text-xl font-semibold">${employee.name}</h2>
-                                    <p class="text-sm text-gray-500">${employee.position}</p>
+                                    <h2 class="text-2xl font-bold text-gray-900">${employee.name}</h2>
+                                    <p class="text-lg text-gray-500">${employee.position}</p>
+                                    ${employee.email ? `<p class="text-sm text-gray-400">${employee.email}</p>` : ''}
                                 </div>
                             </div>
                             <button onclick="hideEmployeeStats()" class="text-gray-500 hover:text-gray-700">
@@ -2032,40 +2047,96 @@
                             </button>
                         </div>
                         
-                        <div class="grid grid-cols-3 gap-4 mb-6">
-                            <div class="text-center p-4 rounded-lg bg-blue-50">
-                                <p class="text-2xl font-bold text-blue-600">${completedEntries.length}</p>
-                                <p class="text-sm text-blue-600">Pointages</p>
+                        <!-- Statistics Grid -->
+                        <div class="stats-grid">
+                            <div class="stat-item stat-item-purple">
+                                <div class="stat-value stat-value-purple">${completedEntries.length}</div>
+                                <div class="stat-label">Pointages totaux</div>
                             </div>
-                            <div class="text-center p-4 rounded-lg bg-green-50">
-                                <p class="text-2xl font-bold text-green-600">${Math.round(totalHours * 10) / 10}h</p>
-                                <p class="text-sm text-green-600">Total heures</p>
+                            
+                            <div class="stat-item stat-item-blue">
+                                <div class="stat-value stat-value-blue">${Math.round(totalHours * 10) / 10}h</div>
+                                <div class="stat-label">Heures totales</div>
                             </div>
-                            <div class="text-center p-4 rounded-lg bg-purple-50">
-                                <p class="text-2xl font-bold text-purple-600">${Math.round(avgHoursPerDay * 10) / 10}h</p>
-                                <p class="text-sm text-purple-600">Moy. par jour</p>
+                            
+                            <div class="stat-item stat-item-green">
+                                <div class="stat-value stat-value-green">${Math.round(weeklyHours * 10) / 10}h</div>
+                                <div class="stat-label">Cette semaine</div>
+                            </div>
+                            
+                            <div class="stat-item stat-item-orange">
+                                <div class="stat-value stat-value-orange">${Math.round(avgHoursPerDay * 10) / 10}h</div>
+                                <div class="stat-label">Moyenne par jour</div>
                             </div>
                         </div>
                         
                         ${employee.hourlyRate > 0 ? `
-                            <div class="text-center p-4 rounded-lg bg-yellow-50 mb-6">
-                                <p class="text-3xl font-bold text-yellow-600">${Math.round(estimatedSalary).toLocaleString()} FCFA</p>
-                                <p class="text-sm text-yellow-600">Salaire estimé</p>
-                                <p class="text-xs text-gray-500">Basé sur ${employee.hourlyRate} FCFA/heure</p>
+                            <div class="card mb-6" style="background: linear-gradient(135deg, #F59E0B, #D97706); color: white; text-align: center;">
+                                <div class="stat-value" style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+                                    ${Math.round(estimatedSalary).toLocaleString()} FCFA
+                                </div>
+                                <div style="font-size: 1rem; opacity: 0.9;">
+                                    Salaire estimé total
+                                </div>
+                                <div style="font-size: 0.875rem; opacity: 0.8; margin-top: 0.5rem;">
+                                    Basé sur ${employee.hourlyRate} FCFA/heure
+                                </div>
                             </div>
                         ` : ''}
                         
-                        <div class="space-y-2 max-h-64 overflow-y-auto">
-                            <h3 class="font-semibold mb-2">Derniers pointages</h3>
-                            ${completedEntries.slice(0, 10).map(entry => {
-                                const duration = calculateDuration(entry.startTime, entry.endTime);
-                                return `
-                                    <div class="flex justify-between p-2 rounded border">
-                                        <span class="text-sm">${formatDate(entry.startTime)}</span>
-                                        <span class="text-sm font-medium">${duration.display}</span>
+                        <!-- Work Schedule Info -->
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="card text-center">
+                                <div class="text-lg font-bold text-purple-600">${employee.startTime || '09:00'} - ${employee.endTime || '17:00'}</div>
+                                <div class="text-sm text-gray-500">Horaires de travail</div>
+                            </div>
+                            <div class="card text-center">
+                                <div class="text-lg font-bold text-blue-600">${employee.breakDuration || 60}min</div>
+                                <div class="text-sm text-gray-500">Pause max/jour</div>
+                            </div>
+                            <div class="card text-center">
+                                <div class="text-lg font-bold text-green-600">${employee.gender === 'F' ? 'Mme' : 'M.'}</div>
+                                <div class="text-sm text-gray-500">Civilité</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Time Entries -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-gray-900">Derniers pointages</h3>
+                            <div class="space-y-2 max-h-64 overflow-y-auto">
+                                ${completedEntries.slice(0, 10).map(entry => {
+                                    const duration = calculateDuration(entry.startTime, entry.endTime, employee);
+                                    const salary = employee.hourlyRate > 0 ? duration.totalHours * employee.hourlyRate : 0;
+                                    
+                                    return `
+                                        <div class="card">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-gray-900">${formatDate(entry.startTime)}</div>
+                                                    <div class="text-sm text-gray-500">
+                                                        ${formatTime(entry.startTime)} → ${formatTime(entry.endTime)}
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-bold text-purple-600">${duration.display}</div>
+                                                    ${salary > 0 ? `<div class="text-sm text-green-600">${Math.round(salary)} FCFA</div>` : ''}
+                                                </div>
+                                            </div>
+                                            ${duration.breakMinutes > 0 ? `
+                                                <div class="text-xs text-orange-500 mt-1">
+                                                    Pause auto: ${duration.breakMinutes}min
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    `;
+                                }).join('')}
+                                
+                                ${completedEntries.length === 0 ? `
+                                    <div class="text-center text-gray-500 py-8">
+                                        <p>Aucun pointage enregistré</p>
                                     </div>
-                                `;
-                            }).join('')}
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
