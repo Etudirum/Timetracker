@@ -1558,15 +1558,17 @@
                                 />
                             </div>
                         ` : ''}
-                        <div>
-                            <button class="btn btn-primary">
+                        <div class="flex gap-2">
+                            <button onclick="exportToPDF()" class="btn btn-danger text-sm">
                                 PDF
                             </button>
-                            <button class="btn btn-success">
-                                ${icons.download}
-                                Exporter
+                            <button onclick="exportToExcel()" class="btn btn-success text-sm">
+                                Excel
                             </button>
-                            <button class="btn btn-secondary">
+                            <button onclick="exportToCSV()" class="btn btn-blue text-sm">
+                                CSV
+                            </button>
+                            <button onclick="printTable()" class="btn btn-secondary text-sm">
                                 ${icons.printer}
                                 Imprimer
                             </button>
