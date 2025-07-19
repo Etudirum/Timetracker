@@ -159,9 +159,26 @@ function App() {
 
   // Charger les employés et les pointages
   useEffect(() => {
-    loadEmployees();
-    loadTimeEntries();
-    loadDisplaySettings();
+    const initializeApp = async () => {
+      setIsLoading(true);
+      try {
+        // Load all initial data
+        await Promise.allSettled([
+          loadEmployees(),
+          loadTimeEntries(),
+          loadDisplaySettings()
+        ]);
+      } catch (error) {
+        console.error('Erreur lors de l\'initialisation:', error);
+      } finally {
+        // Always set loading to false after attempting to load data
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000); // Small delay to prevent flashing
+      }
+    };
+    
+    initializeApp();
   }, []);
 
   // Calculer les statistiques quand les données changent
