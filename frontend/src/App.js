@@ -161,32 +161,47 @@ function App() {
   useEffect(() => {
     const initializeApp = async () => {
       setIsLoading(true);
+      console.log('Starting app initialization...');
+      
       try {
-        // Create a global timeout for initialization
-        const initializationTimeout = new Promise((resolve) => {
-          setTimeout(() => {
-            console.log('App initialization timeout reached - proceeding with available data');
-            resolve();
-          }, 4000); // 4 second maximum for full initialization
-        });
+        // Load display settings first (this is fast and always resolves)
+        await loadDisplaySettings();
+        console.log('Display settings loaded');
         
-        // Load all initial data
-        const dataLoading = Promise.allSettled([
-          loadEmployees(),
-          loadTimeEntries(),
-          loadDisplaySettings()
+        // Load employees and time entries with individual timeouts
+        const loadPromises = [];
+        
+        // Add employees loading
+        loadPromises.push(
+          loadEmployees()
+            .then(() => console.log('Employees loading completed'))
+            .catch((e) => console.log('Employees loading failed/timeout:', e))
+        );
+        
+        // Add time entries loading
+        loadPromises.push(
+          loadTimeEntries()
+            .then(() => console.log('Time entries loading completed'))
+            .catch((e) => console.log('Time entries loading failed/timeout:', e))
+        );
+        
+        // Wait for both with a global timeout
+        await Promise.race([
+          Promise.allSettled(loadPromises),
+          new Promise(resolve => setTimeout(() => {
+            console.log('Global initialization timeout reached');
+            resolve();
+          }, 4000))
         ]);
         
-        // Race between data loading and timeout
-        await Promise.race([dataLoading, initializationTimeout]);
+        console.log('App initialization completed');
         
       } catch (error) {
         console.error('Erreur lors de l\'initialisation:', error);
       } finally {
         // Always set loading to false after attempting to load data
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500); // Small delay to prevent flashing
+        console.log('Setting loading to false');
+        setIsLoading(false);
       }
     };
     
