@@ -1092,7 +1092,10 @@
         
         
         // Edit time entry functions
-        function editTimeEntry(entry) {
+        function editTimeEntry(entryId) {
+            const entry = appState.timeEntries.find(e => e.id === entryId);
+            if (!entry) return;
+            
             appState.editingTimeEntry = {
                 ...entry,
                 startTime: formatDateTimeLocal(entry.startTime),
