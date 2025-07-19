@@ -1446,7 +1446,7 @@
                                         type="password" 
                                         value="${appState.adminPassword}" 
                                         onchange="appState.adminPassword = this.value"
-                                        onkeypress="if(event.key==='Enter') handleAdminAuth()"
+                                        onkeydown="if(event.key==='Enter') { event.preventDefault(); handleAdminAuth(); }"
                                         class="form-input" 
                                         placeholder="Mot de passe administrateur" 
                                     />
