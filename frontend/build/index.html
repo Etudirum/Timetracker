@@ -1090,6 +1090,111 @@
         }
         
         
+        // Edit time entry functions
+        function editTimeEntry(entry) {
+            appState.editingTimeEntry = {
+                ...entry,
+                startTime: formatDateTimeLocal(entry.startTime),
+                endTime: entry.endTime ? formatDateTimeLocal(entry.endTime) : '',
+                notes: entry.notes || ''
+            };
+            render();
+        }
+        
+        async function saveTimeEntry() {
+            const entry = appState.editingTimeEntry;
+            
+            try {
+                const updatedData = {
+                    startTime: new Date(entry.startTime).toISOString(),
+                    endTime: entry.endTime ? new Date(entry.endTime).toISOString() : null,
+                    notes: entry.notes,
+                    status: entry.endTime ? 'completed' : 'active'
+                };
+                
+                await db.collection('timeEntries').doc(entry.id).update(updatedData);
+                
+                appState.editingTimeEntry = null;
+                showMessage('Pointage modifié avec succès', 'success');
+            } catch (error) {
+                console.error('Erreur modification pointage:', error);
+                showMessage('Erreur lors de la modification', 'error');
+            }
+        }
+        
+        function cancelEditTimeEntry() {
+            appState.editingTimeEntry = null;
+            render();
+        }
+        
+        function renderEditTimeEntryForm() {
+            const entry = appState.editingTimeEntry;
+            if (!entry) return '';
+            
+            const employee = appState.employees.find(emp => emp.id === entry.employeeId);
+            
+            return `
+                <div class="modal">
+                    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); z-index: 60; min-width: 400px; ${appState.darkMode ? 'background: #1f2937; color: white;' : ''}">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Modifier le pointage</h3>
+                            <button onclick="cancelEditTimeEntry()" class="text-gray-500 hover:text-gray-700">
+                                ${icons.x}
+                            </button>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-600">Employé: <strong>${employee ? employee.name : 'Employé supprimé'}</strong></p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="form-label">Heure d'arrivée</label>
+                                <input 
+                                    type="datetime-local" 
+                                    value="${entry.startTime}"
+                                    onchange="appState.editingTimeEntry.startTime = this.value"
+                                    class="form-input"
+                                />
+                            </div>
+                            
+                            <div>
+                                <label class="form-label">Heure de départ</label>
+                                <input 
+                                    type="datetime-local" 
+                                    value="${entry.endTime}"
+                                    onchange="appState.editingTimeEntry.endTime = this.value"
+                                    class="form-input"
+                                />
+                                <p class="text-xs text-gray-500 mt-1">Laissez vide si en cours</p>
+                            </div>
+                            
+                            <div>
+                                <label class="form-label">Notes</label>
+                                <textarea 
+                                    value="${entry.notes}"
+                                    onchange="appState.editingTimeEntry.notes = this.value"
+                                    class="form-input"
+                                    rows="3"
+                                    placeholder="Notes optionnelles..."
+                                ></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3 mt-6">
+                            <button onclick="cancelEditTimeEntry()" class="btn btn-secondary">
+                                Annuler
+                            </button>
+                            <button onclick="saveTimeEntry()" class="btn btn-primary">
+                                ${icons.save}
+                                Enregistrer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
         // Filter functions
         function updateEmployeeFilter(value) {
             appState.filter.employee = value;
