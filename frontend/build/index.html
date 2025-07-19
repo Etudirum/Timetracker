@@ -30,9 +30,13 @@
             background-color: #f8fafc;
             color: #1f2937;
             line-height: 1.6;
+            transition: all 0.3s ease;
         }
         
-        .dark body { background-color: #111827; color: #f9fafb; }
+        body.dark {
+            background-color: #111827;
+            color: #f9fafb;
+        }
         
         /* Utilitaires */
         .hidden { display: none; }
@@ -45,6 +49,7 @@
         .space-x-3 > * + * { margin-left: 0.75rem; }
         .space-x-4 > * + * { margin-left: 1rem; }
         .space-y-4 > * + * { margin-top: 1rem; }
+        .gap-2 { gap: 0.5rem; }
         .gap-4 { gap: 1rem; }
         .gap-6 { gap: 1.5rem; }
         
@@ -52,6 +57,7 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
         .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
         .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
         
         /* Responsive */
         @media (min-width: 768px) {
@@ -73,12 +79,19 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.875rem;
         }
         
         .btn:hover { transform: translateY(-1px); }
         .btn-primary { background: #8B5CF6; color: white; }
         .btn-success { background: #22C55E; color: white; }
+        .btn-danger { background: #EF4444; color: white; }
         .btn-secondary { background: #6B7280; color: white; }
+        
+        .btn-primary:hover { background: #7C3AED; }
+        .btn-success:hover { background: #16A34A; }
+        .btn-danger:hover { background: #DC2626; }
+        .btn-secondary:hover { background: #4B5563; }
         
         .card {
             background: white;
@@ -89,7 +102,7 @@
             transition: all 0.2s;
         }
         
-        .dark .card {
+        body.dark .card {
             background: #1f2937;
             border-color: #374151;
             color: #f9fafb;
@@ -106,9 +119,10 @@
             border-bottom: 1px solid #e5e7eb;
             padding: 1rem 0;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         
-        .dark .header {
+        body.dark .header {
             background: #1f2937;
             border-color: #374151;
         }
@@ -118,9 +132,10 @@
             background: white;
             border-bottom: 1px solid #e5e7eb;
             padding: 0;
+            transition: all 0.3s ease;
         }
         
-        .dark .nav {
+        body.dark .nav {
             background: #1f2937;
             border-color: #374151;
         }
@@ -141,8 +156,8 @@
             border-bottom-color: #8B5CF6;
         }
         
-        .dark .nav-item { color: #9ca3af; }
-        .dark .nav-item.active { color: #c084fc; }
+        body.dark .nav-item { color: #9ca3af; }
+        body.dark .nav-item.active { color: #c084fc; }
         
         /* Stats cards */
         .stats-card {
@@ -169,7 +184,7 @@
             transition: all 0.2s;
         }
         
-        .dark .employee-card {
+        body.dark .employee-card {
             background: #374151;
             border-color: #4b5563;
             color: white;
@@ -193,6 +208,13 @@
             font-weight: 600;
             color: #8B5CF6;
             font-size: 0.875rem;
+            overflow: hidden;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         /* Status dots */
@@ -220,14 +242,66 @@
             background: white;
             border-radius: 1rem;
             padding: 1.5rem;
-            max-width: 28rem;
+            max-width: 32rem;
             width: 100%;
             margin: 1rem;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
         
-        .dark .modal-content {
+        body.dark .modal-content {
             background: #1f2937;
+            color: white;
+        }
+        
+        /* Forms */
+        .form-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        body.dark .form-input {
+            background: #374151;
+            border-color: #4b5563;
+            color: white;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+        
+        body.dark .form-label {
+            color: #d1d5db;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: white;
+            cursor: pointer;
+        }
+        
+        body.dark .form-select {
+            background: #374151;
+            border-color: #4b5563;
             color: white;
         }
         
@@ -272,8 +346,12 @@
         .text-gray-600 { color: #4b5563; }
         .text-gray-900 { color: #111827; }
         .text-white { color: white; }
-        .dark .text-gray-500 { color: #9ca3af; }
-        .dark .text-gray-900 { color: #f9fafb; }
+        .text-green-600 { color: #059669; }
+        .text-red-600 { color: #dc2626; }
+        
+        body.dark .text-gray-500 { color: #9ca3af; }
+        body.dark .text-gray-600 { color: #6b7280; }
+        body.dark .text-gray-900 { color: #f9fafb; }
         
         /* Spacing */
         .p-1 { padding: 0.25rem; }
@@ -308,6 +386,18 @@
         .h-5 { height: 1.25rem; }
         .h-8 { height: 2rem; }
         .min-h-screen { min-height: 100vh; }
+        
+        /* Success/Error messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+        .alert-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        
+        body.dark .alert-success { background: #064e3b; color: #a7f3d0; border-color: #065f46; }
+        body.dark .alert-error { background: #7f1d1d; color: #fecaca; border-color: #991b1b; }
         
         /* Responsive utilities */
         @media (max-width: 768px) {
@@ -348,7 +438,7 @@
         
         // État global de l'application
         let appState = {
-            darkMode: false,
+            darkMode: localStorage.getItem('timetracker-theme') === 'dark',
             currentView: 'pointage',
             employees: [],
             timeEntries: [],
@@ -358,7 +448,18 @@
                 totalEmployees: 0,
                 overtimeHours: 0
             },
-            showAdminPanel: false
+            showAdminPanel: false,
+            adminPassword: '',
+            isAuthenticated: false,
+            newEmployee: {
+                firstName: '',
+                lastName: '',
+                position: '',
+                hourlyRate: '',
+                gender: 'M'
+            },
+            message: '',
+            messageType: ''
         };
         
         // Icônes SVG
@@ -373,7 +474,10 @@
             barChart: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>',
             x: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
             userCheck: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16,11 18,13 22,9"/></svg>',
-            clock4: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,10"/></svg>'
+            clock4: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,10"/></svg>',
+            plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+            trash: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="m19,6v14a2,2 0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2v2"/></svg>',
+            shield: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
         };
         
         // Fonctions utilitaires
@@ -389,6 +493,17 @@
             return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
         }
         
+        function showMessage(message, type) {
+            appState.message = message;
+            appState.messageType = type;
+            render();
+            setTimeout(() => {
+                appState.message = '';
+                appState.messageType = '';
+                render();
+            }, 3000);
+        }
+        
         function toggleDarkMode() {
             appState.darkMode = !appState.darkMode;
             document.body.classList.toggle('dark', appState.darkMode);
@@ -402,13 +517,107 @@
         }
         
         function showAdminPanel() {
+            if (!appState.isAuthenticated) {
+                appState.adminPassword = '';
+            }
             appState.showAdminPanel = true;
             render();
         }
         
         function hideAdminPanel() {
             appState.showAdminPanel = false;
+            appState.isAuthenticated = false;
+            appState.adminPassword = '';
+            appState.newEmployee = {
+                firstName: '',
+                lastName: '',
+                position: '',
+                hourlyRate: '',
+                gender: 'M'
+            };
             render();
+        }
+        
+        function handleAdminAuth() {
+            if (appState.adminPassword === 'admin123') {
+                appState.isAuthenticated = true;
+                showMessage('Authentification réussie !', 'success');
+                render();
+            } else {
+                showMessage('Mot de passe incorrect', 'error');
+            }
+        }
+        
+        async function handleAddEmployee() {
+            const { firstName, lastName, position, hourlyRate, gender } = appState.newEmployee;
+            
+            if (!firstName || !lastName || !position) {
+                showMessage('Veuillez remplir tous les champs obligatoires', 'error');
+                return;
+            }
+            
+            try {
+                const employee = {
+                    name: `${firstName} ${lastName}`,
+                    firstName,
+                    lastName,
+                    position,
+                    hourlyRate: parseFloat(hourlyRate) || 0,
+                    gender,
+                    createdAt: new Date().toISOString()
+                };
+                
+                await db.collection('employees').add(employee);
+                
+                appState.newEmployee = {
+                    firstName: '',
+                    lastName: '',
+                    position: '',
+                    hourlyRate: '',
+                    gender: 'M'
+                };
+                
+                showMessage('Employé ajouté avec succès !', 'success');
+                render();
+            } catch (error) {
+                console.error('Erreur ajout employé:', error);
+                showMessage('Erreur lors de l\'ajout de l\'employé', 'error');
+            }
+        }
+        
+        async function handleDeleteEmployee(employeeId, employeeName) {
+            if (!confirm(`Êtes-vous sûr de vouloir supprimer ${employeeName} ?`)) {
+                return;
+            }
+            
+            try {
+                await db.collection('employees').doc(employeeId).delete();
+                showMessage('Employé supprimé avec succès', 'success');
+            } catch (error) {
+                console.error('Erreur suppression employé:', error);
+                showMessage('Erreur lors de la suppression', 'error');
+            }
+        }
+        
+        async function handleClockIn(employeeId) {
+            try {
+                const employee = appState.employees.find(emp => emp.id === employeeId);
+                
+                const entry = {
+                    employeeId,
+                    startTime: new Date().toISOString(),
+                    endTime: null,
+                    status: 'active',
+                    breaks: [],
+                    notes: ''
+                };
+                
+                await db.collection('timeEntries').add(entry);
+                showMessage(`Pointage d'arrivée enregistré pour ${employee.name}`, 'success');
+            } catch (error) {
+                console.error('Erreur pointage arrivée:', error);
+                showMessage('Erreur lors du pointage', 'error');
+            }
         }
         
         // Charger les employés depuis Firebase
@@ -425,13 +634,37 @@
                 });
         }
         
+        // Charger les pointages depuis Firebase
+        function loadTimeEntries() {
+            db.collection('timeEntries')
+                .orderBy('startTime', 'desc')
+                .onSnapshot((snapshot) => {
+                    appState.timeEntries = snapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
+                    
+                    // Calculer les employés actifs
+                    const activeEmployees = new Set(
+                        appState.timeEntries
+                            .filter(entry => !entry.endTime)
+                            .map(entry => entry.employeeId)
+                    ).size;
+                    
+                    appState.stats.activeEmployees = activeEmployees;
+                    render();
+                });
+        }
+        
         // Fonction de rendu principal
         function render() {
-            const { darkMode, currentView, employees, stats, showAdminPanel } = appState;
+            const { darkMode, currentView, employees, stats, showAdminPanel, isAuthenticated, message, messageType } = appState;
             
             document.getElementById('root').innerHTML = `
+                ${message ? `<div class="alert alert-${messageType}" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; min-width: 300px; text-align: center;">${message}</div>` : ''}
+                
                 <!-- Header -->
-                <header class="header ${darkMode ? 'dark' : ''}">
+                <header class="header">
                     <div class="container">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
@@ -463,7 +696,7 @@
                 </header>
 
                 <!-- Navigation -->
-                <nav class="nav ${darkMode ? 'dark' : ''}">
+                <nav class="nav">
                     <div class="container">
                         <div class="flex space-x-4">
                             <button onclick="setCurrentView('pointage')" class="nav-item ${currentView === 'pointage' ? 'active' : ''}">
@@ -549,7 +782,7 @@
                                                 <div class="status-dot status-absent"></div>
                                                 <div class="avatar">
                                                     ${employee.profileImage ? 
-                                                        `<img src="${employee.profileImage}" alt="${employee.name}" class="w-full h-full object-cover rounded-full" />` : 
+                                                        `<img src="${employee.profileImage}" alt="${employee.name}" />` : 
                                                         `<span>${getInitials(employee.name)}</span>`
                                                     }
                                                 </div>
@@ -564,7 +797,7 @@
                                         </div>
                                         
                                         <div class="flex gap-2">
-                                            <button class="btn btn-success text-sm">
+                                            <button onclick="handleClockIn('${employee.id}')" class="btn btn-success text-sm">
                                                 ${icons.play}
                                                 <span>Arrivée</span>
                                             </button>
@@ -574,45 +807,136 @@
                             </div>
                         `}
                     </div>
-                    
-                    <!-- Message de succès -->
-                    <div class="card" style="background: #f0f9ff; border-color: #0ea5e9;">
-                        <div class="flex items-center space-x-2" style="color: #0c4a6e;">
-                            <span style="color: #22c55e; font-size: 1.25rem;">✅</span>
-                            <span class="font-medium">Application TimeTracker24 déployée avec succès !</span>
-                        </div>
-                        <p style="color: #075985;" class="text-sm mt-1">
-                            Firebase connecté ✅ • Interface fonctionnelle ✅ • PWA activée ✅ • Prêt pour utilisation !
-                        </p>
-                    </div>
                 </main>
                 
                 ${showAdminPanel ? `
                     <div class="modal">
                         <div class="modal-content">
                             <div class="flex items-center justify-between mb-6">
-                                <h2 class="text-xl font-semibold">Administration</h2>
+                                <div class="flex items-center space-x-2">
+                                    ${icons.shield}
+                                    <h2 class="text-xl font-semibold">Administration</h2>
+                                </div>
                                 <button onclick="hideAdminPanel()" class="text-gray-500">
                                     ${icons.x}
                                 </button>
                             </div>
-                            <div class="text-center py-8">
-                                ${icons.settings}
-                                <h3 class="text-lg font-semibold mb-2">Panneau d'Administration</h3>
-                                <p class="text-sm text-gray-600 mb-4">
-                                    Fonctionnalités disponibles dans cette version de démonstration :
-                                </p>
-                                <div class="space-y-2 text-sm text-gray-600 text-left">
-                                    <p>• Interface moderne avec thème sombre/clair</p>
-                                    <p>• Connexion Firebase Firestore</p>
-                                    <p>• Statistiques en temps réel</p>
-                                    <p>• Support PWA pour installation native</p>
-                                    <p>• Support NFC avec Electron (codes fournis)</p>
+                            
+                            ${!isAuthenticated ? `
+                                <div class="space-y-4">
+                                    <p class="text-sm text-gray-600">
+                                        Authentification administrateur requise
+                                    </p>
+                                    <div>
+                                        <label class="form-label">Mot de passe</label>
+                                        <input 
+                                            type="password" 
+                                            value="${appState.adminPassword}" 
+                                            onchange="appState.adminPassword = this.value"
+                                            onkeypress="if(event.key==='Enter') handleAdminAuth()"
+                                            class="form-input" 
+                                            placeholder="Mot de passe administrateur" 
+                                        />
+                                    </div>
+                                    <div class="flex justify-end space-x-3">
+                                        <button onclick="hideAdminPanel()" class="btn btn-secondary">
+                                            Annuler
+                                        </button>
+                                        <button onclick="handleAdminAuth()" class="btn btn-primary">
+                                            Se connecter
+                                        </button>
+                                    </div>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-4">
-                                    L'application complète React est maintenant fonctionnelle !
-                                </p>
-                            </div>
+                            ` : `
+                                <div class="space-y-6">
+                                    <div>
+                                        <h3 class="text-lg font-semibold mb-4">Ajouter un employé</h3>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="form-label">Prénom *</label>
+                                                <input 
+                                                    type="text" 
+                                                    value="${appState.newEmployee.firstName}"
+                                                    onchange="appState.newEmployee.firstName = this.value"
+                                                    class="form-input" 
+                                                    placeholder="Prénom" 
+                                                />
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Nom *</label>
+                                                <input 
+                                                    type="text" 
+                                                    value="${appState.newEmployee.lastName}"
+                                                    onchange="appState.newEmployee.lastName = this.value"
+                                                    class="form-input" 
+                                                    placeholder="Nom" 
+                                                />
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Poste *</label>
+                                                <input 
+                                                    type="text" 
+                                                    value="${appState.newEmployee.position}"
+                                                    onchange="appState.newEmployee.position = this.value"
+                                                    class="form-input" 
+                                                    placeholder="Poste" 
+                                                />
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Taux horaire (FCFA)</label>
+                                                <input 
+                                                    type="number" 
+                                                    value="${appState.newEmployee.hourlyRate}"
+                                                    onchange="appState.newEmployee.hourlyRate = this.value"
+                                                    class="form-input" 
+                                                    placeholder="0" 
+                                                />
+                                            </div>
+                                            <div class="col-span-2">
+                                                <label class="form-label">Genre</label>
+                                                <select 
+                                                    value="${appState.newEmployee.gender}"
+                                                    onchange="appState.newEmployee.gender = this.value"
+                                                    class="form-select"
+                                                >
+                                                    <option value="M">Monsieur</option>
+                                                    <option value="F">Madame</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-end mt-4">
+                                            <button onclick="handleAddEmployee()" class="btn btn-primary">
+                                                ${icons.plus}
+                                                Ajouter l'employé
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    ${employees.length > 0 ? `
+                                        <div>
+                                            <h3 class="text-lg font-semibold mb-4">Employés existants</h3>
+                                            <div class="space-y-2 max-h-64 overflow-y-auto">
+                                                ${employees.map(employee => `
+                                                    <div class="flex items-center justify-between p-3 rounded-lg border">
+                                                        <div class="flex items-center space-x-3">
+                                                            <div class="avatar" style="width: 2rem; height: 2rem;">
+                                                                <span style="font-size: 0.75rem;">${getInitials(employee.name)}</span>
+                                                            </div>
+                                                            <div>
+                                                                <p class="font-medium">${employee.name}</p>
+                                                                <p class="text-sm text-gray-500">${employee.position}</p>
+                                                            </div>
+                                                        </div>
+                                                        <button onclick="handleDeleteEmployee('${employee.id}', '${employee.name}')" class="btn btn-danger text-sm">
+                                                            ${icons.trash}
+                                                        </button>
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `}
                         </div>
                     </div>
                 ` : ''}
@@ -621,15 +945,12 @@
         
         // Initialisation
         function init() {
-            // Charger le thème depuis localStorage
-            const savedTheme = localStorage.getItem('timetracker-theme');
-            if (savedTheme) {
-                appState.darkMode = savedTheme === 'dark';
-                document.body.classList.toggle('dark', appState.darkMode);
-            }
+            // Appliquer le thème sauvegardé
+            document.body.classList.toggle('dark', appState.darkMode);
             
-            // Charger les employés
+            // Charger les données
             loadEmployees();
+            loadTimeEntries();
             
             // Premier rendu
             render();
@@ -642,6 +963,16 @@
         
         // Démarrer l'application
         init();
+        
+        // Exposer les fonctions globalement pour les événements onclick
+        window.toggleDarkMode = toggleDarkMode;
+        window.setCurrentView = setCurrentView;
+        window.showAdminPanel = showAdminPanel;
+        window.hideAdminPanel = hideAdminPanel;
+        window.handleAdminAuth = handleAdminAuth;
+        window.handleAddEmployee = handleAddEmployee;
+        window.handleDeleteEmployee = handleDeleteEmployee;
+        window.handleClockIn = handleClockIn;
     </script>
     
     <script>
