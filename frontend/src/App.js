@@ -310,22 +310,36 @@ function App() {
     try {
       if (isOnline) {
         const q = query(collection(db, 'timeEntries'), orderBy('startTime', 'desc'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-          const entries = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          setTimeEntries(entries);
+        
+        // Create a timeout promise
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firebase timeout')), 8000)
+        );
+        
+        // Create the Firebase promise
+        const firebasePromise = new Promise((resolve) => {
+          const unsubscribe = onSnapshot(q, (snapshot) => {
+            const entries = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }));
+            setTimeEntries(entries);
+            resolve(unsubscribe);
+          });
         });
-        return unsubscribe;
+        
+        // Race between timeout and Firebase
+        return await Promise.race([firebasePromise, timeoutPromise]);
       } else {
         const offlineEntries = await offlineStorage.getOfflineEntries();
         setTimeEntries(offlineEntries);
+        return null;
       }
     } catch (error) {
       console.error('Erreur lors du chargement des pointages:', error);
       const offlineEntries = await offlineStorage.getOfflineEntries();
       setTimeEntries(offlineEntries);
+      return null;
     }
   };
 
