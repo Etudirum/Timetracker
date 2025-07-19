@@ -1609,7 +1609,15 @@
                                             <td class="text-sm">
                                                 <span class="font-medium text-purple-600">${duration.display}</span>
                                             </td>
-                                            <td class="text-sm">${totalBreakTime > 0 ? `${Math.round(totalBreakTime)}min` : '-'}</td>
+                                            <td class="text-sm">
+                                                ${totalBreakTime > 0 ? `
+                                                    <div>
+                                                        <span class="font-medium">${Math.round(totalBreakTime)}min</span>
+                                                        ${duration.breakMinutes > 0 ? `<br><span class="text-xs text-orange-500">Auto: ${duration.breakMinutes}min</span>` : ''}
+                                                        ${manualBreakTime > 0 ? `<br><span class="text-xs text-blue-500">Manuel: ${Math.round(manualBreakTime)}min</span>` : ''}
+                                                    </div>
+                                                ` : '-'}
+                                            </td>
                                             <td class="text-sm">${formatDate(entry.startTime)}</td>
                                             <td class="text-sm">
                                                 <button class="text-blue-600 hover:text-blue-800 font-medium">
