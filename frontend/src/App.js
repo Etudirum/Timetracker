@@ -270,25 +270,39 @@ function App() {
     try {
       if (isOnline) {
         const q = query(collection(db, 'employees'), orderBy('name'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-          const employeeData = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-          console.log('Employees loaded from Firebase:', employeeData);
-          setEmployees(employeeData);
+        
+        // Create a timeout promise
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firebase timeout')), 8000)
+        );
+        
+        // Create the Firebase promise
+        const firebasePromise = new Promise((resolve) => {
+          const unsubscribe = onSnapshot(q, (snapshot) => {
+            const employeeData = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+            }));
+            console.log('Employees loaded from Firebase:', employeeData);
+            setEmployees(employeeData);
+            resolve(unsubscribe);
+          });
         });
-        return unsubscribe;
+        
+        // Race between timeout and Firebase
+        return await Promise.race([firebasePromise, timeoutPromise]);
       } else {
         const offlineEmployees = await offlineStorage.getOfflineEmployees();
         console.log('Employees loaded from offline storage:', offlineEmployees);
         setEmployees(offlineEmployees);
+        return null;
       }
     } catch (error) {
       console.error('Erreur lors du chargement des employés:', error);
       const offlineEmployees = await offlineStorage.getOfflineEmployees();
       console.log('Fallback to offline employees:', offlineEmployees);
       setEmployees(offlineEmployees);
+      return null;
     }
   };
 
