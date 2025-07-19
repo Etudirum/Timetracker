@@ -57,6 +57,7 @@ function App() {
     showStats: true,
     showEmployees: true
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const isElectron = useElectron();
   const isOnline = useNetworkStatus();
